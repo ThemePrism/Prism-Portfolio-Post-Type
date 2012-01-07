@@ -725,7 +725,7 @@ SQL;
 					'orderby' => 'term_order',
 					'selected' => $selected,
 					'hierarchical' => $tax_obj->hierarchical,
-					'show_count' => true,
+					'show_count' => false,
 					'hide_empty' => false
 				));
 			}
