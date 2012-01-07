@@ -3,7 +3,7 @@ function KIASetAsThumbnail(id, nonce){
 
 	$link.text( setPostThumbnailL10n.saving );
 	jQuery.post(ajaxurl, {
-		action:"prism_set_thumbnail", post_id: post_id, thumbnail_id: id, _ajax_nonce: nonce, cookie: encodeURIComponent(document.cookie)
+		action:"kia_set_thumbnail", post_id: post_id, thumbnail_id: id, _ajax_nonce: nonce, cookie: encodeURIComponent(document.cookie)
 	}, function(str){
 		var win = window.dialogArguments || opener || parent || top;  
 		$link.text( setPostThumbnailL10n.setThumbnail );

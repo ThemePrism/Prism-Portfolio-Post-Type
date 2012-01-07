@@ -872,49 +872,6 @@ function testing(){  global $post;
 add_action('thematic_before','testing');
 
 
-function restrict_manage_posts() {
-    global $typenow;
-    $args=array( 'public' => true, '_builtin' => false ); 
-    $post_types = get_post_types($args);
-    if ( in_array($typenow, $post_types) ) {
-    $filters = get_object_taxonomies($typenow);
-        foreach ($filters as $tax_slug) {
-            $tax_obj = get_taxonomy($tax_slug);
-			$selected = (isset($_GET[$tax_obj->query_var])) ? $_GET[$tax_obj->query_var] : '';
-            wp_dropdown_categories(array(
-                'show_option_all' => __('Show All '.$tax_obj->label ),
-                'taxonomy' => $tax_slug,
-                'name' => $tax_obj->name,
-                'orderby' => 'term_order',
-                'selected' => $selected,
-                'hierarchical' => $tax_obj->hierarchical,
-                'show_count' => true,
-                'hide_empty' => false
-            ));
-        }
-    }
-}
-function convert_restrict($query) {
-    global $pagenow;
-    global $typenow;
-    if (is_admin() && $pagenow=='edit.php') {
-        $filters = get_object_taxonomies($typenow);
-        foreach ($filters as $tax_slug) {
-            $var = &$query->query_vars[$tax_slug];
-         /*   if ( isset($var) && $var>0 ) {  
-                $term = get_term_by('id',$var,$tax_slug);  
-                $var = $term->slug;
-				$query->query_vars[$tax_slug] = $term->slug;  
-            }  */
-			if ( isset($var) && $var>0) {
-                $term = get_term_by('id',$var,$tax_slug);
-                $var = $term->slug;
-            }
-
-        }
-    }  
-	return $query;
-}
 
 	
 ?>
