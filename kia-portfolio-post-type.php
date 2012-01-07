@@ -850,28 +850,6 @@ if (class_exists("KIA_Portfolio_Post_Type") && !$kia_ppt) {
     $kia_ppt = new KIA_Portfolio_Post_Type();	
 }	
 
-function bacon_test( $form_fields ) {  update_option('test_request',$_GET);
-	//if(isset($_GET['post_type']) && $_GET['post_type']=='portfolio'){
-		unset($form_fields['url'], $form_fields['align'], $form_fields['image-size']);
-		return $form_fields;
-	//}
-
-}	
-//add_filter('attachment_fields_to_edit','bacon_test',99);
-
-
-
-
-function testing(){  global $post;
-
-	//do stuff
-	$req = get_option('test_request');
-	print_r($req);
-	
-}
-add_action('thematic_before','testing');
-
-
 
 	
 ?>
