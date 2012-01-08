@@ -48,7 +48,7 @@ if (!class_exists("Portfolio_Post_Type")) :
 
 class KIA_Portfolio_Post_Type {
 	
-	var $plugin_domain;
+	public $plugin_domain;
 	
 	function KIA_Portfolio_Post_Type() {	
 		$this->plugin_domain = 'kia_portfolioposttype';
@@ -386,7 +386,7 @@ class KIA_Portfolio_Post_Type {
 	//the guts of the custom metabox
 	function featured_tax_display($post) { ?>
 	 
-		<input type="hidden" name="portfolio_featured_nonce" id="portfolio_featured_nonce" value="<?php echo wp_create_nonce( 'portfolio_featured_nonce_'.$post->ID); ?>" />
+		<input type="hidden" name="portfolio_featured_nonce" id="portfolio_featured_nonce" value="<?php echo wp_create_nonce( plugin_basename(__FILE__).$post->ID); ?>" />
 	 
 		<?php $featured = wp_get_post_terms( $post->ID, 'portfolio_featured' ); ?> 
 
@@ -607,7 +607,7 @@ class KIA_Portfolio_Post_Type {
 		global $current_screen;
 		if (($current_screen->id != 'edit-portfolio') || ($current_screen->post_type != 'portfolio')) return $actions; 
 	 
-		$nonce = wp_create_nonce( 'portfolio_featured_nonce_'.$post->ID);
+		$nonce = wp_create_nonce( plugin_basename(__FILE__).$post->ID);
 
 		$featured = wp_get_object_terms($post->ID, 'portfolio_featured'); 
 		
@@ -630,23 +630,27 @@ class KIA_Portfolio_Post_Type {
 	 * Save our taxonomy data from metabox and quick edit 
 	 * (since it is the same)
 	*/
-	function save_taxonomy_data($post_id,$post) {  update_option('test_post',$_POST);
-
-		//kill right away if not a portfolio post types or the nonce is wrong
-		if( $post->post_type != 'portfolio' || !wp_verify_nonce( $_POST['portfolio_featured_nonce'], 'portfolio_featured_nonce_'.$post_id )) return;
+	function save_taxonomy_data($post_id,$post) {  
 
 		// verify if this is an auto save routine. If it is our form has not been submitted, so we dont want to do anything
-		if ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE ) return;	
+		if ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE ) return $post_id;	
+		
+		// verify post type is portfolio and not a revision
+		if( $post->post_type != 'portfolio' || $post->post_type != 'revision' ) return $post_id;
+		
+		// make sure data came from our meta box, verify nonce
+		$nonce = isset($_POST['portfolio_featured_nonce']) ? $_POST['portfolio_featured_nonce'] : NULL ;
+		if (!wp_verify_nonce( $nonce, plugin_basename(__FILE__) . '_' . $post_id )) return $post_id;
 		
 		// Check permissions
 		if ( 'page' == $post->post_type ) {
-			if ( !current_user_can( 'edit_page', $post_id ) ) return;
+			if ( !current_user_can( 'edit_page', $post_id ) ) return $post_id;
 		} else {
-			if ( !current_user_can( 'edit_post', $post_id ) ) return;
+			if ( !current_user_can( 'edit_post', $post_id ) ) return $post_id;
 		}	
-
-		//once verified, update featured tax as long as post type is not a revision
-		if ($post->post_type != 'revision' && isset($_POST['portfolio_featured_tax']) ) { 
+		
+		//once verified, update featured tax
+		if (isset($_POST['portfolio_featured_tax']) ) { 
 			$status = esc_attr($_POST['portfolio_featured_tax']);
 			if ($status) {
 				wp_set_object_terms( $post_id, $status, 'portfolio_featured' );
