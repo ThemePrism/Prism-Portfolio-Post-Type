@@ -190,7 +190,7 @@ class KIA_Portfolio_Post_Type {
 				'capability_type' => 'post',
 				'rewrite' => array("slug" => "portfolio"), // Permalinks format
 				'menu_position' => 5,
-				'supports' => array('title', 'editor', 'author', 'thumbnail','comments','post-formats')
+				'supports' => array('title', 'editor', 'author', 'thumbnail','comments' /*,'post-formats'*/) //todo: support certain post formats
 			);
 
 			register_post_type( 'portfolio', $args );
