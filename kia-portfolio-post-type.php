@@ -725,8 +725,7 @@ SQL;
 					'orderby' => 'term_order',
 					'selected' => $selected,
 					'hierarchical' => $tax_obj->hierarchical,
-					'show_count' => false,
-					'hide_empty' => false
+					'hide_if_empty' => true
 				));
 			}
 		}
@@ -743,7 +742,7 @@ SQL;
 				if ( isset($var) && $var>0) {
 					$term = get_term_by('id',$var,$tax_slug);
 					$var = $term->slug;
-				}
+				} 
 
 			}
 		}  
