@@ -156,7 +156,7 @@ class KIA_Portfolio_Post_Type {
 	
 	function _deactivate() {
 		global $wp_rewrite;		
-		$wp_rewrite->add_permastruct( 'portfolio', '');
+		//$wp_rewrite->add_permastruct( 'portfolio', '');
 		flush_rewrite_rules();
 	}
   
@@ -632,8 +632,7 @@ class KIA_Portfolio_Post_Type {
 	 * (since it is the same)
 	*/
 	function save_taxonomy_data($post_id,$post) {  
-update_option('test_post',$_POST);
-		
+	
 		// verify if this is an auto save routine. If it is our form has not been submitted, so we dont want to do anything
 		if ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE ) return $post_id;	
 		
