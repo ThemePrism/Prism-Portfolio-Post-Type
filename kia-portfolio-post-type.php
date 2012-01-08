@@ -117,20 +117,13 @@ class KIA_Portfolio_Post_Type {
 				$blogids = $wpdb->get_col($wpdb->prepare("SELECT blog_id FROM $wpdb->blogs"));
 				foreach ($blogids as $blog_id) {
 					switch_to_blog($blog_id);
+					$this->_activate();
 				}
 				switch_to_blog($old_blog);
 				return;
 			}	
+			$this->_activate();
 		} 
-
-		$this->register_type();
-		
-	    /**
-		* Flushes rewrite rules on plugin activation to ensure portfolio posts don't 404
-		* http://codex.wordpress.org/Function_Reference/flush_rewrite_rules
-		*/
-		flush_rewrite_rules();
-	
 	}
 
 	function deactivate() {
@@ -144,19 +137,29 @@ class KIA_Portfolio_Post_Type {
 				$blogids = $wpdb->get_col($wpdb->prepare("SELECT blog_id FROM $wpdb->blogs"));
 				foreach ($blogids as $blog_id) {
 					switch_to_blog($blog_id);
+					$this->_deactivate();
 				}
 				switch_to_blog($old_blog);
 				return;
 			}	
+			$this->_deactivate();
 		} 	
-
+	}	
+	
+	function _activate() {
+		$this->register_type();
+		
 		/**
 		* Flushes rewrite rules on plugin activation to ensure portfolio posts don't 404
 		* http://codex.wordpress.org/Function_Reference/flush_rewrite_rules
 		*/
 		flush_rewrite_rules();
-	}	
-
+	}
+	
+	function _deactivate() {
+		flush_rewrite_rules();
+	}
+	
 	/**
 	 * Register post type, taxonomies and terms
 	 * http://codex.wordpress.org/Function_Reference/register_post_type
@@ -386,7 +389,7 @@ class KIA_Portfolio_Post_Type {
 	//the guts of the custom metabox
 	function featured_tax_display($post) { ?>
 	 
-		<input type="hidden" name="portfolio_featured_nonce" id="portfolio_featured_nonce" value="<?php echo wp_create_nonce( plugin_basename(__FILE__).$post->ID); ?>" />
+		<input type="hidden" name="portfolio_featured_nonce" id="portfolio_featured_nonce" value="<?php echo wp_create_nonce( 'kia_featured_nonce_' . $post->ID ); ?>" />
 	 
 		<?php $featured = wp_get_post_terms( $post->ID, 'portfolio_featured' ); ?> 
 
@@ -607,7 +610,7 @@ class KIA_Portfolio_Post_Type {
 		global $current_screen;
 		if (($current_screen->id != 'edit-portfolio') || ($current_screen->post_type != 'portfolio')) return $actions; 
 	 
-		$nonce = wp_create_nonce( plugin_basename(__FILE__).$post->ID);
+		$nonce = wp_create_nonce( 'kia_featured_nonce_' . $post->ID );
 
 		$featured = wp_get_object_terms($post->ID, 'portfolio_featured'); 
 		
@@ -636,11 +639,11 @@ class KIA_Portfolio_Post_Type {
 		if ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE ) return $post_id;	
 		
 		// verify post type is portfolio and not a revision
-		if( $post->post_type != 'portfolio' || $post->post_type != 'revision' ) return $post_id;
+		if( $post->post_type != 'portfolio' || $post->post_type == 'revision' ) return $post_id;
 		
 		// make sure data came from our meta box, verify nonce
 		$nonce = isset($_POST['portfolio_featured_nonce']) ? $_POST['portfolio_featured_nonce'] : NULL ;
-		if (!wp_verify_nonce( $nonce, plugin_basename(__FILE__) . '_' . $post_id )) return $post_id;
+		if (!wp_verify_nonce( $nonce, 'kia_featured_nonce_' . $post_id )) return $post_id;
 		
 		// Check permissions
 		if ( 'page' == $post->post_type ) {
