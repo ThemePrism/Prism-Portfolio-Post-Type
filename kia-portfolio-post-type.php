@@ -711,10 +711,8 @@ SQL;
 	 */
 	function restrict_manage_posts() {
 		global $typenow;
-		$args=array( 'public' => true, '_builtin' => false ); 
-		$post_types = get_post_types($args);   
-		if ( in_array($typenow, $post_types) ) {
-		$filters = get_object_taxonomies($typenow); 
+		if ( $typenow = 'portfolio')  {
+		$filters = array('portfolio_category','portfolio_tag','portfolio_featured');
 			foreach ($filters as $tax_slug) {
 				$tax_obj = get_taxonomy($tax_slug);  
 				$selected = (isset($_GET[$tax_obj->query_var])) ? $_GET[$tax_obj->query_var] : '';
