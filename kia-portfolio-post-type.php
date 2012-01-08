@@ -66,7 +66,7 @@ class KIA_Portfolio_Post_Type {
 		add_action('admin_menu', array(&$this,'add_theme_box'));
 
 		//Add Columns to Portfolio Edit Screen
-		add_filter('manage_edit-portfolio_columns', array(&$this,'edit_columns'));
+		add_filter('manage_edit-kia_portfolio_columns', array(&$this,'edit_columns'));
 		add_action('manage_posts_custom_column', array(&$this,'display_columns'), 10, 2);
 		
 		//Add featured taxonomy radio buttons to quick edit screen
@@ -79,7 +79,7 @@ class KIA_Portfolio_Post_Type {
 		add_action('save_post', array(&$this,'save_taxonomy_data'),20,2);
 		
 		//Make portfolios sortable by featured taxonomy
-		add_filter('manage_edit-portfolio_sortable_columns', array(&$this,'sortable_columns'));
+		add_filter('manage_edit-kia_portfolio_sortable_columns', array(&$this,'sortable_columns'));
 		add_filter('posts_clauses', array(&$this,'portfolio_featured_clauses'), 10, 2);
 		
 		//Add Taxonomy Filter to Custom Post Type 
@@ -172,7 +172,7 @@ class KIA_Portfolio_Post_Type {
 		 * http://codex.wordpress.org/Function_Reference/register_post_type
 		 */
 
-		if(!post_type_exists('portfolio')){
+		if(!post_type_exists('kia_portfolio')){
 			$labels = array(
 				'name' => __( 'Portfolio', $this->plugin_domain ),
 				'singular_name' => __( 'Portfolio Item', $this->plugin_domain ),
@@ -196,14 +196,14 @@ class KIA_Portfolio_Post_Type {
 				'supports' => array('title', 'editor', 'author', 'thumbnail','comments' /*,'post-formats'*/) //todo: support certain post formats
 			);
 
-			register_post_type( 'portfolio', $args );
+			register_post_type( 'kia_portfolio', $args );
 		}
 		/**
 		 * Register a taxonomy for Portfolio Tags
 		 * http://codex.wordpress.org/Function_Reference/register_taxonomy
 		 */
 		 
-		if(!taxonomy_exists('portfolio_tag')){
+		if(!taxonomy_exists('kia_portfolio_tag')){
 			$taxonomy_portfolio_tag_labels = array(
 				'name' => _x( 'Portfolio Tags', $this->plugin_domain ),
 				'singular_name' => _x( 'Portfolio Tag', $this->plugin_domain ),
@@ -233,13 +233,13 @@ class KIA_Portfolio_Post_Type {
 				'query_var' => true
 			);
 			
-			register_taxonomy( 'portfolio_tag', array( 'portfolio' ), $taxonomy_portfolio_tag_args );
+			register_taxonomy( 'kia_portfolio_tag', array( 'kia_portfolio' ), $taxonomy_portfolio_tag_args );
 		}
 		/**
 		 * Register a taxonomy for Portfolio Categories
 		 * http://codex.wordpress.org/Function_Reference/register_taxonomy
 		 */
-		if(!taxonomy_exists('portfolio_category')){
+		if(!taxonomy_exists('kia_portfolio_category')){
 			$taxonomy_portfolio_category_labels = array(
 				'name' => _x( 'Portfolio Categories', $this->plugin_domain ),
 				'singular_name' => _x( 'Portfolio Category', $this->plugin_domain ),
@@ -269,13 +269,13 @@ class KIA_Portfolio_Post_Type {
 				'query_var' => true
 			);
 			
-			register_taxonomy( 'portfolio_category', array( 'portfolio' ), $taxonomy_portfolio_category_args );
+			register_taxonomy( 'kia_portfolio_category', array( 'kia_portfolio' ), $taxonomy_portfolio_category_args );
 		}	
 		/**
 		 * Register a Featured taxonomy for Portfolio Items
 		 * http://codex.wordpress.org/Function_Reference/register_taxonomy
 		 */
-			if(!taxonomy_exists('portfolio_featured')){
+			if(!taxonomy_exists('kia_portfolio_featured')){
 			$portfolio_featured_labels = array(
 				'name' => _x( 'Featured', $this->plugin_domain ),
 				'singular_name' => _x( 'Featured', $this->plugin_domain )			
@@ -290,34 +290,34 @@ class KIA_Portfolio_Post_Type {
 				'show_tagcloud' => false,
 				'show_in_nav_menus' => false,
 			);
-			register_taxonomy( 'portfolio_featured', array( 'portfolio' ), $taxonomy_portfolio_featured_args );
+			register_taxonomy( 'kia_portfolio_featured', array( 'kia_portfolio' ), $taxonomy_portfolio_featured_args );
 		}
 		
 		/**
 		 * Create Terms for Featured Taxonomy
 		 */
-			if (!term_exists( 'excluded', 'portfolio_featured') ){
+			if (!term_exists( 'excluded', 'kia_portfolio_featured') ){
 			wp_insert_term(
 			  'excluded', // the term 
-			  'portfolio_featured', // the taxonomy
+			  'kia_portfolio_featured', // the taxonomy
 			  array(
 				'slug' => 'excluded',
 			  )
 			);
 			}
-			if (!term_exists( 'normal', 'portfolio_featured') ){
+			if (!term_exists( 'normal', 'kia_portfolio_featured') ){
 			wp_insert_term(
 			  'normal', // the term 
-			  'portfolio_featured', // the taxonomy
+			  'kia_portfolio_featured', // the taxonomy
 			  array(
 				'slug' => 'normal',
 			  )
 			);
 			}
-			if (!term_exists( 'featured', 'portfolio_featured') ){
+			if (!term_exists( 'featured', 'kia_portfolio_featured') ){
 				wp_insert_term(
 				  'featured', // the term 
-				  'portfolio_featured', // the taxonomy
+				  'kia_portfolio_featured', // the taxonomy
 				  array(
 					'slug' => 'featured',
 				  )
@@ -346,11 +346,11 @@ class KIA_Portfolio_Post_Type {
 	 */
 
 	function add_counts() {
-			if ( ! post_type_exists( 'portfolio' ) ) {
+			if ( ! post_type_exists( 'kia_portfolio' ) ) {
 				 return;
 			}
 
-			$num_posts = wp_count_posts( 'portfolio' );
+			$num_posts = wp_count_posts( 'kia_portfolio' );
 			$num = number_format_i18n( $num_posts->publish );
 			$text = _n( 'Portfolio Item', 'Portfolio Items', intval($num_posts->publish) );
 			if ( current_user_can( 'edit_posts' ) ) {
@@ -381,7 +381,7 @@ class KIA_Portfolio_Post_Type {
 	 */
 	 
 	function add_theme_box(){
-		add_meta_box('portfolio_featured_tax', _x('Featured or Excluded Item',$this->plugin_domain), array($this,'featured_tax_display'), 'portfolio', 'side', 'low');
+		add_meta_box('kia_portfolio_featured_tax', _x('Featured or Excluded Item',$this->plugin_domain), array($this,'featured_tax_display'), 'kia_portfolio', 'side', 'low');
 	}
 			
 
@@ -389,17 +389,17 @@ class KIA_Portfolio_Post_Type {
 	//the guts of the custom metabox
 	function featured_tax_display($post) { ?>
 	 
-		<input type="hidden" name="portfolio_featured_nonce" id="portfolio_featured_nonce" value="<?php echo wp_create_nonce( 'kia_featured_nonce_' . $post->ID ); ?>" />
+		<input type="hidden" name="kia_portfolio_featured_nonce" id="kia_portfolio_featured_nonce" value="<?php echo wp_create_nonce( 'kia_featured_nonce_' . $post->ID ); ?>" />
 	 
-		<?php $featured = wp_get_post_terms( $post->ID, 'portfolio_featured' ); ?> 
+		<?php $featured = wp_get_post_terms( $post->ID, 'kia_portfolio_featured' ); ?> 
 
 		<p><?php _e('Is this a featured portfolio item?', $this->plugin_domain);?></p>
 	
-		<input type="radio" name="portfolio_featured_tax" <?php if(!is_wp_error($featured) && !empty($featured) && $featured[0]->slug=='featured'){echo " CHECKED ";} ?> value="featured"> <?php _e('Featured', $this->plugin_domain);?> <br/>
+		<input type="radio" name="kia_portfolio_featured_tax" <?php if(!is_wp_error($featured) && !empty($featured) && $featured[0]->slug=='featured'){echo " CHECKED ";} ?> value="featured"> <?php _e('Featured', $this->plugin_domain);?> <br/>
 		
-		<input type="radio" name="portfolio_featured_tax" <?php if( (!is_wp_error($featured) && !empty($featured) && $featured[0]->slug=='normal') || is_wp_error($featured) || empty($featured)){ echo " CHECKED "; } ?> value="normal"> <?php _e('Normal', $this->plugin_domain);?> <br/>
+		<input type="radio" name="kia_portfolio_featured_tax" <?php if( (!is_wp_error($featured) && !empty($featured) && $featured[0]->slug=='normal') || is_wp_error($featured) || empty($featured)){ echo " CHECKED "; } ?> value="normal"> <?php _e('Normal', $this->plugin_domain);?> <br/>
 			
-		<input type="radio" name="portfolio_featured_tax" <?php if(!is_wp_error($featured) && !empty($featured) && $featured[0]->slug=='excluded'){echo " CHECKED ";} ?> value="excluded"> <?php _e('Excluded', $this->plugin_domain);?> <br/>
+		<input type="radio" name="kia_portfolio_featured_tax" <?php if(!is_wp_error($featured) && !empty($featured) && $featured[0]->slug=='excluded'){echo " CHECKED ";} ?> value="excluded"> <?php _e('Excluded', $this->plugin_domain);?> <br/>
 			
 	<?php  
 	}
@@ -415,9 +415,9 @@ class KIA_Portfolio_Post_Type {
 			"title" => _x('Title', 'column name'),
 			"author" => __('Author', $this->plugin_domain),
 			"thumbnail" => __('Thumbnail', $this->plugin_domain),
-			"portfolio_category" => __('Category', $this->plugin_domain),
-			"portfolio_tag" => __('Tags', $this->plugin_domain),
-			"featured" => __('Featured Status'),
+			"kia_portfolio_category" => __('Category', $this->plugin_domain),
+			"kia_portfolio_tag" => __('Tags', $this->plugin_domain),
+			"kia_portfolio_featured" => __('Featured Status'),
 			"comments" => __('Comments', $this->plugin_domain),
 			"date" => __('Date', $this->plugin_domain),
 		);
@@ -449,15 +449,15 @@ class KIA_Portfolio_Post_Type {
 
 				break;	
 				
-				case "portfolio_category":
+				case "kia_portfolio_category":
 			
-					$taxonomies = get_the_terms( $post_id, 'portfolio_category' ) ; 
+					$taxonomies = get_the_terms( $post_id, 'kia_portfolio_category' ) ; 
 					if ( !empty( $taxonomies ) ) {
 						$out = array();
 						foreach ( $taxonomies as $t ) {  
 							$out[] = sprintf( '<a href="%s">%s</a>',
-								esc_url( add_query_arg( array( 'post_type' => $post->post_type, 'portfolio_category' => $t->slug ), 'edit.php' ) ),
-								esc_html( sanitize_term_field( 'name', $t->name, $t->term_id, 'portfolio_category', 'display' ) )
+								esc_url( add_query_arg( array( 'post_type' => $post->post_type, 'kia_portfolio_category' => $t->slug ), 'edit.php' ) ),
+								esc_html( sanitize_term_field( 'name', $t->name, $t->term_id, 'kia_portfolio_category', 'display' ) )
 							);
 						}
 						echo join( ', ', $out );
@@ -470,15 +470,15 @@ class KIA_Portfolio_Post_Type {
 			
 				
 				// Display the portfolio tags in the column view
-				case "portfolio_tag":
+				case "kia_portfolio_tag":
 				
-				$taxonomies = get_the_terms( $post_id, 'portfolio_tag' ) ; 
+				$taxonomies = get_the_terms( $post_id, 'kia_portfolio_tag' ) ; 
 					if ( !empty( $taxonomies ) ) {
 						$out = array();
 						foreach ( $taxonomies as $t ) {  
 							$out[] = sprintf( '<a href="%s">%s</a>',
-								esc_url( add_query_arg( array( 'post_type' => $post->post_type, 'portfolio_tag' => $t->slug ), 'edit.php' ) ),
-								esc_html( sanitize_term_field( 'name', $t->name, $t->term_id, 'portfolio_tag', 'display' ) )
+								esc_url( add_query_arg( array( 'post_type' => $post->post_type, 'kia_portfolio_tag' => $t->slug ), 'edit.php' ) ),
+								esc_html( sanitize_term_field( 'name', $t->name, $t->term_id, 'kia_portfolio_tag', 'display' ) )
 							);
 						}
 						echo join( ', ', $out );
@@ -489,9 +489,9 @@ class KIA_Portfolio_Post_Type {
 				break;		
 				
 				// Display featured status column view
-				case "featured":
+				case "kia_portfolio_featured":
 				
-				$taxonomies = get_the_terms( $post_id, 'portfolio_featured' ) ; 
+				$taxonomies = get_the_terms( $post_id, 'kia_portfolio_featured' ) ; 
 					if ( !empty( $taxonomies ) ) {
 						$out = array();
 						foreach ( $taxonomies as $t ) {  
@@ -517,20 +517,19 @@ class KIA_Portfolio_Post_Type {
 	 * http://shibashake.com/wordpress-theme/expand-the-wordpress-quick-edit-menu
 	 */
 	 
-	 
 	// Add a quick edit input
 	function add_quick_edit($column_name, $post_type) {
-		if ( $post_type != 'portfolio' || $column_name != 'featured') return;
+		if ( $post_type != 'kia_portfolio' || $column_name != 'kia_portfolio_featured') return;
 		
 		?>
 		<fieldset class="inline-edit-col-left">
 		<div class="inline-edit-col">
 			<span class="title"><?php _e('Featured Status');?></span><br/>
-			<input type="hidden" name="portfolio_featured_nonce" id="portfolio_featured_nonce" value="" />
+			<input type="hidden" name="kia_portfolio_featured_nonce" id="kia_portfolio_featured_nonce" value="" />
 
-			<input type="radio" name="portfolio_featured_tax" value="featured"/> <?php _e('Featured ');?>
-			<input type="radio" name="portfolio_featured_tax" value="normal"/> <?php _e('Normal ');?> 
-			<input type="radio" name="portfolio_featured_tax" value="excluded"/> <?php _e('Excluded  ');?>  
+			<input type="radio" name="kia_portfolio_featured_tax" value="featured"/> <?php _e('Featured ');?>
+			<input type="radio" name="kia_portfolio_featured_tax" value="normal"/> <?php _e('Normal ');?> 
+			<input type="radio" name="kia_portfolio_featured_tax" value="excluded"/> <?php _e('Excluded  ');?>  
 		</div>
 		</fieldset>
 		
@@ -542,7 +541,7 @@ class KIA_Portfolio_Post_Type {
 	function quick_edit_javascript() {
 		global $current_screen;
 		
-		if (($current_screen->id != 'edit-portfolio') || ($current_screen->post_type != 'portfolio')) return; 
+		if (($current_screen->id != 'edit-kia_portfolio') || ($current_screen->post_type != 'kia_portfolio')) return; 
 	 
 		?>
 		<script type="text/javascript">  
@@ -562,8 +561,7 @@ class KIA_Portfolio_Post_Type {
 						created_script.type='text/javascript';
 
 						//$('#TB_iframeContent').contents().find("head").append(created_script);
-						
-				
+							
 						//hide Use this button 
 						$('#TB_iframeContent').contents().find('.savesend input[type="submit"]').hide();
 			
@@ -588,9 +586,9 @@ class KIA_Portfolio_Post_Type {
 		function set_inline_featured_status(featuredValue, nonce) {
 			// revert Quick Edit menu so that it refreshes properly
 			inlineEditPost.revert();
-			var featuredRadioInput = document.getElementsByName('portfolio_featured_tax');
-			var nonceInput = document.getElementById('portfolio_featured_nonce');
-			nonceInput.value = nonce;
+			var featuredRadioInput = document.getElementsByName('kia_portfolio_featured_tax');
+			var nonceInput = document.getElementById('kia_portfolio_featured_nonce');
+			nonceInput.value = nonce;  console.log('wtf' + nonce);
 			// check option manually
 			for (i = 0; i < featuredRadioInput.length; i++) {
 				if (featuredRadioInput[i].value == featuredValue) { 
@@ -607,15 +605,15 @@ class KIA_Portfolio_Post_Type {
 
 	// Adjust the quick edit link to trigger our custom inline edits
 	function expand_quick_edit_link($actions, $post) {
-		global $current_screen;
-		if (($current_screen->id != 'edit-portfolio') || ($current_screen->post_type != 'portfolio')) return $actions; 
+		global $current_screen; 
+		if (($current_screen->id != 'edit-kia_portfolio') || ($current_screen->post_type != 'kia_portfolio')) return $actions; 
 	 
 		$nonce = wp_create_nonce( 'kia_featured_nonce_' . $post->ID );
 
-		$featured = wp_get_object_terms($post->ID, 'portfolio_featured'); 
+		$featured = wp_get_object_terms($post->ID, 'kia_portfolio_featured'); 
 		
 		//if for some reason there is no term in the tax, show as normal
-		if($featured){ 
+		if ( !is_wp_error( $featured ) && isset($featured[0]) ){ 
 			$status = $featured[0]->slug;
 		} else {
 			$status = 'normal';
@@ -634,15 +632,17 @@ class KIA_Portfolio_Post_Type {
 	 * (since it is the same)
 	*/
 	function save_taxonomy_data($post_id,$post) {  
-
+update_option('test_post',$_POST);
+		
 		// verify if this is an auto save routine. If it is our form has not been submitted, so we dont want to do anything
 		if ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE ) return $post_id;	
 		
 		// verify post type is portfolio and not a revision
-		if( $post->post_type != 'portfolio' || $post->post_type == 'revision' ) return $post_id;
+		if( $post->post_type != 'kia_portfolio' || $post->post_type == 'revision' ) return $post_id;
 		
 		// make sure data came from our meta box, verify nonce
-		$nonce = isset($_POST['portfolio_featured_nonce']) ? $_POST['portfolio_featured_nonce'] : NULL ;
+		$nonce = isset($_POST['kia_portfolio_featured_nonce']) ? $_POST['kia_portfolio_featured_nonce'] : NULL ;
+		
 		if (!wp_verify_nonce( $nonce, 'kia_featured_nonce_' . $post_id )) return $post_id;
 		
 		// Check permissions
@@ -653,12 +653,12 @@ class KIA_Portfolio_Post_Type {
 		}	
 		
 		//once verified, update featured tax
-		if (isset($_POST['portfolio_featured_tax']) ) { 
-			$status = esc_attr($_POST['portfolio_featured_tax']);
+		if (isset($_POST['kia_portfolio_featured_tax']) ) { 
+			$status = esc_attr($_POST['kia_portfolio_featured_tax']);
 			if ($status) {
-				wp_set_object_terms( $post_id, $status, 'portfolio_featured' );
+				wp_set_object_terms( $post_id, $status, 'kia_portfolio_featured' );
 			} else { 
-				wp_set_object_terms( $post_id, 'normal', 'portfolio_featured' );
+				wp_set_object_terms( $post_id, 'normal', 'kia_portfolio_featured' );
 			}
 		}
 		
@@ -669,8 +669,8 @@ class KIA_Portfolio_Post_Type {
 	 * http://devpress.com/blog/custom-columns-for-custom-post-types/
 	*/
 	function sortable_columns( $columns ) {
-		$columns['featured'] = 'portfolio_featured';
-		//to do: $columns['portfolio_category'] = 'portfolio_category';
+		$columns['kia_portfolio_featured'] = 'portfolio_featured';
+		//to do: $columns['kia_portfolio_category'] = 'portfolio_category';
 		return $columns;
 	}
 
@@ -682,7 +682,7 @@ class KIA_Portfolio_Post_Type {
 	 function portfolio_featured_clauses( $clauses, $wp_query ) {
 		global $wpdb;
 		//sort by featured status
-		if ( isset( $wp_query->query['orderby'] ) && 'portfolio_featured' == $wp_query->query['orderby'] ) {
+		if ( isset( $wp_query->query['orderby'] ) && 'kia_portfolio_featured' == $wp_query->query['orderby'] ) {
 	
 			$clauses['join'] .= <<<SQL
 LEFT OUTER JOIN {$wpdb->term_relationships} ON {$wpdb->posts}.ID={$wpdb->term_relationships}.object_id
@@ -690,20 +690,20 @@ LEFT OUTER JOIN {$wpdb->term_taxonomy} USING (term_taxonomy_id)
 LEFT OUTER JOIN {$wpdb->terms} USING (term_id)
 SQL;
 			
-			$clauses['where'] .= " AND (taxonomy = 'portfolio_featured' OR taxonomy IS NULL)";
+			$clauses['where'] .= " AND (taxonomy = 'kia_portfolio_featured' OR taxonomy IS NULL)";
 			$clauses['groupby'] = "object_id";
 			$clauses['orderby']  = "GROUP_CONCAT({$wpdb->terms}.name ORDER BY name ASC) ";
 			$clauses['orderby'] .= ( 'ASC' == strtoupper( $wp_query->get('order') ) ) ? 'ASC' : 'DESC';
 		}
 		//sort by portfolio category
-		if ( isset( $wp_query->query['orderby'] ) && 'portfolio_category' == $wp_query->query['orderby'] ) {
+		if ( isset( $wp_query->query['orderby'] ) && 'kia_portfolio_category' == $wp_query->query['orderby'] ) {
 	 
 			$clauses['join'] .= <<<SQL
 LEFT OUTER JOIN {$wpdb->term_relationships} ON {$wpdb->posts}.ID={$wpdb->term_relationships}.object_id
 LEFT OUTER JOIN {$wpdb->term_taxonomy} USING (term_taxonomy_id)
 LEFT OUTER JOIN {$wpdb->terms} USING (term_id)
 SQL;
-			$clauses['where'] .= " AND (taxonomy = 'portfolio_featured' OR taxonomy IS NULL)";
+			$clauses['where'] .= " AND (taxonomy = 'kia_portfolio_category' OR taxonomy IS NULL)";
 			$clauses['groupby'] = "object_id";
 			$clauses['orderby']  = "GROUP_CONCAT({$wpdb->terms}.name ORDER BY name ASC) ";
 			$clauses['orderby'] .= ( 'ASC' == strtoupper( $wp_query->get('order') ) ) ? 'ASC' : 'DESC';
@@ -718,8 +718,8 @@ SQL;
 	 */
 	function restrict_manage_posts() {
 		global $typenow;
-		if ( $typenow = 'portfolio')  {
-		$filters = array('portfolio_category','portfolio_tag','portfolio_featured');
+		if ( $typenow == 'kia_portfolio')  {
+		$filters = array('kia_portfolio_category','kia_portfolio_tag','kia_portfolio_featured');
 			foreach ($filters as $tax_slug) {
 				$tax_obj = get_taxonomy($tax_slug);  
 				$selected = (isset($_GET[$tax_obj->query_var])) ? $_GET[$tax_obj->query_var] : '';
