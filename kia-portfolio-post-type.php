@@ -144,22 +144,49 @@ class KIA_Portfolio_Post_Type {
 				// Get all blog ids
 				$blogids = $wpdb->get_col($wpdb->prepare("SELECT blog_id FROM $wpdb->blogs"));
 				foreach ($blogids as $blog_id) {
-					switch_to_blog($blog_id);
-					$this->_deactivate();
+					switch_to_blog($blog_id);  
+					$this->_mu_deactivate('portfolio');
 				}
 				switch_to_blog($old_blog);
 				return;
 			}	
-		} 
-		$this->_deactivate();		
+		} else {
+		$this->_deactivate();
+		}
 	}	
 	
 	function _deactivate() {
 		global $wp_rewrite;		
-		//$wp_rewrite->add_permastruct( 'portfolio', '');
-		flush_rewrite_rules();
+		$wp_rewrite->add_permastruct( 'portfolio', '');
+		$wp_rewrite->flush_rules();
 	}
   
+
+ 
+// remove all rewrite rules for a given permastruct
+function _mu_deactivate($permastruct, $ep_mask=EP_NONE) {
+	// replace all tags within permastruct  
+	if (!$permastruct)return;  
+	global $wp_rewrite;
+	$wp_rewrite->matches = 'matches';
+	$remove_rules = $wp_rewrite->generate_rewrite_rules($permastruct);
+	$num_rules = count($remove_rules);
+	// Get first rule
+	$rule1 = reset($remove_rules); $key_rule1 = key($remove_rules);
+ 
+	$rules = get_option('rewrite_rules');
+	$i = $num_rules;
+	foreach ($rules as $pretty_link => $query_link) {
+		// find the first rule
+		if (($pretty_link == $key_rule1) && ($query_link == $rule1)) { $i = 0; }
+		if ($i < $num_rules) {
+			// Delete next $num_rules
+			unset($rules[$pretty_link]); $i++;
+		}	
+	}
+	update_option('rewrite_rules', $rules);
+}
+
 	/**
 	 * Register post type, taxonomies and terms
 	 * http://codex.wordpress.org/Function_Reference/register_post_type
