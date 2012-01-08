@@ -48,7 +48,7 @@ if (!class_exists("Portfolio_Post_Type")) :
 
 class KIA_Portfolio_Post_Type {
 	
-	public $plugin_domain;
+	public static $plugin_domain;
 	
 	function KIA_Portfolio_Post_Type() {	
 		$this->plugin_domain = 'kia_portfolioposttype';
@@ -102,11 +102,9 @@ class KIA_Portfolio_Post_Type {
 		
 		register_activation_hook( __FILE__, array(&$this,'activate') );
 		register_deactivation_hook( __FILE__, array(&$this,'deactivate') );
-	
 	}
 	
 	function activate() {
-		
 		global $wpdb;
 
 		if (function_exists('is_multisite') && is_multisite()) {
@@ -122,8 +120,18 @@ class KIA_Portfolio_Post_Type {
 				switch_to_blog($old_blog);
 				return;
 			}	
-			$this->_activate();
 		} 
+		$this->_activate();		
+	}
+	
+	function _activate() {
+		$this->register_type();
+		
+		/**
+		* Flushes rewrite rules on plugin activation to ensure portfolio posts don't 404
+		* http://codex.wordpress.org/Function_Reference/flush_rewrite_rules
+		*/
+		flush_rewrite_rules();
 	}
 
 	function deactivate() {
@@ -142,31 +150,23 @@ class KIA_Portfolio_Post_Type {
 				switch_to_blog($old_blog);
 				return;
 			}	
-			$this->_deactivate();
-		} 	
+		} 
+		$this->_deactivate();		
 	}	
 	
-	function _activate() {
-		$this->register_type();
-		
-		/**
-		* Flushes rewrite rules on plugin activation to ensure portfolio posts don't 404
-		* http://codex.wordpress.org/Function_Reference/flush_rewrite_rules
-		*/
-		flush_rewrite_rules();
-	}
-	
 	function _deactivate() {
+		global $wp_rewrite;		
+		$wp_rewrite->add_permastruct( 'portfolio', '');
 		flush_rewrite_rules();
 	}
-	
+  
 	/**
 	 * Register post type, taxonomies and terms
 	 * http://codex.wordpress.org/Function_Reference/register_post_type
 	 */
 	function register_type() {
 	
-		load_plugin_textdomain( $this->plugin_domain, PPT_DIR . '/lang', basename( dirname( __FILE__ ) ) . '/lang' );
+		load_plugin_textdomain( $this->plugin_domain, PPT_DIR . '/lang', basename( dirname( __FILE__ ) ) . '/lang' ); //todo: fix this to check if file exists
 		/**
 		 * Register the Portfolio custom post type
 		 * http://codex.wordpress.org/Function_Reference/register_post_type
