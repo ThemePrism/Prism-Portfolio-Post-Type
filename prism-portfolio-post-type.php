@@ -575,20 +575,21 @@ function _mu_deactivate($permastruct, $ep_mask=EP_NONE) {
 		
 			
 		jQuery(document).ready(function($) {   
-			$('.postimagediv').delegate('.postfeaturedimage ','click', function() { 
-					//get post id from row element id
-					string = $(this).parents('tr.type-portfolio').attr('id'); 
-					if(/post-(\d+)/.exec(string)[1]) post_id = parseInt(/post-(\d+)/.exec(string)[1], 10);
+			$('.postimagediv').delegate('.postfeaturedimage','click', function() { 
+					//get post id from row checkbox value
+					post_id = $(this).parents('td').prevAll('th.check-column').find('input[type=checkbox]').val(); 
+					//old way involving string match todoL remove
+					//if(/post-(\d+)/.exec(string)[1]) post_id = parseInt(/post-(\d+)/.exec(string)[1], 10);
 					
 					tbframe_interval = setInterval(function() {
 					
-						//maybe this is the method to only load custom script from edit screen?
-						created_script=document.createElement('script');
+						//TODO: maybe this is the method to only load custom script from edit screen?
+						/* created_script=document.createElement('script');
 						created_script.src='<?php echo plugins_url( 'js/prism-set-post-thumbnail.js' , __FILE__ );?>';
 						created_script.type='text/javascript';
-
+						
 						//$('#TB_iframeContent').contents().find("head").append(created_script);
-							
+						*/	
 						//hide Use this button 
 						$('#TB_iframeContent').contents().find('.savesend input[type="submit"]').hide();
 			
@@ -597,7 +598,6 @@ function _mu_deactivate($permastruct, $ep_mask=EP_NONE) {
 							return val.replace('WPSetAsThumbnail', 'PrismSetAsThumbnail');
 						});
 
-						
 						//remove url, alignment and size fields- auto set to null, none and full respectively
 						$('#TB_iframeContent').contents().find('.url').hide().find('input').val('');
 						$('#TB_iframeContent').contents().find('.align').hide().find('input:radio').filter('[value="none"]').attr('checked', true);
@@ -605,7 +605,6 @@ function _mu_deactivate($permastruct, $ep_mask=EP_NONE) {
 					}, 2000);
 					
 					if(post_id)	tb_show('', 'media-upload.php?post_id='+post_id+'&type=image&tab=library&TB_iframe=true'); //tab sets the opened TB window to show library by default
-					//tb_show('', 'media-upload.php?type=image&TB_iframe=true');
 					return false;
 				});
 		 });
@@ -648,7 +647,7 @@ function _mu_deactivate($permastruct, $ep_mask=EP_NONE) {
 		
 		$actions['inline hide-if-no-js'] = '<a href="#" class="editinline" title="';
 		$actions['inline hide-if-no-js'] .= esc_attr( __( 'Edit this item inline' ) ) . '" ';
-		$actions['inline hide-if-no-js'] .= " onclick=\"set_inline_featured_status('{$status}', '{$nonce}')\">"; 
+		$actions['inline hide-if-no-js'] .= " onclick=\"set_inline_featured_status('{$status}', '{$nonce}')\">";  
 		$actions['inline hide-if-no-js'] .= __( 'Quick&nbsp;Edit' );
 		$actions['inline hide-if-no-js'] .= '</a>';
 		return $actions;	
@@ -786,7 +785,7 @@ SQL;
 	 */
 
 	function conditional_thickbox() {
-		if(isset($_GET['post_type']) && $_GET['post_type']=='portfolio'){
+		if(isset($_GET['post_type']) && $_GET['post_type']=='prism_portfolio'){
 			wp_enqueue_script('media-upload');
 			wp_enqueue_script('thickbox');
 			wp_enqueue_style('thickbox');
