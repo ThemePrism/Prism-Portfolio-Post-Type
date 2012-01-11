@@ -33,17 +33,6 @@ if (!function_exists('is_admin')) {
     exit();
 }
 
-// Pre-2.6 compatibility
-if ( ! defined( 'WP_CONTENT_URL' ) )
-      define( 'WP_CONTENT_URL', get_option( 'siteurl' ) . '/wp-content' );
-if ( ! defined( 'WP_CONTENT_DIR' ) )
-      define( 'WP_CONTENT_DIR', ABSPATH . 'wp-content' );
-
-//todo: do i need these?
-define( 'PPT_DIR', WP_PLUGIN_DIR . '/shiba-example-plugin' );
-define( 'PPT_URL', WP_PLUGIN_URL . '/shiba-example-plugin' );
-
-
 if (!class_exists("Prism_Portfolio_Post_Type")) :
 
 class Prism_Portfolio_Post_Type {
@@ -323,12 +312,12 @@ function _mu_deactivate($permastruct, $ep_mask=EP_NONE) {
 		/**
 		 * Create Terms for Featured Taxonomy
 		 */
-			if (!term_exists( 'excluded', 'prism_portfolio_featured') ){
+			if (!term_exists( 'archived', 'prism_portfolio_featured') ){
 			wp_insert_term(
-			  'excluded', // the term 
+			  'archived', // the term 
 			  'prism_portfolio_featured', // the taxonomy
 			  array(
-				'slug' => 'excluded',
+				'slug' => 'archived',
 			  )
 			);
 			}
@@ -408,7 +397,7 @@ function _mu_deactivate($permastruct, $ep_mask=EP_NONE) {
 	 */
 	 
 	function add_theme_box(){
-		add_meta_box('prism_portfolio_featured_tax', _x('Featured or Excluded Item',$this->plugin_domain), array($this,'featured_tax_display'), 'prism_portfolio', 'side', 'low');
+		add_meta_box('prism_portfolio_featured_tax', _x('Featured or archived Item',$this->plugin_domain), array($this,'featured_tax_display'), 'prism_portfolio', 'side', 'low');
 	}
 			
 
@@ -426,7 +415,7 @@ function _mu_deactivate($permastruct, $ep_mask=EP_NONE) {
 		
 		<input type="radio" name="prism_portfolio_featured_tax" <?php if( (!is_wp_error($featured) && !empty($featured) && $featured[0]->slug=='normal') || is_wp_error($featured) || empty($featured)){ echo " CHECKED "; } ?> value="normal"> <?php _e('Normal', $this->plugin_domain);?> <br/>
 			
-		<input type="radio" name="prism_portfolio_featured_tax" <?php if(!is_wp_error($featured) && !empty($featured) && $featured[0]->slug=='excluded'){echo " CHECKED ";} ?> value="excluded"> <?php _e('Excluded', $this->plugin_domain);?> <br/>
+		<input type="radio" name="prism_portfolio_featured_tax" <?php if(!is_wp_error($featured) && !empty($featured) && $featured[0]->slug=='archived'){echo " CHECKED ";} ?> value="archived"> <?php _e('archived', $this->plugin_domain);?> <br/>
 			
 	<?php  
 	}
@@ -556,7 +545,7 @@ function _mu_deactivate($permastruct, $ep_mask=EP_NONE) {
 
 			<input type="radio" name="prism_portfolio_featured_tax" value="featured"/> <?php _e('Featured ');?>
 			<input type="radio" name="prism_portfolio_featured_tax" value="normal"/> <?php _e('Normal ');?> 
-			<input type="radio" name="prism_portfolio_featured_tax" value="excluded"/> <?php _e('Excluded  ');?>  
+			<input type="radio" name="prism_portfolio_featured_tax" value="archived"/> <?php _e('archived  ');?>  
 		</div>
 		</fieldset>
 		
