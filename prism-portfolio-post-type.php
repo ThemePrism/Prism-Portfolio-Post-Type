@@ -42,6 +42,9 @@ class Prism_Portfolio_Post_Type {
 	function Prism_Portfolio_Post_Type() {	
 		$this->plugin_domain = 'prism_portfolioposttype';
 		
+		//Add support for thumbnails in case not enabled by theme
+		add_theme_support( 'post-thumbnails' );
+		
 		//Register post type, taxonomies and terms
 		add_action('init', array(&$this,'register_type'));
 		
