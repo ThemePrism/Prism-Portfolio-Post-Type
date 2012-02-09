@@ -565,9 +565,9 @@ function _mu_deactivate($permastruct, $ep_mask=EP_NONE) {
 		?>
 		<script type="text/javascript">  
 		
-			
+		//TODO - use jquery .on()
 		jQuery(document).ready(function($) {   
-			$('.postimagediv').delegate('.postfeaturedimage','click', function() { 
+			$('.postfeaturedimage').on('click', function() { 
 					//get post id from row checkbox value
 					post_id = $(this).parents('td').prevAll('th.check-column').find('input[type=checkbox]').val(); 
 					//old way involving string match todoL remove
