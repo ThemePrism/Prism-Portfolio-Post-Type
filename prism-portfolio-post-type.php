@@ -606,7 +606,7 @@ function _mu_deactivate($permastruct, $ep_mask=EP_NONE) {
 			inlineEditPost.revert();
 			var featuredRadioInput = document.getElementsByName('prism_portfolio_featured_tax');
 			var nonceInput = document.getElementById('prism_portfolio_featured_nonce');
-			nonceInput.value = nonce;  console.log('wtf' + nonce);
+			nonceInput.value = nonce;  
 			// check option manually
 			for (i = 0; i < featuredRadioInput.length; i++) {
 				if (featuredRadioInput[i].value == featuredValue) { 
