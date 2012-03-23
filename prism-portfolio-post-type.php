@@ -38,9 +38,10 @@ if (!class_exists("Prism_Portfolio_Post_Type")) :
 class Prism_Portfolio_Post_Type {
 	
 	public static $plugin_domain;
+
+	const text_domain = 'prism_portfolioposttype';
 	
 	function Prism_Portfolio_Post_Type() {	
-		$this->plugin_domain = 'prism_portfolioposttype';
 		
 		//Add support for thumbnails in case not enabled by theme
 		add_theme_support( 'post-thumbnails' );
@@ -185,7 +186,7 @@ function _mu_deactivate($permastruct, $ep_mask=EP_NONE) {
 	 */
 	function register_type() {
 	
-		load_plugin_textdomain( $this->plugin_domain, PPT_DIR . '/lang', basename( dirname( __FILE__ ) ) . '/lang' ); //todo: fix this to check if file exists
+		load_plugin_textdomain( self::text_domain, PPT_DIR . '/lang', basename( dirname( __FILE__ ) ) . '/lang' ); //todo: fix this to check if file exists
 		/**
 		 * Register the Portfolio custom post type
 		 * http://codex.wordpress.org/Function_Reference/register_post_type
@@ -193,16 +194,16 @@ function _mu_deactivate($permastruct, $ep_mask=EP_NONE) {
 
 		if(!post_type_exists('prism_portfolio')){
 			$labels = array(
-				'name' => __( 'Portfolio', $this->plugin_domain ),
-				'singular_name' => __( 'Portfolio Item', $this->plugin_domain ),
-				'add_new' => __( 'Add New Item', $this->plugin_domain ),
-				'add_new_item' => __( 'Add New Portfolio Item', $this->plugin_domain ),
-				'edit_item' => __( 'Edit Portfolio Item', $this->plugin_domain ),
-				'new_item' => __( 'Add New Portfolio Item', $this->plugin_domain ),
-				'view_item' => __( 'View Item', $this->plugin_domain ),
-				'search_items' => __( 'Search Portfolio', $this->plugin_domain ),
-				'not_found' => __( 'No portfolio items found', $this->plugin_domain ),
-				'not_found_in_trash' => __( 'No portfolio items found in trash', $this->plugin_domain )
+				'name' => __( 'Portfolio', self::text_domain ),
+				'singular_name' => __( 'Portfolio Item', self::text_domain ),
+				'add_new' => __( 'Add New Item', self::text_domain ),
+				'add_new_item' => __( 'Add New Portfolio Item', self::text_domain ),
+				'edit_item' => __( 'Edit Portfolio Item', self::text_domain ),
+				'new_item' => __( 'Add New Portfolio Item', self::text_domain ),
+				'view_item' => __( 'View Item', self::text_domain ),
+				'search_items' => __( 'Search Portfolio', self::text_domain ),
+				'not_found' => __( 'No portfolio items found', self::text_domain ),
+				'not_found_in_trash' => __( 'No portfolio items found in trash', self::text_domain )
 			);
 
 			$args = array(
@@ -224,21 +225,21 @@ function _mu_deactivate($permastruct, $ep_mask=EP_NONE) {
 		 
 		if(!taxonomy_exists('prism_portfolio_tag')){
 			$taxonomy_portfolio_tag_labels = array(
-				'name' => _x( 'Portfolio Tags', $this->plugin_domain ),
-				'singular_name' => _x( 'Portfolio Tag', $this->plugin_domain ),
-				'search_items' => _x( 'Search Portfolio Tags', $this->plugin_domain ),
-				'popular_items' => _x( 'Popular Portfolio Tags', $this->plugin_domain ),
-				'all_items' => _x( 'All Portfolio Tags', $this->plugin_domain ),
-				'parent_item' => _x( 'Parent Portfolio Tag', $this->plugin_domain ),
-				'parent_item_colon' => _x( 'Parent Portfolio Tag:', $this->plugin_domain ),
-				'edit_item' => _x( 'Edit Portfolio Tag', $this->plugin_domain ),
-				'update_item' => _x( 'Update Portfolio Tag', $this->plugin_domain ),
-				'add_new_item' => _x( 'Add New Portfolio Tag', $this->plugin_domain ),
-				'new_item_name' => _x( 'New Portfolio Tag Name', $this->plugin_domain ),
-				'separate_items_with_commas' => _x( 'Separate portfolio tags with commas', $this->plugin_domain ),
-				'add_or_remove_items' => _x( 'Add or remove portfolio tags', $this->plugin_domain ),
-				'choose_from_most_used' => _x( 'Choose from the most used portfolio tags', $this->plugin_domain ),
-				'menu_name' => _x( 'Portfolio Tags', $this->plugin_domain )
+				'name' => __( 'Portfolio Tags', self::text_domain ),
+				'singular_name' => __( 'Portfolio Tag', self::text_domain ),
+				'search_items' => __( 'Search Portfolio Tags', self::text_domain ),
+				'popular_items' => __( 'Popular Portfolio Tags', self::text_domain ),
+				'all_items' => __( 'All Portfolio Tags', self::text_domain ),
+				'parent_item' => __( 'Parent Portfolio Tag', self::text_domain ),
+				'parent_item_colon' => __( 'Parent Portfolio Tag:', self::text_domain ),
+				'edit_item' => __( 'Edit Portfolio Tag', self::text_domain ),
+				'update_item' => __( 'Update Portfolio Tag', self::text_domain ),
+				'add_new_item' => __( 'Add New Portfolio Tag', self::text_domain ),
+				'new_item_name' => __( 'New Portfolio Tag Name', self::text_domain ),
+				'separate_items_with_commas' => __( 'Separate portfolio tags with commas', self::text_domain ),
+				'add_or_remove_items' => __( 'Add or remove portfolio tags', self::text_domain ),
+				'choose_from_most_used' => __( 'Choose from the most used portfolio tags', self::text_domain ),
+				'menu_name' => __( 'Portfolio Tags', self::text_domain )
 			);
 			
 			$taxonomy_portfolio_tag_args = array(
@@ -260,21 +261,21 @@ function _mu_deactivate($permastruct, $ep_mask=EP_NONE) {
 		 */
 		if(!taxonomy_exists('prism_portfolio_category')){
 			$taxonomy_portfolio_category_labels = array(
-				'name' => _x( 'Portfolio Categories', $this->plugin_domain ),
-				'singular_name' => _x( 'Portfolio Category', $this->plugin_domain ),
-				'search_items' => _x( 'Search Portfolio Categories', $this->plugin_domain ),
-				'popular_items' => _x( 'Popular Portfolio Categories', $this->plugin_domain ),
-				'all_items' => _x( 'All Portfolio Categories', $this->plugin_domain ),
-				'parent_item' => _x( 'Parent Portfolio Category', $this->plugin_domain ),
-				'parent_item_colon' => _x( 'Parent Portfolio Category:', $this->plugin_domain ),
-				'edit_item' => _x( 'Edit Portfolio Category', $this->plugin_domain ),
-				'update_item' => _x( 'Update Portfolio Category', $this->plugin_domain ),
-				'add_new_item' => _x( 'Add New Portfolio Category', $this->plugin_domain ),
-				'new_item_name' => _x( 'New Portfolio Category Name', $this->plugin_domain ),
-				'separate_items_with_commas' => _x( 'Separate portfolio categories with commas', $this->plugin_domain ),
-				'add_or_remove_items' => _x( 'Add or remove portfolio categories', $this->plugin_domain ),
-				'choose_from_most_used' => _x( 'Choose from the most used portfolio categories', $this->plugin_domain ),
-				'menu_name' => _x( 'Portfolio Categories', $this->plugin_domain ),
+				'name' => __( 'Portfolio Categories', self::text_domain ),
+				'singular_name' => __( 'Portfolio Category', self::text_domain ),
+				'search_items' => __( 'Search Portfolio Categories', self::text_domain ),
+				'popular_items' => __( 'Popular Portfolio Categories', self::text_domain ),
+				'all_items' => __( 'All Portfolio Categories', self::text_domain ),
+				'parent_item' => __( 'Parent Portfolio Category', self::text_domain ),
+				'parent_item_colon' => __( 'Parent Portfolio Category:', self::text_domain ),
+				'edit_item' => __( 'Edit Portfolio Category', self::text_domain ),
+				'update_item' => __( 'Update Portfolio Category', self::text_domain ),
+				'add_new_item' => __( 'Add New Portfolio Category', self::text_domain ),
+				'new_item_name' => __( 'New Portfolio Category Name', self::text_domain ),
+				'separate_items_with_commas' => __( 'Separate portfolio categories with commas', self::text_domain ),
+				'add_or_remove_items' => __( 'Add or remove portfolio categories', self::text_domain ),
+				'choose_from_most_used' => __( 'Choose from the most used portfolio categories', self::text_domain ),
+				'menu_name' => __( 'Portfolio Categories', self::text_domain ),
 			);
 			
 			$taxonomy_portfolio_category_args = array(
@@ -296,8 +297,8 @@ function _mu_deactivate($permastruct, $ep_mask=EP_NONE) {
 		 */
 			if(!taxonomy_exists('prism_portfolio_featured')){
 			$portfolio_featured_labels = array(
-				'name' => _x( 'Featured', $this->plugin_domain ),
-				'singular_name' => _x( 'Featured', $this->plugin_domain )			
+				'name' => __( 'Featured', self::text_domain ),
+				'singular_name' => __( 'Featured', self::text_domain )			
 			);
 			
 			$taxonomy_portfolio_featured_args = array(
@@ -400,7 +401,7 @@ function _mu_deactivate($permastruct, $ep_mask=EP_NONE) {
 	 */
 	 
 	function add_theme_box(){
-		add_meta_box('prism_portfolio_featured_tax', _x('Featured or archived Item',$this->plugin_domain), array($this,'featured_tax_display'), 'prism_portfolio', 'side', 'low');
+		add_meta_box('prism_portfolio_featured_tax', __('Featured or archived Item',self::text_domain), array($this,'featured_tax_display'), 'prism_portfolio', 'side', 'low');
 	}
 			
 
@@ -412,13 +413,13 @@ function _mu_deactivate($permastruct, $ep_mask=EP_NONE) {
 	 
 		<?php $featured = wp_get_post_terms( $post->ID, 'prism_portfolio_featured' ); ?> 
 
-		<p><?php _e('Is this a featured portfolio item?', $this->plugin_domain);?></p>
+		<p><?php _e('Is this a featured portfolio item?', self::text_domain);?></p>
 	
-		<input type="radio" name="prism_portfolio_featured_tax" <?php if(!is_wp_error($featured) && !empty($featured) && $featured[0]->slug=='featured'){echo " CHECKED ";} ?> value="featured"> <?php _e('Featured', $this->plugin_domain);?> <br/>
+		<input type="radio" name="prism_portfolio_featured_tax" <?php if(!is_wp_error($featured) && !empty($featured) && $featured[0]->slug=='featured'){echo " CHECKED ";} ?> value="featured"> <?php _e('Featured', self::text_domain);?> <br/>
 		
-		<input type="radio" name="prism_portfolio_featured_tax" <?php if( (!is_wp_error($featured) && !empty($featured) && $featured[0]->slug=='normal') || is_wp_error($featured) || empty($featured)){ echo " CHECKED "; } ?> value="normal"> <?php _e('Normal', $this->plugin_domain);?> <br/>
+		<input type="radio" name="prism_portfolio_featured_tax" <?php if( (!is_wp_error($featured) && !empty($featured) && $featured[0]->slug=='normal') || is_wp_error($featured) || empty($featured)){ echo " CHECKED "; } ?> value="normal"> <?php _e('Normal', self::text_domain);?> <br/>
 			
-		<input type="radio" name="prism_portfolio_featured_tax" <?php if(!is_wp_error($featured) && !empty($featured) && $featured[0]->slug=='archived'){echo " CHECKED ";} ?> value="archived"> <?php _e('archived', $this->plugin_domain);?> <br/>
+		<input type="radio" name="prism_portfolio_featured_tax" <?php if(!is_wp_error($featured) && !empty($featured) && $featured[0]->slug=='archived'){echo " CHECKED ";} ?> value="archived"> <?php _e('archived', self::text_domain);?> <br/>
 			
 	<?php  
 	}
@@ -431,14 +432,14 @@ function _mu_deactivate($permastruct, $ep_mask=EP_NONE) {
 	function edit_columns($portfolio_columns){
 		$portfolio_columns = array(
 			"cb" => "<input type=\"checkbox\" />",
-			"title" => _x('Title', 'column name'),
-			"author" => __('Author', $this->plugin_domain),
-			"thumbnail" => __('Thumbnail', $this->plugin_domain),
-			"prism_portfolio_category" => __('Category', $this->plugin_domain),
-			"prism_portfolio_tag" => __('Tags', $this->plugin_domain),
+			"title" => __('Title', 'column name'),
+			"author" => __('Author', self::text_domain),
+			"thumbnail" => __('Thumbnail', self::text_domain),
+			"prism_portfolio_category" => __('Category', self::text_domain),
+			"prism_portfolio_tag" => __('Tags', self::text_domain),
 			"prism_portfolio_featured" => __('Featured Status'),
-			"comments" => __('Comments', $this->plugin_domain),
-			"date" => __('Date', $this->plugin_domain),
+			"comments" => __('Comments', self::text_domain),
+			"date" => __('Date', self::text_domain),
 		);
 		$portfolio_columns['comments'] = '<div class="vers"><img alt="Comments" src="' . esc_url( admin_url( 'images/comment-grey-bubble.png' ) ) . '" /></div>';
 		return $portfolio_columns;
@@ -461,7 +462,7 @@ function _mu_deactivate($permastruct, $ep_mask=EP_NONE) {
 					if ( has_post_thumbnail() ) {
 							$text = '<div class="postimagediv"><a href="#" class="postfeaturedimage">'.get_the_post_thumbnail($post_id, array($width,$height)).'</a></div>';
 						} else {
-							$text = '<div class="postimagediv"><a href="#" class="postfeaturedimage hide-if-no-js">'._x('Add Image',$this->plugin_domain).'</a></div>';
+							$text = '<div class="postimagediv"><a href="#" class="postfeaturedimage hide-if-no-js">'.__('Add Image',self::text_domain).'</a></div>';
 						}  
 						
 						echo $text;
@@ -482,7 +483,7 @@ function _mu_deactivate($permastruct, $ep_mask=EP_NONE) {
 						echo join( ', ', $out );
 						
 					} else {
-						_e( 'Uncategorized' , $this->plugin_domain);
+						_e( 'Uncategorized' , self::text_domain);
 					}	
 					
 			break;
@@ -503,7 +504,7 @@ function _mu_deactivate($permastruct, $ep_mask=EP_NONE) {
 						echo join( ', ', $out );
 						
 					} else {
-						_e( 'No Tags' , $this->plugin_domain);
+						_e( 'No Tags' , self::text_domain);
 					}	
 				break;		
 				
@@ -741,7 +742,7 @@ SQL;
 				$tax_obj = get_taxonomy($tax_slug);  
 				$selected = (isset($_GET[$tax_obj->query_var])) ? $_GET[$tax_obj->query_var] : '';
 				wp_dropdown_categories(array(
-					'show_option_all' => _x('Show All '.$tax_obj->label, $this->plugin_domain ),
+					'show_option_all' => __('Show All '.$tax_obj->label, self::text_domain ),
 					'taxonomy' => $tax_slug,
 					'name' => $tax_obj->name,
 					'orderby' => 'term_order',
