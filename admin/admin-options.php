@@ -38,6 +38,7 @@ class Prism_Admin_Options extends Prism_Portfolio {
 	static function default_options(){
 		$defaults = array ('base_id' => 0,
 					'prepend_portfolio_to_urls' => 'no',
+					'description' => '',
 					'cat_slug' => 'portfolio-category',
 					'tag_slug' => 'portfolio-tag',
 					'prepend_portfolio_page_to_items' => 'no',
@@ -81,6 +82,8 @@ class Prism_Admin_Options extends Prism_Portfolio {
 		$valid = array();
 
 		$valid['base_id'] = absint($input['base_id']);
+
+		$valid['description'] = wp_kses_post($input['description']);
 
 		$valid['cat_slug'] = sanitize_title ( $input['cat_slug']);
 		

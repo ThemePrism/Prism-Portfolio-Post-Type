@@ -55,6 +55,8 @@ class Prism_Post_Type_Init extends Prism_Portfolio {
 		 **/
 		 
 		$options = get_option('prism_portfolio_options');
+
+		$description = isset($options['description']) ? trim($options['description']) : '';
 		
 		$portfolio_page_id = isset($options['base_id']) ? $options['base_id'] : 0;
 		
@@ -221,6 +223,7 @@ class Prism_Post_Type_Init extends Prism_Portfolio {
 				'public' => true,
 				'supports' => array( 'title', 'editor', 'excerpt', 'thumbnail', 'comments', 'custom-fields', 'revisions' ),
 				'capability_type' => 'post',
+				'description' => $description,
 				'has_archive' => true,
 				'menu_position' => 5,
 				'supports' => array('title', 'excerpt', 'custom-fields', 'editor', 'author', 'thumbnail','comments' /*,'post-formats'*/), //todo: support certain post formats
