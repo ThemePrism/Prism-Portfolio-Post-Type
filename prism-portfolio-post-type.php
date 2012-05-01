@@ -128,7 +128,8 @@ class Prism_Portfolio {
 		$includes = array ( 'admin/edit-screen.php',
 							'admin/admin-options.php',
 							'admin/post-type-init.php',
-							'admin/featured-metabox.php'
+							'admin/featured-metabox.php',
+							'admin/gallery-metabox.php'
 							);
 		
 		foreach ($includes as $include) include_once $include;
@@ -140,16 +141,19 @@ class Prism_Portfolio {
 	 **/
 	function init(){
 		//Register post type, taxonomies and terms
-		$this->newPostType = new Prism_Post_Type_Init();
+		$this->Init = new Prism_Post_Type_Init();
 
 		//Add Plugin Options
-		$this->adminOptions = new Prism_Admin_Options(); 
+		$this->Options = new Prism_Admin_Options(); 
 		
 		//Add Columns, Sorting and Quick Edit to Portfolio Edit Screen
-		$this->editColumns = new Prism_Edit_Screen(); 
+		$this->Columns = new Prism_Edit_Screen(); 
 
 		//Creates, saves and validates the data for the Metaboxes
-		$this->prismFeatured = new Prism_Featured();
+		$this->Featured = new Prism_Featured();
+
+		//Creates, manages and saves the data for the Gallery Attachments
+		$this->Gallery = new Prism_Gallery();
 	}
 
 	/**
