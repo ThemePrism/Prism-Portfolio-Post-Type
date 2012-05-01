@@ -16,6 +16,7 @@ if (!function_exists('is_admin')) {
 
     <style> 
       td span {color: #666; font-style: italic;}
+      span.slug { letter-spacing: 1px; font-style: normal; background: #EEE;}
     </style>
 
 	<?php
@@ -83,7 +84,7 @@ if (!function_exists('is_admin')) {
 			<tr>
 			<th scope="row"><?php _e('Portfolio base page', 'prism_portfolio');?></th>
 				<td><input type="checkbox" name="prism_portfolio_options[prepend_portfolio_page_to_items]" value="yes" <?php checked( $options['prepend_portfolio_page_to_items'], 'yes' ); ?> />
-				<span class="slug"><?php _e('Prepend portfolio permalinks with portfolio base page ('.$base_slug.')', 'prism_portfolio');?></span>
+				<span><?php _e('Prepend portfolio permalinks with portfolio base page (<span class="slug">'.$base_slug.'</span>)', 'prism_portfolio');?></span>
 				<br/>
 				<input type="checkbox" name="prism_portfolio_options[prepend_category_to_items]" value="yes" <?php checked( $options['prepend_category_to_items'], 'yes' ); ?> />
 				<span><?php _e('Prepend portfolio permalinks with portfolio category', 'prism_portfolio');?></span>

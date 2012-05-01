@@ -59,6 +59,7 @@ class Prism_Portfolio {
 
 	/** Variables ******************************************************************/
 	
+	static $version = .1;
 	static $post_type = "prism_portfolio";
 	static $tag = "prism_portfolio_tag";
 	static $category = "prism_portfolio_category";
@@ -85,6 +86,9 @@ class Prism_Portfolio {
 
 		register_activation_hook( __FILE__, array(&$this,'activate') );
 		register_deactivation_hook( __FILE__, array(&$this,'deactivate') );
+
+		//add action links to plugins page
+		add_filter('plugin_action_links_' . plugin_basename(__FILE__), array(__CLASS__,'plugin_action_links' ));
 
 	}
 
@@ -124,8 +128,7 @@ class Prism_Portfolio {
 		$includes = array ( 'admin/edit-screen.php',
 							'admin/admin-options.php',
 							'admin/post-type-init.php',
-							'admin/metaboxes.php',
-							'admin/faster-metabox.php'
+							'admin/featured-metabox.php'
 							);
 		
 		foreach ($includes as $include) include_once $include;
@@ -140,16 +143,13 @@ class Prism_Portfolio {
 		$this->newPostType = new Prism_Post_Type_Init();
 
 		//Add Plugin Options
-		$this->editColumns = new Prism_Admin_Options(); 
+		$this->adminOptions = new Prism_Admin_Options(); 
 		
 		//Add Columns, Sorting and Quick Edit to Portfolio Edit Screen
 		$this->editColumns = new Prism_Edit_Screen(); 
 
 		//Creates, saves and validates the data for the Metaboxes
-		$this->metaBoxesA = new Prism_Metaboxes();
-		// ???
-		$this->metaBoxesB = new Faster_Metabox();
-
+		$this->prismFeatured = new Prism_Featured();
 	}
 
 	/**
@@ -215,7 +215,7 @@ class Prism_Portfolio {
 	
 	//@TODO: is this correct? link to slug from plugin options
 	function _deactivate() {
-		global $wp_rewrite;		+
+		global $wp_rewrite;		
 		$wp_rewrite->add_permastruct( 'portfolio', '');
 		$wp_rewrite->flush_rules();
 	}
@@ -246,8 +246,14 @@ class Prism_Portfolio {
 		update_option('rewrite_rules', $rules);
 	}
 
-
-
+	/**
+	 * Adds a link to plugin's settings and help pages (shows up next to the 
+	 * deactivation link on the plugins management page)
+	 */
+	function plugin_action_links( $links )	{ 
+		array_unshift( $links, '<a href="edit.php?post_type=prism_portfolio&page=settings">' . __('Settings', "prism_portfolio") . '</a>' );	
+		return $links; 
+	}
 
 
 

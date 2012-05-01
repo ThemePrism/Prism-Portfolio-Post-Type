@@ -75,6 +75,8 @@ class Prism_Edit_Screen extends Prism_Portfolio {
 		if(self::$tag) $columns[self::$tag] = __('Tags', 'prism_portfolio');
 		if(self::$featured) $columns[self::$featured] = __('Featured', 'prism_portfolio');
 
+		$columns['attachment_count'] = __('#Attachments', "prism_portfolio");
+		
 		$columns['comments'] = '<div class="vers"><img alt="Comments" src="' . esc_url( admin_url( 'images/comment-grey-bubble.png' ) ) . '" /></div>';
 		$columns['date'] = __('Date', 'prism_portfolio');
 		
@@ -84,7 +86,7 @@ class Prism_Edit_Screen extends Prism_Portfolio {
 
 	function display_columns($columns, $post_id){
 
-		global $post;
+		global $post, $wpdb;
 
 		switch ( $columns ) {
 			// Code adapted from: http://wpengineer.com/display-post-thumbnail-post-page-overview
@@ -123,7 +125,7 @@ class Prism_Edit_Screen extends Prism_Portfolio {
 						_e( 'Uncategorized' , 'prism_portfolio');
 					}	
 					
-			break;
+				break;
 			
 				
 				// Display the portfolio tags in the column view
@@ -191,7 +193,12 @@ class Prism_Edit_Screen extends Prism_Portfolio {
 								"featured"
 							);
 					
-			break;
+				break;
+				case "attachment_count":
+					$count = $wpdb->get_var( $wpdb->prepare("SELECT COUNT(ID) FROM $wpdb->posts WHERE post_type='attachment' AND post_parent=%d", $post_id) );
+			
+					echo $count;
+				break;
 		}
 	}
 

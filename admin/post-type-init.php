@@ -208,6 +208,7 @@ class Prism_Post_Type_Init extends Prism_Portfolio {
 		$labels = array(
 				'name' => __( 'Portfolio', 'prism_portfolio' ),
 				'singular_name' => __( 'Portfolio Item', 'prism_portfolio' ),
+				'all_items' => __( 'All Portfolio Items', 'prism_portfolio' ),
 				'add_new' => __( 'Add New Item', 'prism_portfolio' ),
 				'add_new_item' => __( 'Add New Portfolio Item', 'prism_portfolio' ),
 				'edit_item' => __( 'Edit Portfolio Item', 'prism_portfolio' ),
