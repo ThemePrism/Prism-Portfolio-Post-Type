@@ -182,14 +182,14 @@ class Prism_Edit_Screen extends Prism_Portfolio {
 					printf( '<a href="%s" title="%s"><img src="%s" alt="%s"/></a>',
 								wp_nonce_url( admin_url('admin-ajax.php?action=prism-feature-product&archived='.$archived_action.'&product_id=' . $post_id), 'prism-feature-product' ),
 								$archived_title,
-								self::plugin_url() . '/images/x-mark-'.$archived_image.'.png',
+								self::plugin_url() . '/admin/images/x-mark-'.$archived_image.'.png',
 								"archived"
 							);
 					echo "&nbsp;";
 					printf( '<a href="%s" title="%s"><img src="%s" alt="%s"/></a>',
 								wp_nonce_url( admin_url('admin-ajax.php?action=prism-feature-product&featured='.$featured_action.'&product_id=' . $post_id), 'prism-feature-product' ),
 								$featured_title,
-								self::plugin_url() . '/images/star-'.$featured_image.'.png',
+								self::plugin_url() . '/admin/images/star-'.$featured_image.'.png',
 								"featured"
 							);
 					

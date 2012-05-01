@@ -272,12 +272,12 @@ class Prism_Post_Type_Init extends Prism_Portfolio {
 	function icons() { ?>
 		<style type="text/css" media="screen">
 			#menu-posts-prism_portfolio .wp-menu-image {
-				background: url(<?php echo self::plugin_url() . '/images/portfolio-icon.png'; ?>) no-repeat 6px 6px !important;
+				background: url(<?php echo self::plugin_url() . '/admin/images/portfolio-icon.png'; ?>) no-repeat 6px 6px !important;
 			}
 			#menu-posts-prism_portfolio:hover .wp-menu-image, #menu-posts-prism_portfolio.wp-has-current-submenu .wp-menu-image {
 				background-position:6px -16px !important;
 			}
-			#icon-edit.icon32-posts-prism_portfolio {background: url(<?php echo self::plugin_url() .'/images/portfolio-32x32.png'; ?>) no-repeat;}
+			#icon-edit.icon32-posts-prism_portfolio {background: url(<?php echo self::plugin_url() .'/admin/images/portfolio-32x32.png'; ?>) no-repeat;}
 		</style>
 	<?php }
 
