@@ -1,9 +1,9 @@
 <?php
 /*
-Plugin Name: File Gallery
+Plugin Name: Prism Gallery
 Plugin URI: http://skyphe.org/code/wordpress/file-gallery/
 Version: 1.7.4.1
-Description: "File Gallery" extends WordPress' media (attachments) capabilities by adding a new gallery shortcode handler with templating support, a new interface for attachment handling when editing posts, and much more.
+Description: "Prism Gallery" extends WordPress' media (attachments) capabilities by adding a new gallery shortcode handler with templating support, a new interface for attachment handling when editing posts, and much more.
 Author: Bruno "Aesqe" Babic
 Author URI: http://skyphe.org
 
@@ -36,7 +36,7 @@ if (!function_exists('is_admin')) {
 
 
 /**
- * Setup default File Gallery options
+ * Setup default Prism Gallery options
  */
 
 define('PRISM_GALLERY_VERSION', '1.7.4.1');
@@ -161,9 +161,9 @@ class Prism_Gallery extends Prism_Portfolio {
 
 function prism_gallery_debug_print( $content )
 {
-	global $file_gallery;
+	global $prism_portfolio;
 	
-	return $content . $file_gallery->debug_print();
+	return $content . $prism_portfolio->Gallery->debug_print();
 }
 if( isset($_GET['prism_gallery_debug']) )
 	add_action('the_content', 'prism_gallery_debug_print', 100);
@@ -177,13 +177,13 @@ if( isset($_GET['prism_gallery_debug']) )
  */
 function prism_gallery_do_settings()
 {
-	global $file_gallery;
+	global $prism_portfolio;
 
-	$file_gallery->settings = array(
+	$prism_portfolio->Gallery->settings = array(
 			'disable_shortcode_handler' => array(
 				'default' => 0, 
 				'display' => true,
-				'title' => __("Disable 'File Gallery' handling of [gallery] shortcode?", 'prism_portfolio'),
+				'title' => __("Disable 'Prism Gallery' handling of [gallery] shortcode?", 'prism_portfolio'),
 				'type' => 'checkbox',
 				'section' => 0,
 				'position' => 0
@@ -191,7 +191,7 @@ function prism_gallery_do_settings()
 			'show_on_post_type' => array(
 				'default' => 1, 
 				'display' => true,
-				'title' => __('Display File Gallery on which post types?', 'prism_portfolio'),
+				'title' => __('Display Prism Gallery on which post types?', 'prism_portfolio'),
 				'type' => 'checkbox',
 				'values' => prism_gallery_post_type_checkboxes(),
 				'section' => 0,
@@ -224,7 +224,7 @@ function prism_gallery_do_settings()
 			'default_metabox_image_size' => array(
 				'default' => 'thumbnail', 
 				'display' => true,
-				'title' => __('Default WordPress image size for thumbnails in File Gallery metabox on post editing screens?', 'prism_portfolio'),
+				'title' => __('Default WordPress image size for thumbnails in Prism Gallery metabox on post editing screens?', 'prism_portfolio'),
 				'type' => 'select',
 				'values' => prism_gallery_dropdown( 'default_metabox_image_size', 'image_size' ),
 				'section' => 0,
@@ -233,7 +233,7 @@ function prism_gallery_do_settings()
 			'default_metabox_image_width' => array(
 				'default' => 75, 
 				'display' => true,
-				'title' => __('Default width (in pixels) for thumbnails in File Gallery metabox on post editing screens?', 'prism_portfolio'),
+				'title' => __('Default width (in pixels) for thumbnails in Prism Gallery metabox on post editing screens?', 'prism_portfolio'),
 				'type' => 'text',
 				'section' => 0,
 				'position' => 0
@@ -243,7 +243,7 @@ function prism_gallery_do_settings()
 			'default_image_size' => array(
 				'default' => 'thumbnail',
 				'display' => true,
-				'title' => '</th></tr><tr><td colspan="2"><strong style="display: block; margin-top: -15px; font-size: 115%; color: #21759B;">' . __('Some default values for when inserting a gallery into a post', 'prism_portfolio') . '...</strong></td></tr><tr><td colspan="2"><p id="prism-gallery-media-settings-notice" style="margin: 0; background-color: #FFFFE8; border-color: #EEEED0; -moz-border-radius: 3px; -webkit-border-radius: 3px; border-radius: 3px; border-style: solid; border-width: 1px; padding: 0.6em;">' . sprintf(__('The following two blocks of options <strong>do not</strong> affect the output/display of your galleries - they are here only so you could set default values for File Gallery metabox on post editing screen. <a href="%s/help/index.html#settings_page" target="_blank">More information is available in the help file</a>.', "prism_portfolio"), PRISM_GALLERY_URL) . '</p></td></tr><tr valign="top"><th scope="row">' . __('size', 'prism_portfolio'),
+				'title' => '</th></tr><tr><td colspan="2"><strong style="display: block; margin-top: -15px; font-size: 115%; color: #21759B;">' . __('Some default values for when inserting a gallery into a post', 'prism_portfolio') . '...</strong></td></tr><tr><td colspan="2"><p id="prism-gallery-media-settings-notice" style="margin: 0; background-color: #FFFFE8; border-color: #EEEED0; -moz-border-radius: 3px; -webkit-border-radius: 3px; border-radius: 3px; border-style: solid; border-width: 1px; padding: 0.6em;">' . sprintf(__('The following two blocks of options <strong>do not</strong> affect the output/display of your galleries - they are here only so you could set default values for Prism Gallery metabox on post editing screen. <a href="%s/help/index.html#settings_page" target="_blank">More information is available in the help file</a>.', "prism_portfolio"), PRISM_GALLERY_URL) . '</p></td></tr><tr valign="top"><th scope="row">' . __('size', 'prism_portfolio'),
 				'type' => 'select',
 				'values' => prism_gallery_dropdown( 'default_image_size', 'image_size' ),
 				'section' => 0,
@@ -396,8 +396,6 @@ function prism_gallery_do_settings()
 				'section' => 0,
 				'position' => 0
 			),
-			
-			
 			'cache' => array(
 				'default' => 0, 
 				'display' => true,
@@ -530,15 +528,15 @@ function prism_gallery_do_settings()
 			'version' => array(
 				'default' => PRISM_GALLERY_VERSION,
 				'display' => 'disabled',
-				'title' => __('File Gallery version', 'prism_portfolio'),
+				'title' => __('Prism Gallery version', 'prism_portfolio'),
 				'type' => 'text',
 				'section' => 0,
 				'position' => 0
 			),
 			'folder' => array(
-				'default' => prism_gallery_https( PRISM_GALLERY_URL ),
+				'default' =>  Prism_Portfolio::plugin_url(),
 				'display' => 'disabled',
-				'title' => __('File Gallery folder', 'prism_portfolio'),
+				'title' => __('Prism Gallery folder', 'prism_portfolio'),
 				'type' => 'text',
 				'section' => 0,
 				'position' => 0
@@ -546,7 +544,7 @@ function prism_gallery_do_settings()
 			'abspath' => array(
 				'default' => PRISM_GALLERY_ABSPATH,
 				'display' => 'disabled',
-				'title' => __('File Gallery path', 'prism_portfolio'),
+				'title' => __('Prism Gallery path', 'prism_portfolio'),
 				'type' => 'text',
 				'section' => 0,
 				'position' => 100
@@ -598,28 +596,28 @@ function prism_gallery_do_settings()
 			)
 		);
 	
-	foreach( $file_gallery->settings as $key => $val )
+	foreach( $prism_portfolio->Gallery->settings as $key => $val )
 	{
-		$file_gallery->defaults[$key] = $val['default'];
+		$prism_portfolio->Gallery->defaults[$key] = $val['default'];
 		
 		if( is_bool($val['default']) || 1 === $val['default'] || 0 === $val['default'] )
-			$file_gallery->false_defaults[$key] = 0;
+			$prism_portfolio->Gallery->false_defaults[$key] = 0;
 	}
 }
 
 
 /**
- * Registers default File Gallery options when plugin is activated
+ * Registers default Prism Gallery options when plugin is activated
  */
 function prism_gallery_activate()
 {
-	global $file_gallery;
+	global $prism_portfolio;
 
 	prism_gallery_plugins_loaded();
 	prism_gallery_after_setup_theme();
 	prism_gallery_do_settings();
 	
-	$defaults = $file_gallery->defaults;
+	$defaults = $prism_portfolio->Gallery->defaults;
 
 	// if options already exist, upgrade
 	if( $options = get_option('prism_portfolio_gallery') )
@@ -647,7 +645,7 @@ function prism_gallery_activate()
 		}
 
 		$defaults = prism_gallery_parse_args( $options, $defaults);
-		$defaults['folder']  = prism_gallery_https( PRISM_GALLERY_URL );
+		$defaults['folder']  =  Prism_Portfolio::plugin_url();
 		$defaults['abspath'] = PRISM_GALLERY_ABSPATH;
 		$defaults['version'] = PRISM_GALLERY_VERSION;
 	}
@@ -657,7 +655,7 @@ function prism_gallery_activate()
 		$defaults['show_on_post_type_page'] = 1;
 	}
 	
-	update_option('file_gallery', $defaults);
+	update_option('prism_portfolio_gallery', $defaults);
 	
 	// clear any existing cache
 	prism_gallery_clear_cache();
@@ -688,7 +686,7 @@ function prism_gallery_deactivate()
 	$options = get_option('prism_portfolio_gallery');
 	
 	if( isset($options['del_options_on_deactivate']) && true == $options['del_options_on_deactivate'] )
-		delete_option('file_gallery');
+		delete_option('prism_portfolio_gallery');
 }
 register_deactivation_hook( __FILE__, 'prism_gallery_deactivate' );
 
@@ -912,7 +910,7 @@ add_filter('posts_where', 'prism_gallery_add_library_query_vars');
  */
 function prism_gallery_js_admin()
 {
-	global $pagenow, $current_screen, $wp_version, $post_ID, $file_gallery;
+	global $pagenow, $current_screen, $wp_version, $post_ID, $prism_portfolio;
 
 	$s = array('{"', '",', '"}', '\/', '"[', ']"');
 	$r = array("\n{\n\"", "\",\n", "\"\n}", '/', '[', ']');
@@ -925,11 +923,11 @@ function prism_gallery_js_admin()
 	   || ("post" == $current_screen->base && isset($current_screen->post_type))
 	  )
 	{
-		// file_gallery.L10n
+		// prism_gallery.L10n
 		$prism_gallery_localize = array(
 			"switch_to_tags" 			 => __("Switch to tags", "prism_portfolio"),
 			"switch_to_files" 			 => __("Switch to list of attachments", "prism_portfolio"),
-			"fg_info" 					 => __("Insert checked attachments into post as", "prism_portfolio"),
+			"pg_info" 					 => __("Insert checked attachments into post as", "prism_portfolio"),
 			"no_attachments_upload" 	 => __("No files are currently attached to this post.", "prism_portfolio"),
 			"sure_to_delete" 			 => __("Are you sure that you want to delete these attachments? Press [OK] to delete or [Cancel] to abort.", "prism_portfolio"),
 			"saving_attachment_data" 	 => __("saving attachment data...", "prism_portfolio"),
@@ -954,9 +952,9 @@ function prism_gallery_js_admin()
 			'regenerating'               => __('regenerating...', 'prism_portfolio')
 		);
 		
-		// file_gallery.options
+		// prism_gallery.options
 		$prism_gallery_options = array( 
-			"prism_gallery_url"   => prism_gallery_https( PRISM_GALLERY_URL ),
+			"prism_gallery_url"   =>  Prism_Portfolio::plugin_url(),
 			"prism_gallery_nonce" => wp_create_nonce('prism-gallery'),
 			"prism_gallery_mode"  => "list",
 
@@ -985,16 +983,16 @@ function prism_gallery_js_admin()
 		
 		$dependencies = array('jquery', 'jquery-ui-core', 'jquery-ui-draggable', 'jquery-ui-sortable', 'jquery-ui-dialog');
 		
-		wp_enqueue_script('prism-gallery-main',  prism_gallery_https( PRISM_GALLERY_URL ) . '/js/prism-gallery.js', $dependencies, PRISM_GALLERY_VERSION);
-		wp_enqueue_script('prism-gallery-clear_cache',  prism_gallery_https( PRISM_GALLERY_URL ) . '/js/prism-gallery-clear_cache.js', false, PRISM_GALLERY_VERSION);
-		wp_enqueue_script('acf-attachment-custom-fields', prism_gallery_https( PRISM_GALLERY_URL ) . '/js/prism-gallery-attachment_custom_fields.js', false, PRISM_GALLERY_VERSION);
+		wp_enqueue_script('prism-gallery-main',   Prism_Portfolio::plugin_url() . '/admin/js/prism-gallery.js', $dependencies, PRISM_GALLERY_VERSION);
+		wp_enqueue_script('prism-gallery-clear_cache',   Prism_Portfolio::plugin_url() . '/admin/js/prism-gallery-clear_cache.js', false, PRISM_GALLERY_VERSION);
+		wp_enqueue_script('acf-attachment-custom-fields',  Prism_Portfolio::plugin_url() . '/admin/js/prism-gallery-attachment_custom_fields.js', false, PRISM_GALLERY_VERSION);
 
-		echo '
+		echo '<style>bacon = '. Prism_Portfolio::plugin_url() .'</style>
 		<script type="text/javascript">
 			var prism_gallery_L10n = ' . str_replace($s, $r, json_encode($prism_gallery_localize)) . ',
 				prism_gallery_options = ' . str_replace($s, $r, json_encode($prism_gallery_options)) . ',
 				acf_L10n = ' . str_replace($s, $r, json_encode($acf_localize)) . ',
-				init_file_gallery = true,
+				init_prism_gallery = true,
 				acf_options = ' . str_replace($s, $r, json_encode($acf_options)) . ';
 		</script>
 		';
@@ -1002,11 +1000,11 @@ function prism_gallery_js_admin()
 	elseif( "edit.php" == $pagenow  )
 	{
 		$prism_gallery_options = array( 
-			"prism_gallery_url"   => prism_gallery_https( PRISM_GALLERY_URL ),
+			"prism_gallery_url"   =>  Prism_Portfolio::plugin_url(),
 			"prism_gallery_nonce" => wp_create_nonce('prism-gallery')
 		);
 		
-		wp_enqueue_script('prism-gallery-main',  prism_gallery_https( PRISM_GALLERY_URL ) . '/js/prism-gallery.js', array('jquery'), PRISM_GALLERY_VERSION);
+		wp_enqueue_script('prism-gallery-main',   Prism_Portfolio::plugin_url() . '/admin/js/prism-gallery.js', array('jquery'), PRISM_GALLERY_VERSION);
 		
 		echo '
 		<script type="text/javascript">
@@ -1046,7 +1044,7 @@ function prism_gallery_js_admin()
 			'custom_fields' => '[' . $custom_fields . ']'
 		);
 
-		wp_enqueue_script('acf-attachment-custom-fields', prism_gallery_https( PRISM_GALLERY_URL ) . '/js/prism-gallery-attachment_custom_fields.js', false, PRISM_GALLERY_VERSION);
+		wp_enqueue_script('acf-attachment-custom-fields',  Prism_Portfolio::plugin_url() . '/admin/js/prism-gallery-attachment_custom_fields.js', false, PRISM_GALLERY_VERSION);
 		
 		echo '
 		<script type="text/javascript">
@@ -1063,7 +1061,7 @@ function prism_gallery_js_admin()
 			'include_current' => __("Include current post's attachments", "prism_portfolio")
 		);
 
-		wp_enqueue_script('prism-gallery-attach', prism_gallery_https( PRISM_GALLERY_URL ) . '/js/prism-gallery-attach.js', false, PRISM_GALLERY_VERSION);
+		wp_enqueue_script('prism-gallery-attach',  Prism_Portfolio::plugin_url() . '/admin/js/prism-gallery-attach.js', false, PRISM_GALLERY_VERSION);
 		
 		echo '
 		<style type="text/css">
@@ -1089,7 +1087,7 @@ function prism_gallery_js_admin()
 		</script>
 		';
 
-		wp_enqueue_script('prism-gallery-clear_cache', prism_gallery_https( PRISM_GALLERY_URL ) . '/js/prism-gallery-clear_cache.js', false, PRISM_GALLERY_VERSION);
+		wp_enqueue_script('prism-gallery-clear_cache',  Prism_Portfolio::plugin_url() . '/admin/js/prism-gallery-clear_cache.js', false, PRISM_GALLERY_VERSION);
 	}
 	elseif( 'edit-tags.php' == $pagenow && PRISM_GALLERY_MEDIA_TAG_NAME == $_GET['taxonomy'] && 3 > floatval($wp_version) )
 	{
@@ -1129,10 +1127,10 @@ function prism_gallery_css_admin()
 		|| (isset($current_screen->post_type) && 'post' == $current_screen->base)
 	  )
 	{
-		wp_enqueue_style('prism_gallery_admin', apply_filters('prism_gallery_admin_css_location', prism_gallery_https( PRISM_GALLERY_URL ) . '/css/file-gallery.css'), false, PRISM_GALLERY_VERSION );
+		wp_enqueue_style('prism_gallery_admin', apply_filters('prism_gallery_admin_css_location',  Prism_Portfolio::plugin_url() . '/admin/css/prism-gallery.css'), false, PRISM_GALLERY_VERSION );
 		
 		if( 'rtl' == get_bloginfo('text_direction') )
-			wp_enqueue_style('prism_gallery_admin_rtl', apply_filters('prism_gallery_admin_rtl_css_location', prism_gallery_https( PRISM_GALLERY_URL ) . '/css/prism-gallery-rtl.css'), false, PRISM_GALLERY_VERSION );
+			wp_enqueue_style('prism_gallery_admin_rtl', apply_filters('prism_gallery_admin_rtl_css_location',  Prism_Portfolio::plugin_url() . '/admin/css/prism-gallery-rtl.css'), false, PRISM_GALLERY_VERSION );
 	}
 }
 add_action('admin_print_styles', 'prism_gallery_css_admin');
@@ -1146,10 +1144,10 @@ function prism_gallery_content()
 	global $post;
 
 	echo 
-	'<div id="fg_container">
+	'<div id="pg_container">
 		<noscript>
 			<div class="error" style="margin: 0;">
-				<p>' . __('File Gallery requires Javascript to function. Please enable it in your browser.', 'prism_portfolio') . '</p>
+				<p>' . __('Prism Gallery requires Javascript to function. Please enable it in your browser.', 'prism_portfolio') . '</p>
 			</div>
 		</noscript>
 	</div>
@@ -1160,7 +1158,7 @@ function prism_gallery_content()
 	<div id="prism_gallery_delete_dialog" title="' . __('Delete attachment dialog', 'prism_portfolio') . '">
 		<p><strong>' . __("Warning: one of the attachments you've chosen to delete has copies.", 'prism_portfolio') . '</strong></p>
 		<p>' . __('How do you wish to proceed?', 'prism_portfolio') . '</p>
-		<p><a href="' . PRISM_GALLERY_URL . '/help/index.html#deleting_originals" target="_blank">' . __('Click here if you have no idea what this dialog means', 'prism_portfolio') . '</a> ' . __('(opens File Gallery help in new browser window)', 'prism_portfolio') . '</p>
+		<p><a href="' . PRISM_GALLERY_URL . '/help/index.html#deleting_originals" target="_blank">' . __('Click here if you have no idea what this dialog means', 'prism_portfolio') . '</a> ' . __('(opens Prism Gallery help in new browser window)', 'prism_portfolio') . '</p>
 	</div>
 	
 	<div id="prism_gallery_copy_all_dialog" title="' . __('Copy all attachments from another post', 'prism_portfolio') . '">
@@ -1188,16 +1186,16 @@ function prism_gallery()
 			if( ! in_array( $type, array('nav_menu_item', 'revision', 'attachment') ) && 
 				isset($options['show_on_post_type_' . $type]) && true == $options['show_on_post_type_' . $type]
 			)
-				add_meta_box('file_gallery', __( 'File Gallery', 'prism_portfolio' ), 'prism_gallery_content', $type, 'normal');
+				add_meta_box('prism_gallery', __( 'Prism Gallery', 'prism_portfolio' ), 'prism_gallery_content', $type, 'normal');
 		}
 	}
 	else // pre 2.9
 	{
-		add_meta_box('file_gallery', __( 'File Gallery', 'prism_portfolio' ), 'prism_gallery_content', 'post', 'normal');
-		add_meta_box('file_gallery', __( 'File Gallery', 'prism_portfolio' ), 'prism_gallery_content', 'page', 'normal');
+		add_meta_box('prism_gallery', __( 'Prism Gallery', 'prism_portfolio' ), 'prism_gallery_content', 'post', 'normal');
+		add_meta_box('prism_gallery', __( 'Prism Gallery', 'prism_portfolio' ), 'prism_gallery_content', 'page', 'normal');
 	}
 }
-add_action('admin_menu', 'file_gallery');
+add_action('admin_menu', 'prism_gallery');
 
 
 /**
@@ -1258,7 +1256,7 @@ add_filter('manage_pages_columns', 'prism_gallery_posts_columns');
  */
 function prism_gallery_media_custom_column($column_name, $post_id)
 {
-	global $wpdb;
+	global $prism_portfolio, $wpdb;
 	
 	$options = get_option('prism_portfolio_gallery');
 	

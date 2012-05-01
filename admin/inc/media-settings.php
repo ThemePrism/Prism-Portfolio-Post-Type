@@ -6,14 +6,14 @@
  */
 function prism_gallery_options_init()
 {
-	global $prism_portfolio->Gallery;
+	global $prism_portfolio_gallery;
 
-	$so = get_option('prism_portfolio_gallery');
+	$so = get_option('prism_gallery');
 	$prism_gallery_sizes = prism_gallery_get_intermediate_image_sizes();
 	
 	// add sections
 	add_settings_section('intermediate_image_sizes', __('Intermediate image sizes', 'prism_portfolio'), 'prism_gallery_options_sections', 'media');
-	add_settings_section('prism_gallery_options', __('Prism Gallery', 'prism_portfolio'), 'prism_gallery_options_sections', 'media');
+	add_settings_section('prism_gallery_options', __('Prism File Gallery', 'prism_portfolio'), 'prism_gallery_options_sections', 'media');
 	
 	// register the prism_gallery variable
 	register_setting('media', 'prism_gallery', 'prism_gallery_save_media_settings');
@@ -27,12 +27,12 @@ function prism_gallery_options_init()
 			
 			if( "medium" == $size )
 			{
-				$translated_size = ucfirst(__("Medium size", "file-gallery"));
+				$translated_size = ucfirst(__("Medium size", "prism_portfolio"));
 				$size_translated = "";
 			}
 			elseif( "large" == $size )
 			{
-				$translated_size = ucfirst(__("Large size", "file-gallery"));
+				$translated_size = ucfirst(__("Large size", "prism_portfolio"));
 				$size_translated = "";
 			}
 			else
@@ -62,10 +62,10 @@ function prism_gallery_options_sections( $args )
 	switch( $args["id"] )
 	{
 		case "intermediate_image_sizes" :
-			$output = __("Here you can specify width, height and crop attributes for intermediate image sizes added by plugins and/or themes, as well as crop options for the default medium and large sizes", "file-gallery");
+			$output = __("Here you can specify width, height and crop attributes for intermediate image sizes added by plugins and/or themes, as well as crop options for the default medium and large sizes", "prism_portfolio");
 			break;
 		case "prism_gallery_options" :
-			$output = '<p id="file-gallery-help-notice" style="margin: 0 10px; background-color: #FFFFE8; border-color: #EEEED0; -moz-border-radius: 3px; -webkit-border-radius: 3px; border-radius: 3px; border-style: solid; border-width: 1px; padding: 0.6em;">' . sprintf(__('Prism Gallery help file is located in the "help" subfolder of the plugin. You can <a href="%s/help/index.html" target="_blank">click here to open it in new window</a>.', "file-gallery"), PRISM_GALLERY_URL) . '</p>';
+			$output = '<p id="prism-gallery-help-notice" style="margin: 0 10px; background-color: #FFFFE8; border-color: #EEEED0; -moz-border-radius: 3px; -webkit-border-radius: 3px; border-radius: 3px; border-style: solid; border-width: 1px; padding: 0.6em;">' . sprintf(__('Prism Gallery help file is located in the "help" subfolder of the plugin. You can <a href="%s/help/index.html" target="_blank">click here to open it in new window</a>.', "prism_portfolio"), FILE_GALLERY_URL) . '</p>';
 			break;
 	}
 	
@@ -82,12 +82,12 @@ function prism_gallery_options_sections( $args )
  */
 function prism_gallery_save_media_settings( $options )
 {
-	global $prism_portfolio->Gallery;
+	global $prism_portfolio_gallery;
 
-	$defaults = $prism_portfolio->Gallery->false_defaults;
+	$defaults = $prism_portfolio_gallery->Gallery->false_defaults;
 	$defaults = prism_gallery_parse_args( $options, $defaults); // $defaults = shortcode_atts( $defaults, $options );
-	$defaults['folder']  = prism_gallery_https( PRISM_GALLERY_URL );
-	$defaults['abspath'] = PRISM_GALLERY_ABSPATH;
+	$defaults['folder']  = prism_gallery_https( FILE_GALLERY_URL );
+	$defaults['abspath'] = FILE_GALLERY_ABSPATH;
 	
 	return $defaults;
 }
@@ -122,7 +122,7 @@ function prism_gallery_parse_args( $args, $defaults )
 function prism_gallery_dropdown( $name, $type )
 {
 	$output = '';
-	$options = get_option('prism_portfolio_gallery');
+	$options = get_option('prism_gallery');
 	
 	$current = $options[$name];
 	
@@ -139,28 +139,28 @@ function prism_gallery_dropdown( $name, $type )
 		'center' => __('center', 'prism_portfolio')
 	);
 	$keys['linkto']	 = array(
-		"none" => __("nothing (do not link)", "file-gallery"), 
-		"file" => __("file", "file-gallery"), 
-		"attachment" => __("attachment page", "file-gallery"),
-		"parent_post" => __("parent post", "file-gallery"),
-		"external_url" => __("external url", "file-gallery")
+		"none" => __("nothing (do not link)", "prism_portfolio"), 
+		"file" => __("file", "prism_portfolio"), 
+		"attachment" => __("attachment page", "prism_portfolio"),
+		"parent_post" => __("parent post", "prism_portfolio"),
+		"external_url" => __("external url", "prism_portfolio")
 	);
 	$keys['orderby'] = array(
-		"default" => __("file gallery", "file-gallery"), 
-		"rand" => __("random", "file-gallery"), 
-		"menu_order" => __("menu order", "file-gallery"),
-		"post_title" => __("title", "file-gallery"),
-		"ID" => __("date / time", "file-gallery")
+		"default" => __("file gallery", "prism_portfolio"), 
+		"rand" => __("random", "prism_portfolio"), 
+		"menu_order" => __("menu order", "prism_portfolio"),
+		"post_title" => __("title", "prism_portfolio"),
+		"ID" => __("date / time", "prism_portfolio")
 	);
 	$keys['order'] = array(
-		"ASC" => __("ascending", "file-gallery"), 
-		"DESC" => __("descending", "file-gallery")
+		"ASC" => __("ascending", "prism_portfolio"), 
+		"DESC" => __("descending", "prism_portfolio")
 	);
 	$keys['align'] = array(
-		"none" => __("none", "file-gallery"), 
-		"left" => __("left", "file-gallery"), 
-		"right" => __("right", "file-gallery"),
-		"center" => __("center", "file-gallery")
+		"none" => __("none", "prism_portfolio"), 
+		"left" => __("left", "prism_portfolio"), 
+		"right" => __("right", "prism_portfolio"),
+		"center" => __("center", "prism_portfolio")
 	);
 	$keys['columns'] = array(
 		0, 1, 2, 3, 4, 5, 6, 7, 8, 9
@@ -222,7 +222,7 @@ function prism_gallery_dropdown( $name, $type )
 function prism_gallery_post_type_checkboxes()
 {
 	$output = '';
-	$options = get_option('prism_portfolio_gallery');
+	$options = get_option('prism_gallery');
 	$types = get_post_types(false, 'objects');
 	
 	foreach( $types as $type )
@@ -253,12 +253,12 @@ function prism_gallery_post_type_checkboxes()
  */
 function prism_gallery_add_settings()
 {
-	global $prism_portfolio->Gallery;
+	global $prism_portfolio_gallery;
 
 	prism_gallery_do_settings();
 	
-	$settings = $prism_portfolio->Gallery->settings;
-	$options = get_option('prism_portfolio_gallery');
+	$settings = $prism_portfolio_gallery->settings;
+	$options = get_option('prism_gallery');
 	
 	foreach( $settings as $key => $val )
 	{

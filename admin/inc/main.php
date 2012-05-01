@@ -7,7 +7,7 @@ function prism_gallery_list_attachments(&$count_attachments, $post_id, $attachme
 {
 	global $wpdb, $_wp_additional_image_sizes;
 	
-	$options = get_option('file_gallery');
+	$options = get_option('prism_portfolio_gallery');
 	$thumb_id = false;
 	$attached_files = '';
 	
@@ -245,7 +245,7 @@ function prism_gallery_list_tags( $args = array() )
 				"separator" => ", "
 	)));
 	
-	$options = get_option("file_gallery");
+	$options = get_option("prism_portfolio_gallery");
 	
 	$media_tag_tax  = get_taxonomy(PRISM_GALLERY_MEDIA_TAG_NAME);
 	$media_tag_slug = $media_tag_tax->rewrite["slug"];
@@ -380,7 +380,7 @@ function prism_gallery_main( $ajax = true )
 	$originals			  = isset($_POST['originals']) ? $_POST['originals'] : '';
 	$fieldsets			  = isset($_POST['fieldsets']) ? $_POST['fieldsets'] : '';
 	
-	$prism_gallery_options = get_option('file_gallery');
+	$prism_gallery_options = get_option('prism_portfolio_gallery');
 	
 	$gallery_state		  = isset($prism_gallery_options['insert_options_state']) && true == $prism_gallery_options['insert_options_state'] ? true : false;
 	$single_state		  = isset($prism_gallery_options['insert_single_options_state']) && true == $prism_gallery_options['insert_single_options_state'] ? true : false;

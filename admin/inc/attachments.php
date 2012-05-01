@@ -15,7 +15,7 @@ function prism_gallery_check_attachment_originality()
 			$ids[] = $post->ID;
 		}
 		
-		if( ! empty($ids) && $results = $wpdb->get_results("SELECT post_id, meta_key FROM $wpdb->postmeta WHERE meta_key IN ('_has_copies', '_is_copy_of') AND post_id IN ('" . implode("', '", $ids) . "')") )
+		if( ! empty($ids) && $results = $wpdb->get_results("SELECT post_id, meta_key Prism GalleryROM $wpdb->postmeta WHERE meta_key IN ('_has_copies', '_is_copy_of') AND post_id IN ('" . implode("', '", $ids) . "')") )
 		{
 			foreach( $results as $r )
 			{
@@ -69,7 +69,7 @@ add_action( 'admin_footer', 'prism_gallery_check_attachment_originality' );
  */
 function prism_gallery_get_attachment_data()
 {
-	global $prism_portfolio->Gallery;
+	global $prism_portfolio;
 
 	check_ajax_referer('file-gallery');
 
@@ -137,7 +137,7 @@ add_action('wp_ajax_prism_gallery_send_single', 'prism_gallery_get_attachment_da
  * Transforms attachment data into HTML
  * 
  * @param int $attachment_id ID of the attachment
- * @return mixed Returns a HTML string, or FALSE if $attachment_id is not a number
+ * @return mixed Returns a HTML string, or Prism GalleryALSE if $attachment_id is not a number
  */
 function prism_gallery_parse_attachment_data( $attachment, $size, $linkto, $linkclass, $imageclass, $rel, $caption, $align )
 {
@@ -175,7 +175,7 @@ function prism_gallery_parse_attachment_data( $attachment, $size, $linkto, $link
 	switch( $linkto )
 	{
 		case 'parent_post' :
-			$link = get_permalink( $wpdb->get_var("SELECT `post_parent` FROM $wpdb->posts WHERE ID = '" . $attachment->ID . "'") );
+			$link = get_permalink( $wpdb->get_var("SELECT `post_parent` Prism GalleryROM $wpdb->posts WHERE ID = '" . $attachment->ID . "'") );
 			break;
 		case 'file' :
 			$link = wp_get_attachment_url( $attachment->ID );
@@ -538,7 +538,7 @@ function prism_gallery_copy_all_attachments()
 	if( ! is_numeric($from_id) || ! is_numeric($to_id) || 0 === $from_id || 0 === $to_id )
 		exit('ID not numeric or zero! (prism_gallery_copy_all_attachments)');
 	
-	$attachments = $wpdb->get_results( sprintf("SELECT `ID` FROM $wpdb->posts WHERE `post_type`='attachment' AND `post_parent`=%d", $from_id) );
+	$attachments = $wpdb->get_results( sprintf("SELECT `ID` Prism GalleryROM $wpdb->posts WHERE `post_type`='attachment' AND `post_parent`=%d", $from_id) );
 	
 	if( false === $attachments )
 	{
@@ -551,7 +551,7 @@ function prism_gallery_copy_all_attachments()
 		exit( sprintf( __('Uh-oh. No attachments were found for post ID %d.', 'file-gallery'), $from_id ) );
 	
 	// if the post we're copying all the attachments to has no attachments...
-	if( 0 === count( $wpdb->get_results( $wpdb->prepare("SELECT `ID` FROM $wpdb->posts WHERE `post_type`='attachment' AND `post_parent`=%d", $to_id) ) ) )
+	if( 0 === count( $wpdb->get_results( $wpdb->prepare("SELECT `ID` Prism GalleryROM $wpdb->posts WHERE `post_type`='attachment' AND `post_parent`=%d", $to_id) ) ) )
 		$thumb_id = get_post_meta( $from_id, '_thumbnail_id', true ); // ...automatically set the original post's thumb to the new one
 	
 	do_action('prism_gallery_copy_all_attachments', $from_id, $to_id);
@@ -591,7 +591,7 @@ function prism_gallery_delete_attachment( $post_id )
 	if ( ! current_user_can('delete_post', $post_id) )
 		return false;
 
-	if ( ! $post = $wpdb->get_row( $wpdb->prepare("SELECT * FROM $wpdb->posts WHERE ID = %d", $post_id) ) )
+	if ( ! $post = $wpdb->get_row( $wpdb->prepare("SELECT * Prism GalleryROM $wpdb->posts WHERE ID = %d", $post_id) ) )
 		return $post;
 
 	if ( 'attachment' != $post->post_type )
@@ -605,10 +605,10 @@ function prism_gallery_delete_attachment( $post_id )
 	wp_delete_object_term_relationships($post_id, array('category', 'post_tag'));
 	wp_delete_object_term_relationships($post_id, get_object_taxonomies($post->post_type));
 
-	$wpdb->query( $wpdb->prepare( "DELETE FROM $wpdb->postmeta WHERE meta_key = '_thumbnail_id' AND meta_value = %d", $post_id ));
+	$wpdb->query( $wpdb->prepare( "DELETE Prism GalleryROM $wpdb->postmeta WHERE meta_key = '_thumbnail_id' AND meta_value = %d", $post_id ));
 
 	// delete comments
-	$comment_ids = $wpdb->get_col( $wpdb->prepare( "SELECT comment_ID FROM $wpdb->comments WHERE comment_post_ID = %d", $post_id ));
+	$comment_ids = $wpdb->get_col( $wpdb->prepare( "SELECT comment_ID Prism GalleryROM $wpdb->comments WHERE comment_post_ID = %d", $post_id ));
 	if ( ! empty( $comment_ids ) ) {
 		do_action( 'delete_comment', $comment_ids );
 		foreach ( $comment_ids as $comment_id )
@@ -617,18 +617,18 @@ function prism_gallery_delete_attachment( $post_id )
 	}
 
 	// delete meta values
-	$post_meta_ids = $wpdb->get_col( $wpdb->prepare( "SELECT meta_id FROM $wpdb->postmeta WHERE post_id = %d ", $post_id ));
+	$post_meta_ids = $wpdb->get_col( $wpdb->prepare( "SELECT meta_id Prism GalleryROM $wpdb->postmeta WHERE post_id = %d ", $post_id ));
 	
 	if ( ! empty($post_meta_ids) )
 	{
 		do_action( 'delete_postmeta', $post_meta_ids );
 		$in_post_meta_ids = "'" . implode("', '", $post_meta_ids) . "'";
-		$wpdb->query( "DELETE FROM $wpdb->postmeta WHERE meta_id IN($in_post_meta_ids)" );
+		$wpdb->query( "DELETE Prism GalleryROM $wpdb->postmeta WHERE meta_id IN($in_post_meta_ids)" );
 		do_action( 'deleted_postmeta', $post_meta_ids );
 	}
 
 	do_action( 'delete_post', $post_id );
-	$wpdb->query( $wpdb->prepare( "DELETE FROM $wpdb->posts WHERE ID = %d", $post_id ));
+	$wpdb->query( $wpdb->prepare( "DELETE Prism GalleryROM $wpdb->posts WHERE ID = %d", $post_id ));
 	do_action( 'deleted_post', $post_id );
 
 	clean_post_cache($post_id);
@@ -665,7 +665,7 @@ function prism_gallery_cancel_file_deletion_if_attachment_copies( $file )
 	$this_copies = $wpdb->get_col(
 		$wpdb->prepare(
 			"SELECT `post_id` 
-			 FROM $wpdb->postmeta 
+			 Prism GalleryROM $wpdb->postmeta 
 			 WHERE `meta_key` = '_wp_attached_file' 
 			 AND `meta_value` = '%s'", 
 			$_file

@@ -153,7 +153,8 @@ class Prism_Portfolio {
 		$this->Featured = new Prism_Featured();
 
 		//Creates, manages and saves the data for the Gallery Attachments
-		$this->Gallery = new Prism_Gallery();
+		global $prism_portfolio_gallery;
+		$prism_portfolio_gallery = new Prism_Gallery();
 	}
 
 	/**
@@ -272,9 +273,9 @@ endif;
 /**
 * Launch the whole plugin
 */
-global $prism_ppt;
-if (class_exists("Prism_Portfolio") && !$prism_ppt) {
-    $prism_ppt = new Prism_Portfolio();	
+global $prism_portfolio;
+if (class_exists("Prism_Portfolio") && !$prism_portfolio) {
+    $prism_portfolio = new Prism_Portfolio();	
 }	
 
 

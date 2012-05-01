@@ -6,7 +6,7 @@
  */
 function prism_gallery_https( $input )
 {
-	global $prism_portfolio->Gallery;
+	global $prism_portfolio;
 
 	if( $prism_portfolio->Gallery->ssl_admin && 0 === strpos($input, 'http:') && 0 !== strpos($input, 'https:') )
 		$input = 'https' . substr($input, 4);
@@ -207,7 +207,7 @@ function prism_gallery_save_toggle_state()
 	
 	$options[$opt] = (int) $_POST['state'];
 	
-	update_option('file_gallery', $options);
+	update_option('prism_portfolio_gallery', $options);
 	
 	exit();
 }

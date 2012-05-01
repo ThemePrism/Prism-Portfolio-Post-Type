@@ -35,7 +35,7 @@ function prism_gallery_media_tags_add_permalink_fields()
 
 	if( isset($_POST['media_tag_taxonomy_slug']) || isset($_POST['media_tag_taxonomy_name']) || isset($_POST['mediatag_base']) )
 	{
-		update_option('file_gallery', $options);
+		update_option('prism_portfolio_gallery', $options);
 		
 		prism_gallery_media_tags_update_taxonomy_slug( $current_tax_name, $options['media_tag_taxonomy_name'] );
 	}
@@ -82,7 +82,7 @@ function prism_gallery_media_tags_permalink_fields( $field )
 
 function prism_gallery_media_tags_get_taxonomy_slug()
 {
-	global $wpdb, $mediatags, $prism_portfolio->Gallery;
+	global $wpdb, $mediatags, $prism_portfolio;
 
 	if( defined('PRISM_GALLERY_MEDIA_TAG_NAME') )
 		return PRISM_GALLERY_MEDIA_TAG_NAME;
@@ -108,7 +108,7 @@ function prism_gallery_media_tags_get_taxonomy_slug()
 	{
 		$options['media_tag_taxonomy_name'] = $tax_name;
 		$options['media_tag_taxonomy_slug'] = $tax_slug;
-		update_option('file_gallery', $options);
+		update_option('prism_portfolio_gallery', $options);
 
 		if( $tax_name != $current_tax_name )
 			prism_gallery_media_tags_update_taxonomy_slug( $current_tax_name, $tax_name );

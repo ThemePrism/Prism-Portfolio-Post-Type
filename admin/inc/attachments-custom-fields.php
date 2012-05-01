@@ -2,7 +2,7 @@
 
 /**
  * Displays the table for custom fields on attachment editing screen
- * within the File Gallery metabox
+ * within the Prism Gallery metabox
  */
 function prism_gallery_attachment_custom_fields_table( $attachment_id )
 {
@@ -142,7 +142,7 @@ if( false === $prism_portfolio->Gallery->acf )
  */
 function prism_gallery_attachment_fields_to_edit( $form_fields, $attachment )
 {
-	global $pagenow, $wpdb, $prism_portfolio->Gallery;
+	global $pagenow, $wpdb, $prism_portfolio;
 
 	// parent post url button
 	if( false === strpos($form_fields['url']['html'], __('Attachment Post URL')) ) // Button title changed in 3.3

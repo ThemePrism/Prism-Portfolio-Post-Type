@@ -27,7 +27,7 @@
 	<input type="hidden" name="prism_gallery_copies"      id="prism_gallery_copies"      value="" style="width: 90%" />
 	<input type="hidden" name="prism_gallery_originals"   id="prism_gallery_originals"   value="" style="width: 90%" />
 	
-	<div id="fg_buttons"<?php if( ( ! isset($prism_gallery_options["display_gallery_fieldset"]) && ! isset($prism_gallery_options["display_single_fieldset"]) ) || ( isset($prism_gallery_options["display_gallery_fieldset"]) && isset($prism_gallery_options["display_single_fieldset"]) && true != $prism_gallery_options["display_gallery_fieldset"] && true != $prism_gallery_options["display_single_fieldset"] ) ){ echo ' class="alt"'; }?>>
+	<div id="pg_buttons"<?php if( ( ! isset($prism_gallery_options["display_gallery_fieldset"]) && ! isset($prism_gallery_options["display_single_fieldset"]) ) || ( isset($prism_gallery_options["display_gallery_fieldset"]) && isset($prism_gallery_options["display_single_fieldset"]) && true != $prism_gallery_options["display_gallery_fieldset"] && true != $prism_gallery_options["display_single_fieldset"] ) ){ echo ' class="alt"'; }?>>
 	
 		<input type="button" value="<?php _e("Refresh attachments", "file-gallery"); ?>" title="<?php _e("Refresh attachments", "file-gallery"); ?>" class="button" id="prism_gallery_refresh" />
 	
@@ -44,17 +44,17 @@
 	
 		<div class="additional">
 			<input type="button" value="<?php _e("Save attachment order", "file-gallery"); ?>" title="<?php _e("Save attachment order", "file-gallery"); ?>" class="button" id="prism_gallery_save_menu_order" />
-			<input type="button" value="<?php _e("Clear File Gallery cache", "file-gallery"); ?>" title="<?php _e("Clear File Gallery cache", "file-gallery"); ?>" class="button" id="prism_gallery_clear_cache_manual" />
+			<input type="button" value="<?php _e("Clear Prism Gallery cache", "file-gallery"); ?>" title="<?php _e("Clear Prism Gallery cache", "file-gallery"); ?>" class="button" id="prism_gallery_clear_cache_manual" />
 			<input type="button" value="<?php _e("Adjust media settings", "file-gallery"); ?>" title="<?php _e("Adjust media settings", "file-gallery"); ?>" class="button thickbox" alt="<?php echo admin_url("options-media.php"); ?>?TB_iframe=1" id="prism_gallery_adjust_media_settings"  />
 			<input type="button" value="<?php _e("Open help file", "file-gallery"); ?>" title="<?php _e("Open help file", "file-gallery"); ?>" class="button thickbox" alt="<?php echo PRISM_GALLERY_URL; ?>/help/index.html?TB_iframe=1" id="prism_gallery_open_help"  />
 		</div>
 		
-	</div><!-- / fg_butons-->
+	</div><!-- / pg_butons-->
 	
 	<div id="file-gallery-content">
 	
 	<?php if( (isset($prism_gallery_options["display_gallery_fieldset"]) && true == $prism_gallery_options["display_gallery_fieldset"]) || (isset($prism_gallery_options["display_single_fieldset"]) && true == $prism_gallery_options["display_single_fieldset"]) ) : ?>
-		<p id="fg_info">
+		<p id="pg_info">
 			<?php _e("Insert checked attachments into post as", "file-gallery"); ?>:
 		</p>
 	<?php endif; ?>
@@ -230,12 +230,12 @@
 				
 				<br class="clear" />
 				
-				<p id="fg_gallery_tags_container">
-					<label for="fg_gallery_tags"><?php _e("Media tags", "file-gallery");?>:</label>
-					<input type="text" id="fg_gallery_tags" name="fg_gallery_tags" value="<?php if( isset($_POST["tag_list"]) ){ echo $_POST["tag_list"];} ?>" />
+				<p id="pg_gallery_tags_container">
+					<label for="pg_gallery_tags"><?php _e("Media tags", "file-gallery");?>:</label>
+					<input type="text" id="pg_gallery_tags" name="pg_gallery_tags" value="<?php if( isset($_POST["tag_list"]) ){ echo $_POST["tag_list"];} ?>" />
 		
-					<label for="fg_gallery_tags_from"><?php _e("current post's attachments only?", "file-gallery"); ?></label>
-					<input type="checkbox" id="fg_gallery_tags_from" name="fg_gallery_tags_from" checked="checked" />
+					<label for="pg_gallery_tags_from"><?php _e("current post's attachments only?", "file-gallery"); ?></label>
+					<input type="checkbox" id="pg_gallery_tags_from" name="pg_gallery_tags_from" checked="checked" />
 				</p>
 				
 				<!--<input type="button" onclick="prism_gallery_preview_template(jQuery('#prism_gallery_template').val()); return false;" value="&uArr;" title="preview template" class="button" />-->
@@ -360,17 +360,17 @@
 <?php
 
 // prints number of attachments
-$print_attachment_count = __("File Gallery &mdash; %d attachment.", "file-gallery");
+$print_attachment_count = __("Prism Gallery &mdash; %d attachment.", "file-gallery");
 
 if( 0 == $count_attachments || $count_attachments > 1 )
-	$print_attachment_count = __("File Gallery &mdash; %d attachments.", "file-gallery");
+	$print_attachment_count = __("Prism Gallery &mdash; %d attachments.", "file-gallery");
 
 echo '<script type="text/javascript">
 		if( ' . $count_attachments . ' )
-			jQuery("#file_gallery").addClass("has-attachments").removeClass("no-attachments");
+			jQuery("#prism_gallery").addClass("has-attachments").removeClass("no-attachments");
 		else
-			jQuery("#file_gallery").removeClass("has-attachments").addClass("no-attachments");
+			jQuery("#prism_gallery").removeClass("has-attachments").addClass("no-attachments");
 			
-		jQuery("#file_gallery .hndle").html("<span>' . sprintf($print_attachment_count, $count_attachments) . '</span>");
+		jQuery("#prism_gallery .hndle").html("<span>' . sprintf($print_attachment_count, $count_attachments) . '</span>");
 	  </script>';
 ?>

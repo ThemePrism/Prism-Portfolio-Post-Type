@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Clears File Gallery cache (transients)
+ * Clears Prism Gallery cache (transients)
  *
  * @since 1.5
  */
@@ -116,7 +116,7 @@ function prism_gallery_clear_cache_manual()
 	
 	prism_gallery_clear_cache();
 	
-	_e("You have successfully cleared the File Gallery cache.", "file-gallery");
+	_e("You have successfully cleared the Prism Gallery cache.", "file-gallery");
 	
 	exit();
 }

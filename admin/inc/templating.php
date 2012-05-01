@@ -104,7 +104,7 @@ function prism_gallery_mobile_css( $stylesheet_url )
  */
 function prism_gallery_css_front( $mobile = false )
 {
-	global $wp_query, $prism_portfolio->Gallery;
+	global $wp_query, $prism_portfolio;
 
 	$options = get_option('prism_portfolio_gallery');
 	
@@ -351,7 +351,7 @@ add_action('wp_print_scripts', 'prism_gallery_print_scripts');
  */
 function prism_gallery_overrides( $args )
 {
-	global $prism_portfolio->Gallery;
+	global $prism_portfolio;
 
 	if( is_string($args) )
 		$args = wp_parse_args($args);
@@ -367,7 +367,7 @@ function prism_gallery_overrides( $args )
  */
 function prism_gallery_shortcode( $content = false, $attr = false )
 {
-	global $prism_portfolio->Gallery, $wpdb, $post;
+	global $prism_portfolio, $wpdb, $post;
 
 	// if the function is called directly, not via shortcode
 	if( false !== $content && false === $attr )

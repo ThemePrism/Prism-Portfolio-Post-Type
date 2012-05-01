@@ -37,7 +37,7 @@ class Prism_Featured extends Prism_Portfolio {
 		 * All scipts and functions for the plupload gallery 
 		 */
 		// load scripts and styles
-		add_action( 'admin_print_styles-post.php', array(__CLASS__, 'meta_styles'), 1000 );
+/*		add_action( 'admin_print_styles-post.php', array(__CLASS__, 'meta_styles'), 1000 );
 		add_action( 'admin_print_styles-post-new.php', array(__CLASS__, 'meta_styles'), 1000 );
 		add_action( 'admin_print_scripts-post.php', array(__CLASS__, 'meta_scripts'), 1000 );
 		add_action( 'admin_print_scripts-post-new.php', array(__CLASS__, 'meta_scripts'), 1000 );
@@ -48,7 +48,7 @@ class Prism_Featured extends Prism_Portfolio {
 
     	//plupload ajax action 
     	add_action( 'wp_ajax_plupload_action' , array(__CLASS__,'plupload_action' ));
-
+*/
 
 	}
 
