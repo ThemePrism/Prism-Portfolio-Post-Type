@@ -134,7 +134,7 @@ class Prism_Portfolio_Ajax  {
 				// if it's not an image...
 				if( "" == $attachment_thumb )
 				{
-					$attachment_thumb[0] = includes_url('images/crystal'). "/" . prism_gallery_get_file_type($attachment->post_mime_type) . ".png";
+					$attachment_thumb = wp_get_attachment_image_src($attachment->ID, $attachment_thumb_size, true);
 					$attachment_width    = '';
 					$attachment_height   = '';
 					$non_image           = ' non_image';

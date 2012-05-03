@@ -396,7 +396,6 @@ add_filter('posts_where', 'prism_gallery_add_library_query_vars');
 
 require_once('inc/attachments.php');
 require_once('inc/miscellaneous.php');
-require_once('inc/mime-types.php');
 
 
 require_once('inc/main.php');

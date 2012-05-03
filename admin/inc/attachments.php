@@ -164,7 +164,7 @@ function prism_gallery_parse_attachment_data( $attachment, $size, $linkto, $link
 	else
 	{
 		$filetype        = prism_gallery_get_file_type($attachment->post_mime_type);
-		$size_src        = includes_url('images/crystal') . '/' . $filetype . '.png';
+		$size_src        = wp_get_attachment_image_src($attachment->ID, $size, true);
 		$width           = '';
 		$height          = '';
 		$imageclass     .= ' non-image';

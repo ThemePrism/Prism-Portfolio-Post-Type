@@ -1549,60 +1549,7 @@ jQuery(document).ready(function($){
 
 	if( "undefined" !== typeof(Prism_Portfolio_Settings.init_prism_gallery) && 'true' === Prism_Portfolio_Settings.init_prism_gallery )
 	{
-		// regenerate thumbnails
-		$("#prism_gallery_attachment_edit_image a.prism_gallery_regenerate").live("click", function(e)
-		{
-			var id = $(this).attr("id").replace(/\]/, '').replace(/regenerate\[/, '');
-			
-			prism_gallery.regenerate_thumbnails( [id] );
-			
-			e.preventDefault();
-		});
-	
-	
-		// WPML
-		if( $("#icl_div").length > 0 )
-		{
-			if( $("#icl_translations_table").length > 0 )
-			{
-				$("#icl_translations_table a[title=edit]").each(function()
-				{
-					var fg_icl_trans_id = Number($(this).attr('href').match(/post=([\d]+)&/).pop());
 		
-					if( "number" == typeof(fg_icl_trans_id) )
-					{
-						$(this).after('<a title="' + prism_gallery.L10n.copy_all_from_translation + '" href="#" id="copy-from-translation-' + fg_icl_trans_id + '"><img src="' + prism_gallery.options.prism_gallery_img + '/famfamfam_silk/image_add.png" alt="' + prism_gallery.L10n.copy_all_from_translation + '" /></a>');
-		
-						$("#copy-from-translation-" + fg_icl_trans_id).bind("click", function()
-						{
-							if( confirm(prism_gallery.L10n.copy_all_from_translation_) )
-								prism_gallery.copy_all_attachments(fg_icl_trans_id);
-		
-							return false;
-						});
-					}
-				});
-			}
-			else
-			{
-				var fg_icl_ori_id = $("#icl_translation_of option:selected").val();
-		
-				if( "undefined" != typeof(fg_icl_ori_id) && "undefined" != fg_icl_ori_id )
-				{
-					$("#icl_div .inside").append('<a href="#" id="prism_gallery_copy_from_wmpl_original">' + prism_gallery.L10n.copy_all_from_original + '</a>');
-		
-					$("#prism_gallery_copy_from_wmpl_original").bind("click", function()
-					{
-						if( confirm(prism_gallery.L10n.copy_all_from_original_) )
-							prism_gallery.copy_all_attachments(fg_icl_ori_id);
-		
-						return false;
-					});
-				}
-			}
-		} 
-	
-	
 		// show / hide additional gallery options depending on preselected values
 		if( "default" != $("#prism_gallery_orderby").val() )
 		{
@@ -1635,7 +1582,7 @@ jQuery(document).ready(function($){
 		/* === BINDINGS === */
 	
 	
-		$("#prism_gallery_linkclass, #prism_gallery_imageclass, #prism_gallery_galleryclass, #prism_gallery_mimetype, #prism_gallery_limit, #prism_gallery_offset, #prism_gallery_external_url, #prism_gallery_single_linkclass, #prism_gallery_single_imageclass, #prism_gallery_single_external_url, #fg_gallery_tags, #prism_gallery_postid, #prism_gallery_mimetype, #prism_gallery_linkrel_custom").live('keypress keyup', function(e)
+		$("#pg_container").on("keypress keyup", "#prism_gallery_linkclass, #prism_gallery_imageclass, #prism_gallery_galleryclass, #prism_gallery_mimetype, #prism_gallery_limit, #prism_gallery_offset, #prism_gallery_external_url, #prism_gallery_single_linkclass, #prism_gallery_single_imageclass, #prism_gallery_single_external_url, #fg_gallery_tags, #prism_gallery_postid, #prism_gallery_mimetype, #prism_gallery_linkrel_custom", function(e)
 		{
 			// on enter
 			if ( 13 === e.which || 13 === e.keyCode )
@@ -1656,7 +1603,7 @@ jQuery(document).ready(function($){
 		});
 	
 		
-		$("#fgae_post_alt, #fgae_post_title, #fgae_post_excerpt, #fgae_tax_input, #fgae_menu_order").live('keypress keyup', function(e)
+		$("#pg_container").on("keypress keyup", "#fgae_post_alt, #fgae_post_title, #fgae_post_excerpt, #fgae_tax_input, #fgae_menu_order", function(e)
 		{
 			if ( 13 === e.which || 13 === e.keyCode ) // on enter
 			{
@@ -1670,7 +1617,7 @@ jQuery(document).ready(function($){
 			}
 		});
 	
-		$("a.post_thumb_status").live("click", function()
+		$("#pg_container").on("click", "a.post_thumb_status", function()
 		{
 			var what = false;
 			
@@ -1680,7 +1627,8 @@ jQuery(document).ready(function($){
 			return prism_gallery.set_post_thumb($(this).attr("rel"), what);
 		});
 			
-		$("#remove-post-thumbnail").attr("onclick", "").live("click.prism_gallery", function()
+		$("#remove-post-thumbnail").attr("onclick", "");
+		$(document).on("click", "#remove-post-thumbnail", function()
 		{		
 			if( 0 < $(".sortableitem.post_thumb").length )
 				return prism_gallery.set_post_thumb($(".sortableitem.post_thumb").attr("id").split("-").pop(), true);
@@ -1690,18 +1638,18 @@ jQuery(document).ready(function($){
 			return false;
 		});
 		
-		$("#prism_gallery_copy_all_form").bind("submit", function(){ return false; });
+		$("#pg_container").on("submit", "#prism_gallery_copy_all_form", function(){ return false; });
 	
 	
 		// copy all attachments from another post
-		$("#prism_gallery_copy_all").live("click", function()
+		$("#pg_container").on("click", "#prism_gallery_copy_all", function()
 		{
 			$("#prism_gallery_copy_all_dialog").dialog("open");
 		});
 		
 		
 		// toggle fieldsets
-		$("#prism_gallery_hide_gallery_options, #prism_gallery_hide_single_options, #prism_gallery_hide_acf").live("click", function()
+		$("#pg_container").on("click", "#prism_gallery_hide_gallery_options, #prism_gallery_hide_single_options, #prism_gallery_hide_acf", function()
 		{
 			prism_gallery.fieldset_toggle( $(this).attr("id") );
 		});
@@ -1710,7 +1658,7 @@ jQuery(document).ready(function($){
 		/* attachment edit screen */
 		
 		// save attachment
-		$("#prism_gallery_edit_attachment_save").live("click", function()
+		$("#pg_container").on("click", "#prism_gallery_edit_attachment_save", function()
 		{
 			var attachment_data =
 			{
@@ -1728,26 +1676,15 @@ jQuery(document).ready(function($){
 		});
 		
 		// cancel changes
-		$("#prism_gallery_edit_attachment_cancel").live("click", function()
+		$("#pg_container").on("click", "#prism_gallery_edit_attachment_cancel", function()
 		{
 			return prism_gallery.init('return_from_single_attachment');
 		});
 	
-		// acf enter on new field name
-		$("#new_custom_field_key").live("keypress keyup", function(e)
-		{
-			if ( 13 === e.which || 13 === e.keyCode ) // on enter
-			{
-				$("#new_custom_field_submit").trigger("click");
-				e.preventDefault();
-			}
-		});
-
-
 		/* thumbnails */
 		
 		// attachment thumbnail click
-		$("#pg_container .fgtt, #pg_container .checker_action").live("click.prism_gallery", function()
+		$("#pg_container").on("click", ".fgtt, .checker_action", function()
 		{
 			var p = $(this).parent(), c = "#att-chk-" + p.attr("id").replace("image-", "");
 			
@@ -1756,25 +1693,25 @@ jQuery(document).ready(function($){
 		});
 		
 		// attachment thumbnail double click
-		$("#pg_container .fgtt, #pg_container .checker_action").live("dblclick", function()
+		$("#pg_container").on("dblclick", ".fgtt, .checker_action", function()
 		{
 			prism_gallery.edit( $(this).parent("li:first").attr("id").replace("image-", "") );
 		});
 		
 		// edit attachment button click
-		$("#pg_container .img_edit").live("click", function()
+		$("#pg_container").on("click", ".img_edit", function()
 		{
 			return prism_gallery.edit( $(this).attr("id").replace('in-', '').replace('-edit', '') );
 		});
 	
 		// zoom attachment button click
-		$("#pg_container .img_zoom, .attachment_edit_thumb").live("click", function()
+		$("#pg_container").on("click", ".img_zoom, .attachment_edit_thumb", function()
 		{
 			return prism_gallery.zoom( this );
 		});
 	
 		// delete or detach single attachment link click
-		$("#pg_container .delete_or_detach_link").live("click", function()
+		$("#pg_container").on("click", ".delete_or_detach_link", function()
 		{
 			var id = $(this).attr("rel"),
 				 a = '#detach_or_delete_' + id,
@@ -1790,7 +1727,7 @@ jQuery(document).ready(function($){
 		});
 			
 		// detach single attachment link click
-		$("#pg_container .do_single_detach").live("click", function()
+		$("#pg_container").on("click", ".do_single_detach", function()
 		{
 			var id = $(this).attr("rel");
 			
@@ -1801,7 +1738,7 @@ jQuery(document).ready(function($){
 		});
 			
 		// delete single attachment link click
-		$("#pg_container .do_single_delete").live("click", function()
+		$("#pg_container").on("click", ".do_single_delete", function()
 		{
 			var id = $(this).attr("rel");
 			
@@ -1815,7 +1752,7 @@ jQuery(document).ready(function($){
 		});	
 			
 		// delete single attachment link confirm
-		$("#pg_container .delete").live("click", function()
+		$("#pg_container").on("click", ".delete", function()
 		{
 			var id = $(this).parent("div").attr("id").replace(/del_attachment_/, "");
 			
@@ -1828,13 +1765,13 @@ jQuery(document).ready(function($){
 		});
 			
 		// delete single attachment link confirm
-		$("#pg_container .detach").live("click", function()
+		$("#pg_container").on("click", ".detach", function()
 		{
 			return prism_gallery.detach_attachments( $(this).parent("div").attr("id").replace(/detach_attachment_/, ""), false );
 		});
 		
 		// delete / detach single attachment link cancel
-		$("#pg_container .delete_cancel, #pg_container .detach_cancel").live("click", function()
+		$("#pg_container").on("click", ".delete_cancel, .detach_cancel", function()
 		{
 			 $(this)
 				.parent("div")
@@ -1846,7 +1783,7 @@ jQuery(document).ready(function($){
 	
 		/* send gallery or single image(s) to editor */
 		
-		$("#prism_gallery_send_gallery_legend, #prism_gallery_send_single_legend").live("click mouseover", function(e)
+		$("#pg_container").on("click mouseover", "#prism_gallery_send_gallery_legend, #prism_gallery_send_single_legend", function(e)
 		{
 			if( "click" == e.type )
 				prism_gallery.send_to_editor( $(this).attr("id") );
@@ -1858,31 +1795,31 @@ jQuery(document).ready(function($){
 		/* main menu buttons */
 	
 		// refresh attachments button click
-		$("#prism_gallery_refresh").live("click", function()
+		$("#pg_container").on("click", "#prism_gallery_refresh", function()
 		{
 			 prism_gallery.init( 'refreshed' );
 		});
 		
 		// resort attachments button click
-		$("#prism_gallery_attachments_sort_submit").live("click", function()
+		$("#pg_container").on("click", "#prism_gallery_attachments_sort_submit", function()
 		{
 			 prism_gallery.init( 'sorted' );
 		});
 		
 		// delete checked attachments button click
-		$("#prism_gallery_delete_checked").live("click", function()
+		$("#pg_container").on("click", "#prism_gallery_delete_checked", function()
 		{
 			prism_gallery.delete_dialog( $('#data_collector_checked').val() );
 		});
 			
 		// detach checked attachments button click
-		$("#prism_gallery_detach_checked").live("click", function()
+		$("#pg_container").on("click", "#prism_gallery_detach_checked", function()
 		{
 			prism_gallery.detach_attachments($('#data_collector_checked').val(), prism_gallery.L10n.sure_to_detach);
 		});
 		
 		// save attachments menu order button click
-		$("#prism_gallery_save_menu_order, #prism_gallery_save_menu_order_link").live("click", function(e)
+		$("#pg_container").on("click", "#prism_gallery_save_menu_order, #prism_gallery_save_menu_order_link", function(e)
 		{
 			prism_gallery.save_menu_order();
 			
@@ -1891,7 +1828,7 @@ jQuery(document).ready(function($){
 		});
 			
 		// check all attachments button click
-		$("#prism_gallery_check_all").live("click", function()
+		$("#pg_container").on("click", "#prism_gallery_check_all", function()
 		{
 			if( $("#data_collector_checked").val() != $("#data_collector_full").val() )
 			{
@@ -1906,7 +1843,7 @@ jQuery(document).ready(function($){
 		});
 			
 		// uncheck all attachments button click
-		$("#prism_gallery_uncheck_all").live("click click_tinymce_gallery", function(e)
+		$("#pg_container").on("click", "#prism_gallery_uncheck_all", function(e)
 		{
 			if( "" != $("#data_collector_checked").val() )
 			{
@@ -1926,52 +1863,30 @@ jQuery(document).ready(function($){
 		/* other bindings */
 		
 		// bind dropdown select boxes change to serialize attachments list
-		$("#prism_gallery_size, #prism_gallery_linkto, #prism_gallery_orderby, #prism_gallery_order, #prism_gallery_template, #prism_gallery_single_linkto, #pg_container .sortableitem .checker, #prism_gallery_columns, #prism_gallery_linkrel,  #prism_gallery_paginate, #prism_gallery_linksize").live("change", function()
+		$("#pg_container").on("change", "#prism_gallery_size, #prism_gallery_linkto, #prism_gallery_orderby, #prism_gallery_order, #prism_gallery_template, #prism_gallery_single_linkto, #pg_container .sortableitem .checker, #prism_gallery_columns, #prism_gallery_linkrel,  #prism_gallery_paginate, #prism_gallery_linksize", function()
 		{
 			prism_gallery.serialize();
 		});
 		
 		// tags from current post only checkbox, switch to tags button
-		$("#fg_gallery_tags_from, #prism_gallery_switch_to_tags").live("click", function()
+		$("#pg_container").on("click", "#fg_gallery_tags_from, #prism_gallery_switch_to_tags", function()
 		{
 			prism_gallery.serialize();
 		});
 		
 		// blur binding for text inputs and dropdown selects
-		$("#fg_gallery_tags, #prism_gallery_linkclass, #prism_gallery_imageclass, #prism_gallery_galleryclass, #prism_gallery_single_linkclass, #prism_gallery_single_imageclass, #prism_gallery_single_external_url, #prism_gallery_external_url, #prism_gallery_postid, #prism_gallery_limit").live("blur", function()
+		$("#pg_container").on("blur", "#fg_gallery_tags, #prism_gallery_linkclass, #prism_gallery_imageclass, #prism_gallery_galleryclass, #prism_gallery_single_linkclass, #prism_gallery_single_imageclass, #prism_gallery_single_external_url, #prism_gallery_external_url, #prism_gallery_postid, #prism_gallery_limit", function()
 		{
 			prism_gallery.serialize();
 		});
-	
-		// whether to show tags or list of attachments
-		$("#prism_gallery_switch_to_tags").live("click", function()
-		{
-			prism_gallery.files_or_tags( false );
-		});
-			
-		// clickable tag links
-		$(".fg_insert_tag").live("click", function()
-		{
-			return prism_gallery.add_remove_tags( this );
-		});
 		
 		// thickbox window closed
-		if( "function" === typeof(jQuery.fn.on) )
+		$(document.body).on("tb_unload", "#TB_window", function()
 		{
-			jQuery(document.body).on("tb_unload", "#TB_window", function(e)
-			{
-				prism_gallery.tinymce_deselect( true );
-				prism_gallery.init();
-			});
-		}
-		else
-		{
-			jQuery('#TB_window').live("unload", function(e)
-			{
-				prism_gallery.tinymce_deselect( true );
-				prism_gallery.init();
-			});
-		}
+			prism_gallery.tinymce_deselect( true );
+			prism_gallery.init();
+		});
+		
 	} 
 
 
