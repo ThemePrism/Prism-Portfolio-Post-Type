@@ -115,9 +115,7 @@ class Prism_Portfolio_Gallery extends Prism_Portfolio {
 		$s = array('{"', '",', '"}', '\/', '"[', ']"');
 		$r = array("\n{\n\"", "\",\n", "\"\n}", '/', '[', ']');
 
-		if( $current_screen->base == 'post' &&
-			(isset($current_screen->post_type) && $current_screen->post_type == parent::$post_type)
-		  )
+		if( $current_screen->base == 'post' && (isset($current_screen->post_type) && $current_screen->post_type == parent::$post_type) )
 		{
 			// prism_gallery.L10n
 			$prism_gallery_localize = array(
@@ -216,77 +214,7 @@ class Prism_Portfolio_Gallery extends Prism_Portfolio {
 			wp_localize_script( 'prism-plupload', 'base_plupload_config', $plupload_init );	
 			
 		}
-		elseif( $current_screen->base == 'edit' && (isset($current_screen->post_type) && $current_screen->post_type == parent::$post_type)) {
-			$prism_gallery_options = array( 
-				"prism_gallery_url"   =>  parent::plugin_url(),
-				"prism_gallery_nonce" => wp_create_nonce('prism-gallery')
-			);
-			
-			wp_enqueue_script('prism-gallery-main',   parent::plugin_url() . '/admin/js/prism-gallery.js', array('jquery'), parent::$version);
-			
-			wp_localize_script( 'prism-gallery-main', 'Prism_Portfolio_Settings', array( 'prism_gallery_options' => $prism_gallery_options, 'acf_L10n' => $acf_localize, 'init_prism_gallery' => 'false' )); 
-		}
-		elseif( "media.php" == $pagenow && is_numeric($_GET['attachment_id']) && "edit" == $_GET["action"] ) {
-			$custom_fields = array();
-			$custom = get_post_custom($_GET['attachment_id']);
-
-			foreach( (array) $custom as $key => $val )
-			{
-				if( 1 < count($val) || "_" == substr($key, 0, 1) || is_array($val[0]) )
-					continue;
 		
-				$custom_fields[] = $key;
-			}
-
-			$custom_fields = (! empty($custom_fields)) ? "'" . implode("','", $custom_fields) . "'" : "";
-
-			$acf_localize = array(
-				'new_custom_field' => __("Add New Custom Field", "prism_portfolio"),
-				'add_new_custom_field' => __("Add Custom Field", "prism_portfolio"),
-				'error_deleting_attachment_custom_field' => __("Error deleting attachment custom field!", "prism_portfolio"),
-				'error_adding_attachment_custom_field' => __("Error adding attachment custom field!", "prism_portfolio"),
-				'name' => __("Name:", "prism_portfolio"),
-				'value' => __("Value:", "prism_portfolio")
-			);
-			
-			$acf_options = array( 
-				'add_new_attachment_custom_field_nonce' => wp_create_nonce( 'add_new_attachment_custom_field_nonce' ),
-				'delete_attachment_custom_field_nonce' => wp_create_nonce( 'delete_attachment_custom_field_nonce' ),
-				'custom_fields' => '[' . $custom_fields . ']'
-			);
-
-			wp_enqueue_script('acf-attachment-custom-fields',  parent::plugin_url() . '/admin/js/prism-gallery-attachment_custom_fields.js', false, parent::$version);
-			
-			wp_localize_script( 'acf-attachment-custom-fields', 'Prism_Portfolio_Settings', array( 'acf_L10n' => $acf_localize, 'acf_options' => $acf_options )); 
-			
-		}
-		elseif( "media-upload.php" == $pagenow && isset($_GET["tab"]) && "library" == $_GET["tab"] ) {
-			$prism_gallery_localize = array(
-				'attach_all_checked_copy' => __("Attach all checked items to current post", "prism_portfolio"),
-				'exclude_current' => __("Exclude current post's attachments", "prism_portfolio"),
-				'include_current' => __("Include current post's attachments", "prism_portfolio")
-			);
-
-			wp_enqueue_script('prism-gallery-attach',  parent::plugin_url() . '/admin/js/prism-gallery-attach.js', false, parent::$version);
-			
-			wp_localize_script( 'prism-gallery-attach', 'Prism_Portfolio_Settings', array( 'prism_gallery_L10n' => $prism_gallery_localize , 'prism_gallery_attach_nonce' => wp_create_nonce( 'prism-gallery-attach' ) )); 
-			
-			echo '
-			<style type="text/css">
-				#library-form .media-item.child-of-' . $_GET["post_id"] . '
-				{
-					background-color: #FFE;
-				}
-			</style>
-			';
-		}
-		elseif( "options-media.php" == $pagenow ) {
-
-			wp_enqueue_script('prism-gallery-clear_cache',  parent::plugin_url() . '/admin/js/prism-gallery-clear_cache.js', false, parent::$version);
-			
-			wp_localize_script( 'prism-gallery-clear_cache', 'Prism_Portfolio_Settings', array( 'clear_cache_nonce' => wp_create_nonce('prism-gallery-clear_cache') )); 
-		}
-
 	}
 
 
@@ -296,15 +224,7 @@ class Prism_Portfolio_Gallery extends Prism_Portfolio {
 	function admin_styles() {
 		global $pagenow, $current_screen, $prism_gallery;
 		
-		if( ($current_screen->base == 'post' && isset($current_screen->post_type) && $current_screen->post_type == parent::$post_type)
-				|| 'media.php' 			== $pagenow 
-				|| 'options-media.php'	== $pagenow 
-				|| 'media-upload.php'	== $pagenow 
-				|| 'upload.php'			== $pagenow 
-				|| 'edit.php'			== $pagenow 
-				|| 'options-permalink.php' == $pagenow
-				|| (isset($current_screen->post_type) && $current_screen->post_type == parent::$post_type )
-			)
+		if( ($current_screen->base == 'post' && isset($current_screen->post_type) && $current_screen->post_type == parent::$post_type))
 		{
 			wp_enqueue_style('prism_gallery_admin', apply_filters('prism_gallery_admin_css_location',  parent::plugin_url() . '/admin/css/prism-gallery.css'), false, parent::$version );
 			
@@ -482,10 +402,7 @@ require_once('inc/mime-types.php');
 require_once('inc/main.php');
 require_once('inc/functions.php');
 require_once('inc/cache.php');
-require_once('inc/regenerate-images.php');
-require_once('inc/attachments-custom-fields.php');
 
-if( 3.1 <= floatval(get_bloginfo('version')) )
-	require_once('inc/media-tags-list-table.class.php');
+
 
 ?>

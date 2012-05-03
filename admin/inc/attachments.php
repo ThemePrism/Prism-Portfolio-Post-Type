@@ -71,7 +71,7 @@ function prism_gallery_get_attachment_data()
 {
 	global $prism_portfolio;
 
-	check_ajax_referer("prism_portfolio");
+	check_ajax_referer("prism-gallery");
 
 	$attachment   = $_POST['attachment_id'];
 	$size 		  = $_POST['size'];
@@ -164,7 +164,7 @@ function prism_gallery_parse_attachment_data( $attachment, $size, $linkto, $link
 	else
 	{
 		$filetype        = prism_gallery_get_file_type($attachment->post_mime_type);
-		$size_src        = PRISM_GALLERY_CRYSTAL_URL . '/' . $filetype . '.png';
+		$size_src        = includes_url('images/crystal') . '/' . $filetype . '.png';
 		$width           = '';
 		$height          = '';
 		$imageclass     .= ' non-image';
@@ -243,7 +243,7 @@ function prism_gallery_caption_shortcode( $output = "", $attr, $content = null)
  */
 function prism_gallery_edit_attachment()
 {
-	check_ajax_referer("prism_portfolio");
+	check_ajax_referer("prism-gallery");
 	
 	$type 			= 'image';
 	$media_tags		= array();
@@ -268,7 +268,7 @@ function prism_gallery_edit_attachment()
 	else
 	{
 		$fullsize_src = wp_get_attachment_url( $attachment->ID );
-		$size_src     = prism_gallery_https( PRISM_GALLERY_CRYSTAL_URL ) . '/' . prism_gallery_get_file_type($attachment->post_mime_type) . '.png';
+		$size_src     = includes_url('images/crystal') . '/' . prism_gallery_get_file_type($attachment->post_mime_type) . '.png';
 		
 		$type = 'document';
 	}
@@ -293,9 +293,7 @@ function prism_gallery_edit_attachment()
 	<div id="prism_gallery_attachment_edit_image">
 		<?php if( 'image' == $type ) : ?>
 		<a href="<?php echo $fullsize_src; ?>" title="" class="attachment_edit_thumb"><img src="<?php echo $size_src; ?>" alt="image" /></a>
-		<p>
-			<a href="#" id="regenerate[<?php echo $attachment->ID; ?>]" class="prism_gallery_regenerate"><?php _e("Regenerate this image's thumbnails", "prism_portfolio"); ?></a>
-		</p>
+
 		<?php else : ?>
 		<img src="<?php echo $size_src; ?>" alt="image" />
 		<?php endif; ?>
@@ -339,22 +337,11 @@ function prism_gallery_edit_attachment()
 		<label for="post_content"><?php _e('Description', "prism_portfolio"); ?>: </label>
 		<textarea name="post_content" id="fgae_post_content" rows="4" cols="20" class="roundborder"<?php if( ! current_user_can('edit_post', $attachment->ID) ){ echo ' readonly="readonly"';} ?>><?php echo $attachment->post_content; ?></textarea><br />
 		
-		<label for="tax_input"><?php _e('Media tags (separate each tag with a comma)', "prism_portfolio"); ?>: </label>
-		<input type="text" name="tax_input" id="fgae_tax_input" value="<?php echo $media_tags; ?>" class="roundborder"<?php if( ! current_user_can('edit_post', $attachment->ID) ){ echo ' readonly="readonly"';} ?> /><br />
-		
-		<label for="menu_order"><?php _e('Menu order', "prism_portfolio"); ?>: </label>
-		<input type="text" name="menu_order" id="fgae_menu_order" value="<?php echo $attachment->menu_order; ?>" class="roundborder"<?php if( ! current_user_can('edit_post', $attachment->ID) ){ echo ' readonly="readonly"';} ?> /><br />
-		
 		<label for="attachment_uri"><?php _e('Attachment file URL:', "prism_portfolio"); ?></label>
 		<input type="text" name="attachment_uri" id="fgae_attachment_uri" readonly="readonly" value="<?php echo $fullsize_src; ?>" class="roundborder" />
         
         <br />
         <br />
-        
-		<?php
-        	if( isset($options['display_acf']) && true == $options['display_acf'] )
-				prism_gallery_attachment_custom_fields_table($attachment->ID);
-		?>
 		
 		<input type="button" id="prism_gallery_edit_attachment_save" value="<?php _e('save and return', "prism_portfolio"); ?>" class="button-primary" />
 		<input type="button" id="prism_gallery_edit_attachment_cancel"value="<?php _e('cancel and return', "prism_portfolio"); ?>" class="button-secondary" />

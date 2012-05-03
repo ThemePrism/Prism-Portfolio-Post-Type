@@ -1249,7 +1249,7 @@ jQuery(document).ready(function($){
 			};
 			
 			$("#pg_container")
-				.html('<p class="loading_image"><img src="' + prism_gallery.options.prism_gallery_img + '"/ajax-loader.gif" alt="' + prism_gallery.L10n.loading_attachment_data + '" /><br />' + prism_gallery.L10n.loading_attachment_data + '</p>');
+				.html('<p class="loading_image"><img src="' + prism_gallery.options.prism_gallery_img + '/ajax-loader.gif" alt="' + prism_gallery.L10n.loading_attachment_data + '" /><br />' + prism_gallery.L10n.loading_attachment_data + '</p>');
 			
 			$.post
 			(
@@ -1541,30 +1541,6 @@ jQuery(document).ready(function($){
 			});
 			
 			return output;
-		},
-		
-		regenerate_thumbnails : function( attachment_ids )
-		{
-			var el = "#prism_gallery_attachment_edit_image a.prism_gallery_regenerate",
-				text = $(el).html();
-			
-			$(el).html('<img src="' + prism_gallery.options.prism_gallery_img + '/ajax-loader.gif" alt="' + prism_gallery.L10n.regenerating + '" />' + prism_gallery.L10n.regenerating);
-
-			$.post
-			(
-				ajaxurl, 
-				{
-					action : "prism_gallery_regenerate_thumbnails",
-					attachment_ids : attachment_ids
-				},
-				function(response)
-				{
-					$("#prism_gallery_response").stop().html(response.message).show().css({opacity : 1}).fadeOut(7500);
-					$("#fg_loading_on_thumb").fadeOut(250).remove();
-					$(el).html(text);
-				},
-				"json"
-			);
 		}
 	});
 	
