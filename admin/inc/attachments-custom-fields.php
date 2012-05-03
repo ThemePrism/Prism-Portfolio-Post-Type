@@ -42,13 +42,13 @@ function prism_gallery_attachment_custom_fields_table( $attachment_id )
 	<tr class="acf_new_custom_field">
 		<th valign="top" scope="row" class="label">
 			<label for="attachments[' . $attachment_id . '][acf_new_custom_field]">
-				<span class="alignleft">' . __("Add New Custom Field", "file-gallery") . '</span>
+				<span class="alignleft">' . __("Add New Custom Field", "prism_portfolio") . '</span>
 				<br class="clear" />
 			</label>
 		</th>
 		<td class="field">
 			<p>
-				<label>'. __("Name:", "file-gallery") . '</label>
+				<label>'. __("Name:", "prism_portfolio") . '</label>
 				<br />
 				<input value="" name="new_custom_field_key" id="new_custom_field_key" class="text" type="text">
 				<abbr title="required" class="required">*</abbr>
@@ -59,17 +59,17 @@ function prism_gallery_attachment_custom_fields_table( $attachment_id )
 				<textarea value="" name="new_custom_field_value" id="new_custom_field_value" class="textarea"></textarea>
 			</p>
 			<p>
-				<input id="new_custom_field_submit" name="new_custom_field_submit" value="'. __("Add Custom Field", "file-gallery") . '" class="button-secondary" type="submit">
+				<input id="new_custom_field_submit" name="new_custom_field_submit" value="'. __("Add Custom Field", "prism_portfolio") . '" class="button-secondary" type="submit">
 			</p>
-			<p class="help"><abbr title="required" class="required">*</abbr>'. __('The "Name" field is required', "file-gallery") . '</p>
+			<p class="help"><abbr title="required" class="required">*</abbr>'. __('The "Name" field is required', "prism_portfolio") . '</p>
 		</td>
 	</tr>
 	';
 
 	echo 
 	'<fieldset id="fieldset_attachment_custom_fields">
-		<legend>' . __("Custom Fields", "file-gallery") . '</legend>
-		<input type="button" id="prism_gallery_hide_acf" class="' . $class . '" title="' . __('show/hide this fieldset', 'file-gallery') . '" />
+		<legend>' . __("Custom Fields", "prism_portfolio") . '</legend>
+		<input type="button" id="prism_gallery_hide_acf" class="' . $class . '" title="' . __('show/hide this fieldset', "prism_portfolio") . '" />
 		<table id="media-single-form"' . $style . '>
 			<tbody>
 				' . implode("", $form_fields) . '
@@ -146,9 +146,9 @@ function prism_gallery_attachment_fields_to_edit( $form_fields, $attachment )
 
 	// parent post url button
 	if( false === strpos($form_fields['url']['html'], __('Attachment Post URL')) ) // Button title changed in 3.3
-		$form_fields['url']['html'] = str_replace( __('Post URL'), __('Attachment URL', 'file-gallery'), $form_fields['url']['html']);
+		$form_fields['url']['html'] = str_replace( __('Post URL'), __('Attachment URL', "prism_portfolio"), $form_fields['url']['html']);
 
-	$form_fields['url']['html'] .= '<button type="button" class="button urlparent" title="' . get_permalink( $wpdb->get_var( $wpdb->prepare("SELECT `post_parent` FROM $wpdb->posts WHERE `ID`='%d'", $attachment->ID) ) ) . '">' . __('Parent Post URL', 'file-gallery') . '</button>';
+	$form_fields['url']['html'] .= '<button type="button" class="button urlparent" title="' . get_permalink( $wpdb->get_var( $wpdb->prepare("SELECT `post_parent` FROM $wpdb->posts WHERE `ID`='%d'", $attachment->ID) ) ) . '">' . __('Parent Post URL', "prism_portfolio") . '</button>';
 
 	// custom fields
 	if( false === $prism_portfolio->Gallery->acf )
@@ -159,7 +159,7 @@ function prism_gallery_attachment_fields_to_edit( $form_fields, $attachment )
 		{
 			if( 'media.php' == $pagenow && is_numeric($_GET['attachment_id']) && 'edit' == $_GET['action'] )
 			{
-				$form_fields['acf_custom_fields'] = array( 'label' => '&nbsp;', 'tr' => '<tr><td colspan="2"><h2>' . __('Custom Fields', 'file-gallery') . '</h2></td></tr>' );
+				$form_fields['acf_custom_fields'] = array( 'label' => '&nbsp;', 'tr' => '<tr><td colspan="2"><h2>' . __('Custom Fields', "prism_portfolio") . '</h2></td></tr>' );
 				
 				$custom = get_post_custom($attachment->ID);
 				
@@ -177,9 +177,9 @@ function prism_gallery_attachment_fields_to_edit( $form_fields, $attachment )
 				
 				$form_fields['acf_new_custom_field'] = array( 
 					'label' => __('Add New Custom Field', 'ile-gallery'), 
-					'helps' => '<abbr class="required" title="required">*</abbr>' . __('The "Name" field is required', 'file-gallery'),
+					'helps' => '<abbr class="required" title="required">*</abbr>' . __('The "Name" field is required', "prism_portfolio"),
 					'input' => 'html', 
-					'html'  => '<p><label>'. __('Name:', 'file-gallery') . '</label><br /><input value="" name="new_custom_field_key" id="new_custom_field_key" class="text" type="text"><abbr class="required" title="required">*</abbr></p><p><label>'. __('Value:', 'file-gallery') . '</label><br /><textarea name="new_custom_field_value" id="new_custom_field_value" class="textarea"></textarea></p><p><input id="new_custom_field_submit" name="new_custom_field_submit" value="' . __('Add Custom Field', 'file-gallery') . '" class="button-secondary" type="submit"></p>'
+					'html'  => '<p><label>'. __('Name:', "prism_portfolio") . '</label><br /><input value="" name="new_custom_field_key" id="new_custom_field_key" class="text" type="text"><abbr class="required" title="required">*</abbr></p><p><label>'. __('Value:', "prism_portfolio") . '</label><br /><textarea name="new_custom_field_value" id="new_custom_field_value" class="textarea"></textarea></p><p><input id="new_custom_field_submit" name="new_custom_field_submit" value="' . __('Add Custom Field', "prism_portfolio") . '" class="button-secondary" type="submit"></p>'
 				);
 			}
 		}

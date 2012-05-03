@@ -114,7 +114,7 @@ a.img_edit
 	float: right !important;	
 	text-align: left !important;
 }
-#file-gallery-content	{
+#prism-gallery-content	{
 	float:right;
 	width:97%;
 	margin-right: 35px;
@@ -196,14 +196,14 @@ a.img_edit
 #media_tag_taxonomy_name,
 #media_tag_taxonomy_slug
 {
-	background: url(../images/file-gallery-logo.png) left center no-repeat;
+	background: url(../images/prism-gallery-logo.png) left center no-repeat;
 }
 
 #poststuff #prism_gallery h3.hndle span
 {
 	width: 100%;
 	display: block;
-	background:url(../images/file-gallery-logo.png) left center no-repeat;
+	background:url(../images/prism-gallery-logo.png) left center no-repeat;
 }
 
 #prism_gallery_list .img_zoom img	{

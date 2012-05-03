@@ -1,0 +1,62 @@
+
+.prism_meta .drag-drop .drag-drop-area {
+    border: 4px dashed #ddd;
+    height: 200px;
+}
+.prism_meta .drag-drop .drag-drop-inside {
+    margin: 70px auto 0;
+    width: 250px;
+}
+.prism_meta .drag-drop-inside p {
+    color: #aaa;
+    font-size: 14px;
+    margin: 5px 0;
+    display: none;
+}
+.prism_meta .drag-drop .drag-drop-inside p { text-align: center }
+.prism_meta .drag-drop-inside p.drag-drop-info { font-size: 20px }
+.prism_meta .drag-drop .drag-drop-inside p,
+.prism_meta .drag-drop-inside p.drag-drop-buttons { display: block }
+.prism_meta .drag-drop.drag-over .drag-drop-area { border-color: #83b4d8 }
+.prism_meta .plupload-upload-ui { position: relative }
+
+.prism_meta .filelist {
+    width: 60%;
+	margin-top: 20px;
+}
+.prism_meta .filelist .file {
+    padding: 5px;
+    background: #ececec;
+    border: solid 1px #ccc;
+    margin-bottom: 4px;
+}
+.prism_meta .filelist .fileprogress {
+    width: 0%;
+    background: #B7C53D;
+    height: 5px;
+    margin: 10px auto;
+}
+.prism_meta .plupload-thumbs {
+    overflow: hidden;
+    margin: 10px auto;
+}
+.prism_meta .plupload-thumbs .thumb {
+    width: 100px;
+    padding-right: 10px;
+    float: left;
+}
+.prism_meta .plupload-thumbs .thumb img {
+    width: 100px;
+    height: 100px;
+}
+.prism_meta .ui-sortable  .thumb img {
+    cursor: pointer;
+}
+
+
+
+
+
+
+
+

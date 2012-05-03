@@ -71,7 +71,7 @@ function prism_gallery_get_attachment_data()
 {
 	global $prism_portfolio;
 
-	check_ajax_referer('file-gallery');
+	check_ajax_referer("prism_portfolio");
 
 	$attachment   = $_POST['attachment_id'];
 	$size 		  = $_POST['size'];
@@ -243,7 +243,7 @@ function prism_gallery_caption_shortcode( $output = "", $attr, $content = null)
  */
 function prism_gallery_edit_attachment()
 {
-	check_ajax_referer('file-gallery');
+	check_ajax_referer("prism_portfolio");
 	
 	$type 			= 'image';
 	$media_tags		= array();
@@ -253,7 +253,7 @@ function prism_gallery_edit_attachment()
 	
 	if( ! $attachment )
 	{
-		printf( __('Attachment with ID <strong>%d</strong> does not exist!', 'file-gallery'), $attachment_id );
+		printf( __('Attachment with ID <strong>%d</strong> does not exist!', "prism_portfolio"), $attachment_id );
 		exit();
 	}
 	
@@ -294,21 +294,21 @@ function prism_gallery_edit_attachment()
 		<?php if( 'image' == $type ) : ?>
 		<a href="<?php echo $fullsize_src; ?>" title="" class="attachment_edit_thumb"><img src="<?php echo $size_src; ?>" alt="image" /></a>
 		<p>
-			<a href="#" id="regenerate[<?php echo $attachment->ID; ?>]" class="prism_gallery_regenerate"><?php _e("Regenerate this image's thumbnails", "file-gallery"); ?></a>
+			<a href="#" id="regenerate[<?php echo $attachment->ID; ?>]" class="prism_gallery_regenerate"><?php _e("Regenerate this image's thumbnails", "prism_portfolio"); ?></a>
 		</p>
 		<?php else : ?>
 		<img src="<?php echo $size_src; ?>" alt="image" />
 		<?php endif; ?>
 		<br />
 		<div id="attachment_data">
-			<p><strong><?php _e('ID:', 'file-gallery'); ?></strong> <a href="<?php echo admin_url('media.php?attachment_id=' . $attachment->ID . '&action=edit&TB_iframe=1'); ?>" class="thickbox" onclick="return false;"><?php echo $attachment->ID; ?></a></p>
-			<p><strong><?php _e('Date uploaded:', 'file-gallery'); ?></strong><br /><?php echo date(get_option('date_format'), strtotime($attachment->post_date)); ?></p>
-			<p><strong><?php _e('Uploaded by:', 'file-gallery'); ?></strong> <?php echo $post_author; ?></p>
+			<p><strong><?php _e('ID:', "prism_portfolio"); ?></strong> <a href="<?php echo admin_url('media.php?attachment_id=' . $attachment->ID . '&action=edit&TB_iframe=1'); ?>" class="thickbox" onclick="return false;"><?php echo $attachment->ID; ?></a></p>
+			<p><strong><?php _e('Date uploaded:', "prism_portfolio"); ?></strong><br /><?php echo date(get_option('date_format'), strtotime($attachment->post_date)); ?></p>
+			<p><strong><?php _e('Uploaded by:', "prism_portfolio"); ?></strong> <?php echo $post_author; ?></p>
 			<?php if( is_array($has_copies) ) : ?>
-			<p class="attachment_info_has_copies"><?php _e('IDs of copies of this attachment:', 'file-gallery'); ?> <strong><?php foreach( $has_copies as $c){ echo '<a href="' . admin_url('media.php?attachment_id=' . $c . '&action=edit') . '" target="_blank">' . $c . '</a>'; }?></strong></p>
+			<p class="attachment_info_has_copies"><?php _e('IDs of copies of this attachment:', "prism_portfolio"); ?> <strong><?php foreach( $has_copies as $c){ echo '<a href="' . admin_url('media.php?attachment_id=' . $c . '&action=edit') . '" target="_blank">' . $c . '</a>'; }?></strong></p>
 			<?php endif; ?>
 			<?php if( $is_copy ) : ?>
-			<p class="attachment_info_is_a_copy"><?php _e('This attachment is a copy of attachment ID', 'file-gallery'); ?> <strong><?php echo '<a href="' . admin_url('media.php?attachment_id=' . $is_copy . '&action=edit') . '" target="_blank">' . $is_copy . '</a>'; ?></strong></p>
+			<p class="attachment_info_is_a_copy"><?php _e('This attachment is a copy of attachment ID', "prism_portfolio"); ?> <strong><?php echo '<a href="' . admin_url('media.php?attachment_id=' . $is_copy . '&action=edit') . '" target="_blank">' . $is_copy . '</a>'; ?></strong></p>
 			<?php endif; ?>
 
 			
@@ -326,26 +326,26 @@ function prism_gallery_edit_attachment()
 		<input type="hidden" name="action"  id="fgae_action"  value="update" />
 
 		<?php if( prism_gallery_file_is_displayable_image(  get_attached_file($attachment->ID) ) ) : ?>
-		<label for="post_alt"><?php _e('Alternate text for this image', 'file-gallery'); ?>: </label>
+		<label for="post_alt"><?php _e('Alternate text for this image', "prism_portfolio"); ?>: </label>
 		<input type="text" name="post_alt" id="fgae_post_alt" value="<?php echo get_post_meta($attachment->ID, '_wp_attachment_image_alt', true); ?>" class="roundborder"<?php if( ! current_user_can('edit_post', $attachment->ID)){ echo ' readonly="readonly"';} ?> /><br />
 		<?php endif; ?>
 		
-		<label for="post_title"><?php _e('Title', 'file-gallery'); ?>: </label>
+		<label for="post_title"><?php _e('Title', "prism_portfolio"); ?>: </label>
 		<input type="text" name="post_title" id="fgae_post_title" value="<?php echo $attachment->post_title; ?>" class="roundborder"<?php if( ! current_user_can('edit_post', $attachment->ID) ){ echo ' readonly="readonly"';} ?> /><br />
 		
-		<label for="post_excerpt"><?php _e('Caption', 'file-gallery'); ?>: </label>
+		<label for="post_excerpt"><?php _e('Caption', "prism_portfolio"); ?>: </label>
 		<textarea name="post_excerpt" id="fgae_post_excerpt" class="roundborder"<?php if( ! current_user_can('edit_post', $attachment->ID) ){ echo ' readonly="readonly"';} ?>><?php echo $attachment->post_excerpt; ?></textarea><br />
 		
-		<label for="post_content"><?php _e('Description', 'file-gallery'); ?>: </label>
+		<label for="post_content"><?php _e('Description', "prism_portfolio"); ?>: </label>
 		<textarea name="post_content" id="fgae_post_content" rows="4" cols="20" class="roundborder"<?php if( ! current_user_can('edit_post', $attachment->ID) ){ echo ' readonly="readonly"';} ?>><?php echo $attachment->post_content; ?></textarea><br />
 		
-		<label for="tax_input"><?php _e('Media tags (separate each tag with a comma)', 'file-gallery'); ?>: </label>
+		<label for="tax_input"><?php _e('Media tags (separate each tag with a comma)', "prism_portfolio"); ?>: </label>
 		<input type="text" name="tax_input" id="fgae_tax_input" value="<?php echo $media_tags; ?>" class="roundborder"<?php if( ! current_user_can('edit_post', $attachment->ID) ){ echo ' readonly="readonly"';} ?> /><br />
 		
-		<label for="menu_order"><?php _e('Menu order', 'file-gallery'); ?>: </label>
+		<label for="menu_order"><?php _e('Menu order', "prism_portfolio"); ?>: </label>
 		<input type="text" name="menu_order" id="fgae_menu_order" value="<?php echo $attachment->menu_order; ?>" class="roundborder"<?php if( ! current_user_can('edit_post', $attachment->ID) ){ echo ' readonly="readonly"';} ?> /><br />
 		
-		<label for="attachment_uri"><?php _e('Attachment file URL:', 'file-gallery'); ?></label>
+		<label for="attachment_uri"><?php _e('Attachment file URL:', "prism_portfolio"); ?></label>
 		<input type="text" name="attachment_uri" id="fgae_attachment_uri" readonly="readonly" value="<?php echo $fullsize_src; ?>" class="roundborder" />
         
         <br />
@@ -356,8 +356,8 @@ function prism_gallery_edit_attachment()
 				prism_gallery_attachment_custom_fields_table($attachment->ID);
 		?>
 		
-		<input type="button" id="prism_gallery_edit_attachment_save" value="<?php _e('save and return', 'file-gallery'); ?>" class="button-primary" />
-		<input type="button" id="prism_gallery_edit_attachment_cancel"value="<?php _e('cancel and return', 'file-gallery'); ?>" class="button-secondary" />
+		<input type="button" id="prism_gallery_edit_attachment_save" value="<?php _e('save and return', "prism_portfolio"); ?>" class="button-primary" />
+		<input type="button" id="prism_gallery_edit_attachment_cancel"value="<?php _e('cancel and return', "prism_portfolio"); ?>" class="button-secondary" />
 	
 	</div>	
 <?php
@@ -378,7 +378,7 @@ function prism_gallery_copy_attachments_to_post()
 {
 	global $wpdb;
 	
-	check_ajax_referer('file-gallery-attach');
+	check_ajax_referer('prism-gallery-attach');
 	
 	$post_id 	  = (int) $_POST['post_id'];
 	$attached_ids = $_POST['ids'];
@@ -421,20 +421,20 @@ function prism_gallery_copy_attachments_to_post()
 		// generate output
 		if( ! empty($attachments_exist) )
 		{
-			$output .= __('Some of the checked attachments were successfully attached to current post.', 'file-gallery');
-			$output .= '<br />' . __("Additionally, here are ID's of attachments you had selected, but were already attached to current post, according to their URIs.<br />You will be presented with an option to copy those attachments as well in the next version of this plugin. If that makes any sense, that is.", 'file-gallery') . ': ' . implode(',', $attachments_exist);
+			$output .= __('Some of the checked attachments were successfully attached to current post.', "prism_portfolio");
+			$output .= '<br />' . __("Additionally, here are ID's of attachments you had selected, but were already attached to current post, according to their URIs.<br />You will be presented with an option to copy those attachments as well in the next version of this plugin. If that makes any sense, that is.", "prism_portfolio") . ': ' . implode(',', $attachments_exist);
 		}
 		else
 		{
-			$output .= __('Checked attachments were successfully attached to current post.', 'file-gallery');
+			$output .= __('Checked attachments were successfully attached to current post.', "prism_portfolio");
 		}
 	}
 	else
 	{
 		if( ! empty($attachments_exist) )
-			$output .= __('All of the checked attachments are already attached to current post, according to their URIs.<br />You will be presented with an option to copy those attachments as well in the next version of this plugin. If that makes any sense, that is.', 'file-gallery');
+			$output .= __('All of the checked attachments are already attached to current post, according to their URIs.<br />You will be presented with an option to copy those attachments as well in the next version of this plugin. If that makes any sense, that is.', "prism_portfolio");
 		else
-			$output .= __('You must check the checkboxes next to attachments you want to copy to current post.', 'file-gallery');
+			$output .= __('You must check the checkboxes next to attachments you want to copy to current post.', "prism_portfolio");
 	}
 	
 	if( ! is_array($attached_ids) )
@@ -542,13 +542,13 @@ function prism_gallery_copy_all_attachments()
 	
 	if( false === $attachments )
 	{
-		$error = __('Database error! (prism_gallery_copy_all_attachments)', 'file-gallery');
+		$error = __('Database error! (prism_gallery_copy_all_attachments)', "prism_portfolio");
 		prism_gallery_write_log( $error );
 		exit( $error );
 	}
 	
 	if( 0 === count($attachments) )
-		exit( sprintf( __('Uh-oh. No attachments were found for post ID %d.', 'file-gallery'), $from_id ) );
+		exit( sprintf( __('Uh-oh. No attachments were found for post ID %d.', "prism_portfolio"), $from_id ) );
 	
 	// if the post we're copying all the attachments to has no attachments...
 	if( 0 === count( $wpdb->get_results( $wpdb->prepare("SELECT `ID` Prism GalleryROM $wpdb->posts WHERE `post_type`='attachment' AND `post_parent`=%d", $to_id) ) ) )
@@ -569,7 +569,7 @@ function prism_gallery_copy_all_attachments()
 	}
 	
 	if( ! isset($errors) )
-		echo sprintf( __('All attachments were successfully copied from post %d.', 'file-gallery'), $from_id );
+		echo sprintf( __('All attachments were successfully copied from post %d.', "prism_portfolio"), $from_id );
 	else
 		echo 'error ids: ' . implode(', ', $errors);
 	

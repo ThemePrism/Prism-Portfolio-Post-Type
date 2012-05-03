@@ -4,7 +4,7 @@
  * 
  * The Post Type Admin Options class creates and validates options for the plugin
  *
- * @class 		Prism_Admin_Options
+ * @class 		Prism_Portfolio_Admin_Options
  * @package		Prism_Portfolio
  * @category	Class
  * @author		Kathy Darling
@@ -23,16 +23,15 @@ if (!function_exists('is_admin')) {
     exit();
 }
 
-class Prism_Admin_Options extends Prism_Portfolio {
+class Prism_Portfolio_Admin_Options {
 
-	public function __construct() {  
+	public static function init() { 
+		// add the plugin options and options page
+		add_action( 'admin_init', array( __CLASS__, 'options_init' ) );
+		add_action('admin_menu', array(__CLASS__, 'register_submenu_page'));
 
-	// add the plugin options and options page
-    add_action( 'admin_init', array( __CLASS__, 'options_init' ) );
-    add_action('admin_menu', array(__CLASS__, 'register_submenu_page'));
-
-	// add notices on options save
-    add_action( 'admin_notices', array(__CLASS__,'admin_notice' ),0);
+		// add notices on options save
+		add_action( 'admin_notices', array(__CLASS__,'admin_notice' ),0);
 	}
 
 	static function default_options(){
@@ -56,13 +55,13 @@ class Prism_Admin_Options extends Prism_Portfolio {
 	}
 
 	static function register_submenu_page() {
-		add_submenu_page( 'edit.php?post_type='.self::$post_type, __('Portfolio Settings','prism_portfolio'), __('Portfolio Settings','prism_portfolio'), 'manage_options', 'settings', array(__CLASS__,'submenu_page_callback') ); 
+		add_submenu_page( 'edit.php?post_type='.Prism_Portfolio::$post_type, __('Portfolio Settings',"prism_portfolio"), __('Portfolio Settings',"prism_portfolio"), 'manage_options', 'settings', array(__CLASS__,'submenu_page_callback') ); 
 	}
 
 	// Draw the menu page itself
 
 	static function submenu_page_callback() {
-		include(self::plugin_path() . '/admin/inc/options.php');
+		include(Prism_Portfolio::plugin_path() . '/admin/inc/options.php');
 	}
 
 	// Sanitize and validate input. Accepts an array, return a sanitized array.
@@ -112,7 +111,7 @@ class Prism_Admin_Options extends Prism_Portfolio {
 			add_settings_error(
 				'slug',           // setting title
 				'prism_portfolio_texterror',            // error ID
-				__('Category slug cannot contain spaces or HTML characters','prism_portfolio'),   // error message
+				__('Category slug cannot contain spaces or HTML characters',"prism_portfolio"),   // error message
 				'error'                        // type of message
 			);
 		}
@@ -121,7 +120,7 @@ class Prism_Admin_Options extends Prism_Portfolio {
 			add_settings_error(
 				'slug',           // setting title
 				'prism_portfolio_texterror',            // error ID
-				__('Tag slug cannot contain spaces or HTML characters','prism_portfolio'),   // error message
+				__('Tag slug cannot contain spaces or HTML characters',"prism_portfolio"),   // error message
 				'error'                        // type of message
 			);
 		}
@@ -138,7 +137,7 @@ class Prism_Admin_Options extends Prism_Portfolio {
 			add_settings_error(
 				'slug',           // setting title
 				'prism_portfolio_texterror',            // error ID
-				__('You\'ve changed your permalink structure in some way.  Don\'t forget to <a href="'.admin_url('options-permalink.php').'">re-save your permalinks</a>.','prism_portfolio'),   // error message
+				__('You\'ve changed your permalink structure in some way.  Don\'t forget to <a href="'.admin_url('options-permalink.php').'">re-save your permalinks</a>.',"prism_portfolio"),   // error message
 				'updated'                        // type of message
 			);
 		}

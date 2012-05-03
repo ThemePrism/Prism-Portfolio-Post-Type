@@ -56,15 +56,8 @@ class Prism_Portfolio {
 	protected static $plugin_url;
 	protected static $plugin_path;
 	protected static $template_url;
-
-	/** Child Classes **/
-	private $Init;
-	private $Options;
-	private $Columns;
-	private $Featured;
-	private $Gallery;
-
-			/** Variables ******************************************************************/
+	
+	/** Variables ******************************************************************/
 	
 	static $version = .1;
 	static $post_type = "prism_portfolio";
@@ -77,28 +70,34 @@ class Prism_Portfolio {
 
 	/** Constructor ******************************************************************/
 	
-	function Prism_Portfolio() {	
-
+	function __construct() { 
+	
 		// Set up localisation
-		$this->load_plugin_textdomain();
+		self::load_plugin_textdomain();
 
 		// define plugin url
-		$this->plugin_url();
+		self::plugin_url();
 
 		// Include required files
-		$this->includes();
+		self::includes();
 
 		// Boot up the classes
-		$this->init();
-
-		register_activation_hook( __FILE__, array(&$this,'activate') );
-		register_deactivation_hook( __FILE__, array(&$this,'deactivate') );
+		Prism_Portfolio_Post_Type::init(); //Register post type, taxonomies and terms
+		Prism_Portfolio_Admin_Options::init(); //Add Plugin Options	
+		Prism_Portfolio_Edit_Screen::init(); // Add Columns, Sorting and Quick Edit to Portfolio Edit Screen
+		Prism_Portfolio_Featured_Tax::init(); //Creates, saves and validates the data for the Metaboxes
+		Prism_Portfolio_Gallery::init(); //Creates, manages and saves the data for the Gallery Attachments
+		
+		//activation and deactivation hooks
+		register_activation_hook( __FILE__, array(__CLASS__,'activate') );
+		register_deactivation_hook( __FILE__, array(__CLASS__,'deactivate') );
 
 		//add action links to plugins page
 		add_filter('plugin_action_links_' . plugin_basename(__FILE__), array(__CLASS__,'plugin_action_links' ));
 
+		
 	}
-
+	
 
 	/**
 	 * Get the plugin url
@@ -122,15 +121,15 @@ class Prism_Portfolio {
 	/**
 	 * Localisation
 	 **/
-	function load_plugin_textdomain() {
-		load_plugin_textdomain('prism_portfolio', false, basename(dirname( __FILE__ )) . '/languages');
+	static function load_plugin_textdomain() {
+		load_plugin_textdomain("prism_portfolio", false, basename(dirname( __FILE__ )) . '/languages');
 	}
 
 
 	/**
 	 * Include Required Files
 	 **/
-	function includes() {
+	static function includes() {
 
 		$includes = array ( 'admin/edit-screen.php',
 							'admin/admin-options.php',
@@ -144,30 +143,10 @@ class Prism_Portfolio {
 	}
 
 	/**
-	 * Initialize Everything 
-	 **/
-	function init(){
-		//Register post type, taxonomies and terms
-		$this->Init = new Prism_Post_Type_Init();
-
-		//Add Plugin Options
-		$this->Options = new Prism_Admin_Options(); 
-		
-		//Add Columns, Sorting and Quick Edit to Portfolio Edit Screen
-		$this->Columns = new Prism_Edit_Screen(); 
-
-		//Creates, saves and validates the data for the Metaboxes
-		$this->Featured = new Prism_Featured();
-
-		//Creates, manages and saves the data for the Gallery Attachments
-		$this->Gallery = new Prism_Gallery();
-	}
-
-	/**
 	 * Activation 
 	 **/
 
-	function activate() {
+	static function activate() {
 		global $wpdb;
 
 		if (function_exists('is_multisite') && is_multisite()) {
@@ -178,19 +157,19 @@ class Prism_Portfolio {
 				$blogids = $wpdb->get_col($wpdb->prepare("SELECT blog_id FROM $wpdb->blogs"));
 				foreach ($blogids as $blog_id) {
 					switch_to_blog($blog_id);
-					$this->_activate();
+					self::_activate();
 				}
 				switch_to_blog($old_blog);
 				return;
 			}	
 		} 
-		$this->_activate();		
+		self::_activate();		
 	}
 	
-	function _activate() {
-		Prism_Post_Type_Init::register_type();
+	static function _activate() {
+		Prism_Portfolio_Post_Type::register_type();
 		
-		Prism_Admin_Options::default_options();
+		Prism_Portfolio_Admin_Options::default_options();
 		
 		/**
 		* Flushes rewrite rules on plugin activation to ensure portfolio posts don't 404
@@ -203,7 +182,7 @@ class Prism_Portfolio {
 	 * De-Activation 
 	 **/
 
-	function deactivate() {
+	static function deactivate() {
 		global $wpdb;
 
 		if (function_exists('is_multisite') && is_multisite()) {
@@ -214,18 +193,18 @@ class Prism_Portfolio {
 				$blogids = $wpdb->get_col($wpdb->prepare("SELECT blog_id FROM $wpdb->blogs"));
 				foreach ($blogids as $blog_id) {
 					switch_to_blog($blog_id);  
-					$this->_mu_deactivate('portfolio');
+					self::_mu_deactivate('portfolio');
 				}
 				switch_to_blog($old_blog);
 				return;
 			}	
 		} else {
-		$this->_deactivate();
+		self::_deactivate();
 		}
 	}	
 	
 	//@TODO: is this correct? link to slug from plugin options
-	function _deactivate() {
+	static function _deactivate() {
 		global $wp_rewrite;		
 		$wp_rewrite->add_permastruct( 'portfolio', '');
 		$wp_rewrite->flush_rules();
@@ -234,7 +213,7 @@ class Prism_Portfolio {
 
  
 	// remove all rewrite rules for a given permastruct
-	function _mu_deactivate($permastruct, $ep_mask=EP_NONE) {
+	static function _mu_deactivate($permastruct, $ep_mask=EP_NONE) {
 		// replace all tags within permastruct  
 		if (!$permastruct)return;  
 		global $wp_rewrite;
@@ -261,15 +240,10 @@ class Prism_Portfolio {
 	 * Adds a link to plugin's settings and help pages (shows up next to the 
 	 * deactivation link on the plugins management page)
 	 */
-	function plugin_action_links( $links )	{ 
+	static function plugin_action_links( $links )	{ 
 		array_unshift( $links, '<a href="edit.php?post_type=prism_portfolio&page=settings">' . __('Settings', "prism_portfolio") . '</a>' );	
 		return $links; 
 	}
-
-
-
-
-
 
 
 
@@ -280,9 +254,7 @@ endif;
 * Launch the whole plugin
 */
 global $prism_portfolio;
-if (class_exists("Prism_Portfolio") && !$prism_portfolio) {
-    $prism_portfolio = new Prism_Portfolio();	
-}	
+if (class_exists("Prism_Portfolio") && !$prism_portfolio) $prism_portfolio = new Prism_Portfolio();	
 
 
 	

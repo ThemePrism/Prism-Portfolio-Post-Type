@@ -14,7 +14,7 @@ function prism_gallery_regenerate_thumbnails( $attachment_ids = NULL )
 	}
 
 	if( empty($attachment_ids) )
-		$errors[] =  __('No valid attachment IDs were supplied!', 'file-gallery');
+		$errors[] =  __('No valid attachment IDs were supplied!', "prism_portfolio");
 	
 	foreach( (array) $attachment_ids as $aid )
 	{
@@ -25,9 +25,9 @@ function prism_gallery_regenerate_thumbnails( $attachment_ids = NULL )
 		$metadata = wp_generate_attachment_metadata( $aid, $fullsizepath );
 		
 		if( is_wp_error($metadata) )
-			$data['errors'][] = sprintf( __('Error: %s while regenerating image ID %d', 'file-gallery'), $metadata->get_error_message(), $aid);
+			$data['errors'][] = sprintf( __('Error: %s while regenerating image ID %d', "prism_portfolio"), $metadata->get_error_message(), $aid);
 		elseif( empty($metadata) )
-			$data['errors'][] = sprintf( __('Unknown error while regenerating image ID %d', 'file-gallery'), $aid);
+			$data['errors'][] = sprintf( __('Unknown error while regenerating image ID %d', "prism_portfolio"), $aid);
 		else
 			$data['success'][] = $aid;
 
@@ -38,16 +38,16 @@ function prism_gallery_regenerate_thumbnails( $attachment_ids = NULL )
 	if( empty($data['errors']) )
 	{
 		if( 1 === count($attachment_ids) )
-			$data['message'] = __('Attachment thumbnails were successfully regenerated', 'file-gallery');
+			$data['message'] = __('Attachment thumbnails were successfully regenerated', "prism_portfolio");
 		else
-			$data['message'] = __("All attachments' thumbnails were successfully regenerated", 'file-gallery');
+			$data['message'] = __("All attachments' thumbnails were successfully regenerated", "prism_portfolio");
 	}
 	else
 	{
 		if( ! empty($data['success']) )
-			$data['message'] = __("There were errors and some of the attachments' thumbnails weren't successfully regenerated!", 'file-gallery');
+			$data['message'] = __("There were errors and some of the attachments' thumbnails weren't successfully regenerated!", "prism_portfolio");
 		else
-			$data['message'] = __("There were errors and none of the attachments' thumbnails were successfully regenerated!", 'file-gallery');
+			$data['message'] = __("There were errors and none of the attachments' thumbnails were successfully regenerated!", "prism_portfolio");
 	}
 	
 	header('Content-type: application/json'); 

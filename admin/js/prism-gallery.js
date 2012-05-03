@@ -4,59 +4,8 @@ var prism_gallery =
 	options : Prism_Portfolio_Settings.prism_gallery_options
 };
 
-// add access and prop for older versions of jQuery
-if( typeof(jQuery.access) !== 'function' )
-{
-	jQuery.extend({
-		access: function( elems, key, value, exec, fn, pass ) {
-			var length = elems.length;
-	
-			// Setting many attributes
-			if ( typeof key === "object" ) {
-				for ( var k in key ) {
-					jQuery.access( elems, k, key[k], exec, fn, value );
-				}
-				return elems;
-			}
-	
-			// Setting one attribute
-			if ( value !== undefined ) {
-				// Optionally, function values get executed if exec is true
-				exec = !pass && exec && jQuery.isFunction(value);
-	
-				for ( var i = 0; i < length; i++ ) {
-					fn( elems[i], key, exec ? value.call( elems[i], i, fn( elems[i], key ) ) : value, pass );
-				}
-	
-				return elems;
-			}
-	
-			// Getting an attribute
-			return length ? fn( elems[0], key ) : undefined;
-		}
-	});
-}
-	
-if( typeof(jQuery.fn.prop) !== 'function' )
-{
-	jQuery.fn.extend({
-		prop: function( name, value ) {
-			
-			if( 'checked' === name || 'selected' === name || 'disabled' === name || 'readonly' === name )
-			{
-				if( true === value )
-					value = name;
-				else if( false === value )
-					value = "";
-			}
-			
-			return jQuery.access( this, name, value, true, jQuery.attr );
-		}
-	});
-}
+jQuery(document).ready(function($){	
 
-jQuery(document).ready(function($)
-{	
 	$.extend(prism_gallery,
 	{
 		gallery_image_clicked : false,
@@ -238,7 +187,7 @@ jQuery(document).ready(function($)
 			{
 				$("#prism_gallery_uncheck_all").trigger("click_tinymce_gallery");
 				
-				$("#fg_container .sortableitem .checker").map(function()
+				$("#pg_container .sortableitem .checker").map(function()
 				{
 					if( "all" === attachment_ids || -1 < attachment_ids.indexOf($(this).attr("id").replace("att-chk-", "")) )
 					{
@@ -289,7 +238,7 @@ jQuery(document).ready(function($)
 		{
 			var all_checked = true;
 			
-			$("#fg_container .sortableitem .checker").map(function()
+			$("#pg_container .sortableitem .checker").map(function()
 			{
 				if( ! this.checked )
 				{
@@ -307,15 +256,15 @@ jQuery(document).ready(function($)
 		 * loads main file gallery data via ajax
 		 */
 		init : function( response_message )
-		{
+		{  
 			var tags_from = $("#fg_gallery_tags_from").prop("checked"), 
-				container = $("#fg_container"), 
+				container = $("#pg_container"), 
 				fieldsets = $("#prism_gallery_fieldsets").val(),
 				data = null,
 				attachment_order = $("#data_collector_full").val();
 			
 			if( 0 === $("#prism_gallery_response").length )
-				$("#prism_gallery.postbox").prepend('<div id="prism_gallery_response"></div>');
+				$("#prism_gallery.postbox").prepend('<div id="prism_gallery_response"></div>'); 
 			
 			if( "return_from_single_attachment" == response_message )
 			{
@@ -356,7 +305,7 @@ jQuery(document).ready(function($)
 
 			container
 				.empty()
-				.append('<p class="loading_image"><img src="' + prism_gallery.options.prism_gallery_url + '/images/ajax-loader.gif" alt="' + prism_gallery.L10n.loading_attachments + '" /><br />' + prism_gallery.L10n.loading_attachments + '<br /></p>')
+				.append('<p class="loading_image"><img src="' + prism_gallery.options.prism_gallery_img + '/ajax-loader.gif" alt="' + prism_gallery.L10n.loading_attachments + '" /><br />' + prism_gallery.L10n.loading_attachments + '<br /></p>')
 				.css({height : "auto"})
 				.show();
 			
@@ -381,13 +330,13 @@ jQuery(document).ready(function($)
 		 */
 		setup : function()
 		{
-			var container = $("#fg_container"),
+			var container = $("#pg_container"),
 				files_or_tags = $("#files_or_tags");
 			
 			if( 0 === container.length || (0 === files_or_tags.length && 0 < $("prism_gallery_gallery_options").length) )
 				return;
 
-			prism_gallery.options.num_attachments = $("#fg_container #prism_gallery_list li").length;
+			prism_gallery.options.num_attachments = $("#pg_container #prism_gallery_list li").length;
 			
 			if( 0 < prism_gallery.options.num_attachments )
 				$("#prism_gallery_copy_all").appendTo("#fg_buttons .advanced");
@@ -696,7 +645,7 @@ jQuery(document).ready(function($)
 						start		: function()
 						{
 							var sitem = $("#prism_gallery_list .sortableitem.image:first-child");
-							$("#fg_container .fgtt").unbind("click.prism_gallery");
+							$("#pg_container .fgtt").unbind("click.prism_gallery");
 							$("#prism_gallery_list .ui-selected").css({width : sitem.width()  + "px", height : sitem.height() + "px"});
 						},
 						update      : function(){ prism_gallery.serialize(); }
@@ -720,7 +669,7 @@ jQuery(document).ready(function($)
 						start		: function()
 						{
 							var sitem = $("#prism_gallery_list .sortableitem.image:first-child");
-							$("#fg_container .fgtt").unbind("click.prism_gallery");
+							$("#pg_container .fgtt").unbind("click.prism_gallery");
 							$("#prism_gallery_list .ui-selected").css({"width"  : sitem.width()  + "px", "height" : sitem.height() + "px"});
 						},
 						update      : function(){ prism_gallery.serialize(); }
@@ -1010,8 +959,8 @@ jQuery(document).ready(function($)
 		{
 			prism_gallery.options.prism_gallery_mode = "list";
 			
-			$("#fg_container")
-				.html("<p class=\"loading_image\"><img src=\"" + prism_gallery.options.prism_gallery_url + "/images/ajax-loader.gif\" alt=\"" + prism_gallery.L10n.saving_attachment_data + "\" /><br />" + prism_gallery.L10n.saving_attachment_data + "</p>");
+			$("#pg_container")
+				.html('<p class="loading_image"><img src="' + prism_gallery.options.prism_gallery_img + '/ajax-loader.gif" alt="' + prism_gallery.L10n.saving_attachment_data + '" /><br />' + prism_gallery.L10n.saving_attachment_data + '</p>');
 			
 			$.post
 			(
@@ -1033,7 +982,7 @@ jQuery(document).ready(function($)
 				},
 				function(response)
 				{
-					$("#fg_container").html(response).css({height : "auto"});
+					$("#pg_container").html(response).css({height : "auto"});
 					$("#prism_gallery_response").html($("#prism_gallery_response_inner").html()).stop().fadeTo(0, 1).show().fadeOut(7500);
 					
 					prism_gallery.setup();
@@ -1091,9 +1040,9 @@ jQuery(document).ready(function($)
 				if( "" == originals || "undefined" == originals || "undefined" == typeof( originals ))
 					originals = "";
 					
-				$("#fg_container")
-					.css({height : $("#fg_container").height()})
-					.html('<p class="loading_image"><img src="' + prism_gallery.options.prism_gallery_url + '/images/ajax-loader.gif" alt="' + prism_gallery.L10n.loading + '" /><br />' + a + '</p>');
+				$("#pg_container")
+					.css({height : $("#pg_container").height()})
+					.html('<p class="loading_image"><img src="' + prism_gallery.options.prism_gallery_img + '/ajax-loader.gif" alt="' + prism_gallery.L10n.loading + '" /><br />' + a + '</p>');
 				
 				data = {
 						post_id 			: $("#post_ID").val(),
@@ -1113,7 +1062,7 @@ jQuery(document).ready(function($)
 					data,
 					function(response)
 					{
-						$('#fg_container').html(response).css({height : "auto"});
+						$('#pg_container').html(response).css({height : "auto"});
 						$('#prism_gallery_response').html($("#prism_gallery_response_inner").html()).stop().fadeTo(0, 1).css({display : "block"}).fadeOut(7500);
 						
 						prism_gallery.setup();
@@ -1148,9 +1097,9 @@ jQuery(document).ready(function($)
 				if( 1 < attachment_count )
 					a = prism_gallery.L10n.detaching_attachments;
 		
-				$("#fg_container")
-					.css({"height" : $("#fg_container").height()})
-					.html('<p class="loading_image"><img src="' + prism_gallery.options.prism_gallery_url + '/images/ajax-loader.gif" alt="' + prism_gallery.L10n.loading + '" /><br />' + a + '</p>');
+				$("#pg_container")
+					.css({"height" : $("#pg_container").height()})
+					.html('<p class="loading_image"><img src="' + prism_gallery.options.prism_gallery_img + '/ajax-loader.gif" alt="' + prism_gallery.L10n.loading + '" /><br />' + a + '</p>');
 		
 				data = {
 						post_id 			: $("#post_ID").val(),
@@ -1167,7 +1116,7 @@ jQuery(document).ready(function($)
 					data,
 					function(response)
 					{
-						$("#fg_container")
+						$("#pg_container")
 							.html(response)
 							.css({height : "auto"});
 						
@@ -1281,7 +1230,7 @@ jQuery(document).ready(function($)
 
 
 		/**
-		 * loads the attachment metadata edit page into fg_container
+		 * loads the attachment metadata edit page into pg_container
 		 */
 		edit : function( attachment_id )
 		{
@@ -1299,8 +1248,8 @@ jQuery(document).ready(function($)
 				_ajax_nonce			: prism_gallery.options.prism_gallery_nonce
 			};
 			
-			$("#fg_container")
-				.html("<p class=\"loading_image\"><img src=\"" + prism_gallery.options.prism_gallery_url + "/images/ajax-loader.gif\" alt=\"" + prism_gallery.L10n.loading_attachment_data + "\" /><br />" + prism_gallery.L10n.loading_attachment_data + "</p>");
+			$("#pg_container")
+				.html('<p class="loading_image"><img src="' + prism_gallery.options.prism_gallery_img + '"/ajax-loader.gif" alt="' + prism_gallery.L10n.loading_attachment_data + '" /><br />' + prism_gallery.L10n.loading_attachment_data + '</p>');
 			
 			$.post
 			(
@@ -1308,7 +1257,7 @@ jQuery(document).ready(function($)
 				data,
 				function(response)
 				{
-					$('#fg_container').html(response);
+					$('#pg_container').html(response);
 					
 					prism_gallery.tinymce_deselect();
 				},
@@ -1328,7 +1277,7 @@ jQuery(document).ready(function($)
 			image.src = $(element).attr("href");
 		
 			$("#prism_gallery_image_dialog")
-				.html('<p class="loading_image"><img src="' + prism_gallery.options.prism_gallery_url + '/images/ajax-loader.gif" alt="' + prism_gallery.L10n.loading + '" />	</p>')
+				.html('<p class="loading_image"><img src="' + prism_gallery.options.prism_gallery_img + '/ajax-loader.gif" alt="' + prism_gallery.L10n.loading + '" />	</p>')
 				.dialog( 'option', 'width',  'auto' )
 				.dialog( 'option', 'height', 'auto' )
 				.dialog("open");
@@ -1460,7 +1409,7 @@ jQuery(document).ready(function($)
 
 			$('#prism_gallery_response').stop().fadeTo(0, 1).html('<img src="' + admin_url + '/images/loading.gif" width="16" height="16" alt="' + prism_gallery.L10n.loading + '" id="fg_loading_on_bar" />').show();
 
-			$("#image-" + attachment_ids).append('<img src="' + prism_gallery.options.prism_gallery_url + '/images/loading-big.gif" width="32" height="32" alt="' + prism_gallery.L10n.loading + '" id="fg_loading_on_thumb" class="thumb_switch_load" />').children("#fg_loading_on_thumb").fadeIn(250);
+			$("#image-" + attachment_ids).append('<img src="' + prism_gallery.options.prism_gallery_img + '/loading-big.gif" width="32" height="32" alt="' + prism_gallery.L10n.loading + '" id="fg_loading_on_thumb" class="thumb_switch_load" />').children("#fg_loading_on_thumb").fadeIn(250);
 			
 			data = {
 				action			: action,
@@ -1599,7 +1548,7 @@ jQuery(document).ready(function($)
 			var el = "#prism_gallery_attachment_edit_image a.prism_gallery_regenerate",
 				text = $(el).html();
 			
-			$(el).html('<img src="' + prism_gallery.options.prism_gallery_url + '/images/ajax-loader.gif" alt="' + prism_gallery.L10n.regenerating + '" />' + prism_gallery.L10n.regenerating);
+			$(el).html('<img src="' + prism_gallery.options.prism_gallery_img + '/ajax-loader.gif" alt="' + prism_gallery.L10n.regenerating + '" />' + prism_gallery.L10n.regenerating);
 
 			$.post
 			(
@@ -1622,8 +1571,7 @@ jQuery(document).ready(function($)
 
 /* end prism_gallery object */
 
-
-	if( "udefined" !== typeof(init_prism_gallery) && true === init_prism_gallery )
+	if( "undefined" !== typeof(Prism_Portfolio_Settings.init_prism_gallery) && 'true' === Prism_Portfolio_Settings.init_prism_gallery )
 	{
 		// regenerate thumbnails
 		$("#prism_gallery_attachment_edit_image a.prism_gallery_regenerate").live("click", function(e)
@@ -1647,7 +1595,7 @@ jQuery(document).ready(function($)
 		
 					if( "number" == typeof(fg_icl_trans_id) )
 					{
-						$(this).after('<a title="' + prism_gallery.L10n.copy_all_from_translation + '" href="#" id="copy-from-translation-' + fg_icl_trans_id + '"><img src="' + prism_gallery.options.prism_gallery_url + '/images/famfamfam_silk/image_add.png" alt="' + prism_gallery.L10n.copy_all_from_translation + '" /></a>');
+						$(this).after('<a title="' + prism_gallery.L10n.copy_all_from_translation + '" href="#" id="copy-from-translation-' + fg_icl_trans_id + '"><img src="' + prism_gallery.options.prism_gallery_img + '/famfamfam_silk/image_add.png" alt="' + prism_gallery.L10n.copy_all_from_translation + '" /></a>');
 		
 						$("#copy-from-translation-" + fg_icl_trans_id).bind("click", function()
 						{
@@ -1823,7 +1771,7 @@ jQuery(document).ready(function($)
 		/* thumbnails */
 		
 		// attachment thumbnail click
-		$("#fg_container .fgtt, #fg_container .checker_action").live("click.prism_gallery", function()
+		$("#pg_container .fgtt, #pg_container .checker_action").live("click.prism_gallery", function()
 		{
 			var p = $(this).parent(), c = "#att-chk-" + p.attr("id").replace("image-", "");
 			
@@ -1832,25 +1780,25 @@ jQuery(document).ready(function($)
 		});
 		
 		// attachment thumbnail double click
-		$("#fg_container .fgtt, #fg_container .checker_action").live("dblclick", function()
+		$("#pg_container .fgtt, #pg_container .checker_action").live("dblclick", function()
 		{
 			prism_gallery.edit( $(this).parent("li:first").attr("id").replace("image-", "") );
 		});
 		
 		// edit attachment button click
-		$("#fg_container .img_edit").live("click", function()
+		$("#pg_container .img_edit").live("click", function()
 		{
 			return prism_gallery.edit( $(this).attr("id").replace('in-', '').replace('-edit', '') );
 		});
 	
 		// zoom attachment button click
-		$("#fg_container .img_zoom, .attachment_edit_thumb").live("click", function()
+		$("#pg_container .img_zoom, .attachment_edit_thumb").live("click", function()
 		{
 			return prism_gallery.zoom( this );
 		});
 	
 		// delete or detach single attachment link click
-		$("#fg_container .delete_or_detach_link").live("click", function()
+		$("#pg_container .delete_or_detach_link").live("click", function()
 		{
 			var id = $(this).attr("rel"),
 				 a = '#detach_or_delete_' + id,
@@ -1866,7 +1814,7 @@ jQuery(document).ready(function($)
 		});
 			
 		// detach single attachment link click
-		$("#fg_container .do_single_detach").live("click", function()
+		$("#pg_container .do_single_detach").live("click", function()
 		{
 			var id = $(this).attr("rel");
 			
@@ -1877,7 +1825,7 @@ jQuery(document).ready(function($)
 		});
 			
 		// delete single attachment link click
-		$("#fg_container .do_single_delete").live("click", function()
+		$("#pg_container .do_single_delete").live("click", function()
 		{
 			var id = $(this).attr("rel");
 			
@@ -1891,7 +1839,7 @@ jQuery(document).ready(function($)
 		});	
 			
 		// delete single attachment link confirm
-		$("#fg_container .delete").live("click", function()
+		$("#pg_container .delete").live("click", function()
 		{
 			var id = $(this).parent("div").attr("id").replace(/del_attachment_/, "");
 			
@@ -1904,13 +1852,13 @@ jQuery(document).ready(function($)
 		});
 			
 		// delete single attachment link confirm
-		$("#fg_container .detach").live("click", function()
+		$("#pg_container .detach").live("click", function()
 		{
 			return prism_gallery.detach_attachments( $(this).parent("div").attr("id").replace(/detach_attachment_/, ""), false );
 		});
 		
 		// delete / detach single attachment link cancel
-		$("#fg_container .delete_cancel, #fg_container .detach_cancel").live("click", function()
+		$("#pg_container .delete_cancel, #pg_container .detach_cancel").live("click", function()
 		{
 			 $(this)
 				.parent("div")
@@ -1971,7 +1919,7 @@ jQuery(document).ready(function($)
 		{
 			if( $("#data_collector_checked").val() != $("#data_collector_full").val() )
 			{
-				$('#fg_container .sortableitem .checker').map(function()
+				$('#pg_container .sortableitem .checker').map(function()
 				{
 					$(this).parents(".sortableitem").addClass("selected");
 					return this.checked = true;
@@ -1986,7 +1934,7 @@ jQuery(document).ready(function($)
 		{
 			if( "" != $("#data_collector_checked").val() )
 			{
-				$('#fg_container .sortableitem .checker').map(function()
+				$('#pg_container .sortableitem .checker').map(function()
 				{
 					$(this).parents(".sortableitem").removeClass("selected");
 					return this.checked = false;
@@ -2002,7 +1950,7 @@ jQuery(document).ready(function($)
 		/* other bindings */
 		
 		// bind dropdown select boxes change to serialize attachments list
-		$("#prism_gallery_size, #prism_gallery_linkto, #prism_gallery_orderby, #prism_gallery_order, #prism_gallery_template, #prism_gallery_single_linkto, #fg_container .sortableitem .checker, #prism_gallery_columns, #prism_gallery_linkrel,  #prism_gallery_paginate, #prism_gallery_linksize").live("change", function()
+		$("#prism_gallery_size, #prism_gallery_linkto, #prism_gallery_orderby, #prism_gallery_order, #prism_gallery_template, #prism_gallery_single_linkto, #pg_container .sortableitem .checker, #prism_gallery_columns, #prism_gallery_linkrel,  #prism_gallery_paginate, #prism_gallery_linksize").live("change", function()
 		{
 			prism_gallery.serialize();
 		});
@@ -2048,7 +1996,7 @@ jQuery(document).ready(function($)
 				prism_gallery.init();
 			});
 		}
-	}
+	} 
 
 
 	/* === edit.php screens === */

@@ -4,7 +4,7 @@
  * 
  * The Prism Post Type Edit Screen creates the columns on the edit screen 
  *
- * @class 		Prism_Edit_Screen
+ * @class 		Prism_Portfolio_Edit_Screen
  * @package		Prism_Portfolio
  * @category	Class
  * @author		KathyisAwesome
@@ -16,9 +16,11 @@
  *
  */
 
-class Prism_Edit_Screen extends Prism_Portfolio {
-
-	public function __construct() {   
+class Prism_Portfolio_Edit_Screen {
+	
+	protected static $plugin_url;
+	
+	public static function init() { 
 
 		//Add Columns to Portfolio Edit Screen
 		add_filter('manage_edit-prism_portfolio_columns', array(__CLASS__,'edit_columns'));
@@ -68,17 +70,17 @@ class Prism_Edit_Screen extends Prism_Portfolio {
 	 
 	function edit_columns(){
 		$columns['cb'] = '<input type="checkbox" />';
-		$columns['title'] = __('Title', 'prism_portfolio');
-		$columns['thumbnail'] = __('Thumbnail', 'prism_portfolio');
+		$columns['title'] = __('Title', "prism_portfolio");
+		$columns['thumbnail'] = __('Thumbnail', "prism_portfolio");
 
-		if(self::$category) $columns[self::$category] = __('Category', 'prism_portfolio');
-		if(self::$tag) $columns[self::$tag] = __('Tags', 'prism_portfolio');
-		if(self::$featured) $columns[self::$featured] = __('Featured', 'prism_portfolio');
+		if(Prism_Portfolio::$category) $columns[Prism_Portfolio::$category] = __('Category', "prism_portfolio");
+		if(Prism_Portfolio::$tag) $columns[Prism_Portfolio::$tag] = __('Tags', "prism_portfolio");
+		if(Prism_Portfolio::$featured) $columns[Prism_Portfolio::$featured] = __('Featured', "prism_portfolio");
 
 		$columns['attachment_count'] = __('#Attachments', "prism_portfolio");
 		
 		$columns['comments'] = '<div class="vers"><img alt="Comments" src="' . esc_url( admin_url( 'images/comment-grey-bubble.png' ) ) . '" /></div>';
-		$columns['date'] = __('Date', 'prism_portfolio');
+		$columns['date'] = __('Date', "prism_portfolio");
 		
 		return $columns;
 	}
@@ -101,56 +103,56 @@ class Prism_Edit_Screen extends Prism_Portfolio {
 					if ( has_post_thumbnail() ) {
 							$text = '<div class="postimagediv"><a href="#" class="postfeaturedimage">'.get_the_post_thumbnail($post_id, array($width,$height)).'</a></div>';
 						} else {
-							$text = '<div class="postimagediv"><a href="#" class="postfeaturedimage hide-if-no-js">'.__('Add Image','prism_portfolio').'</a></div>';
+							$text = '<div class="postimagediv"><a href="#" class="postfeaturedimage hide-if-no-js">'.__('Add Image',"prism_portfolio").'</a></div>';
 						}  
 						
 						echo $text;
 
 				break;	
 
-				case self::$category:
+				case Prism_Portfolio::$category:
 			
-					$taxonomies = get_the_terms( $post_id, self::$category ) ; 
+					$taxonomies = get_the_terms( $post_id, Prism_Portfolio::$category ) ; 
 					if ( !empty( $taxonomies ) ) {
 						$out = array();
 						foreach ( $taxonomies as $t ) {  
 							$out[] = sprintf( '<a href="%s">%s</a>',
-								esc_url( add_query_arg( array( 'post_type' => $post->post_type, self::$category => $t->slug ), 'edit.php' ) ),
-								esc_html( sanitize_term_field( 'name', $t->name, $t->term_id, self::$category, 'display' ) )
+								esc_url( add_query_arg( array( 'post_type' => $post->post_type, Prism_Portfolio::$category => $t->slug ), 'edit.php' ) ),
+								esc_html( sanitize_term_field( 'name', $t->name, $t->term_id, Prism_Portfolio::$category, 'display' ) )
 							);
 						}
 						echo join( ', ', $out );
 						
 					} else {
-						_e( 'Uncategorized' , 'prism_portfolio');
+						_e( 'Uncategorized' , "prism_portfolio");
 					}	
 					
 				break;
 			
 				
 				// Display the portfolio tags in the column view
-				case self::$tag:
+				case Prism_Portfolio::$tag:
 				
-				$taxonomies = get_the_terms( $post_id, self::$tag) ; 
+				$taxonomies = get_the_terms( $post_id, Prism_Portfolio::$tag) ; 
 					if ( !empty( $taxonomies ) ) {
 						$out = array();
 						foreach ( $taxonomies as $t ) {  
 							$out[] = sprintf( '<a href="%s">%s</a>',
-								esc_url( add_query_arg( array( 'post_type' => $post->post_type, self::$tag => $t->slug ), 'edit.php' ) ),
-								esc_html( sanitize_term_field( 'name', $t->name, $t->term_id, self::$tag, 'display' ) )
+								esc_url( add_query_arg( array( 'post_type' => $post->post_type, Prism_Portfolio::$tag => $t->slug ), 'edit.php' ) ),
+								esc_html( sanitize_term_field( 'name', $t->name, $t->term_id, Prism_Portfolio::$tag, 'display' ) )
 							);
 						}
 						echo join( ', ', $out );
 						
 					} else {
-						_e( 'No Tags' , 'prism_portfolio');
+						_e( 'No Tags' , "prism_portfolio");
 					}	
 				break;		
 				
 				// Display featured status column view
-				case self::$featured:
+				case Prism_Portfolio::$featured:
 				
-				$terms = get_the_terms( $post_id, self::$featured ) ;   
+				$terms = get_the_terms( $post_id, Prism_Portfolio::$featured ) ;   
 				$status = null;
 				
 				if( !is_wp_error($terms) && !empty($terms)) { $term = array_shift($terms); $status=$term->slug; }
@@ -158,38 +160,38 @@ class Prism_Edit_Screen extends Prism_Portfolio {
 					//should only be 1 value so pop off the first $term with 0 index
 					if ( $status == "archived") {
 						$archived_image = 'on';
-						$archived_title = __( 'Undo Archived' , 'prism_portfolio');
+						$archived_title = __( 'Undo Archived' , "prism_portfolio");
 						$archived_action = 'unset';
 						$featured_image = 'off';
-						$featured_title = __( 'Mark as Featured' , 'prism_portfolio');	
+						$featured_title = __( 'Mark as Featured' , "prism_portfolio");	
 						$featured_action = 'set';						
 					} elseif ( $status == "featured") {
 						$archived_image = 'off';
-						$archived_title = __( 'Mark as Archived' , 'prism_portfolio');
+						$archived_title = __( 'Mark as Archived' , "prism_portfolio");
 						$archived_action = 'set';
 						$featured_image = 'on';
-						$featured_title = __( 'Undo Featured' , 'prism_portfolio');
+						$featured_title = __( 'Undo Featured' , "prism_portfolio");
 						$featured_action = 'unset';
 					} else {			
 						$archived_image = 'off';
-						$archived_title = __( 'Mark as Archived' , 'prism_portfolio');
+						$archived_title = __( 'Mark as Archived' , "prism_portfolio");
 						$archived_action = 'set';
 						$featured_image = 'off';
-						$featured_title = __( 'Mark as Featured' , 'prism_portfolio');
+						$featured_title = __( 'Mark as Featured' , "prism_portfolio");
 						$featured_action = 'set';	
 					}	
 					
 					printf( '<a href="%s" title="%s"><img src="%s" alt="%s"/></a>',
 								wp_nonce_url( admin_url('admin-ajax.php?action=prism-feature-product&archived='.$archived_action.'&product_id=' . $post_id), 'prism-feature-product' ),
 								$archived_title,
-								self::plugin_url() . '/admin/images/x-mark-'.$archived_image.'.png',
+								Prism_Portfolio::plugin_url() . '/admin/images/x-mark-'.$archived_image.'.png',
 								"archived"
 							);
 					echo "&nbsp;";
 					printf( '<a href="%s" title="%s"><img src="%s" alt="%s"/></a>',
 								wp_nonce_url( admin_url('admin-ajax.php?action=prism-feature-product&featured='.$featured_action.'&product_id=' . $post_id), 'prism-feature-product' ),
 								$featured_title,
-								self::plugin_url() . '/admin/images/star-'.$featured_image.'.png',
+								Prism_Portfolio::plugin_url() . '/admin/images/star-'.$featured_image.'.png',
 								"featured"
 							);
 					
@@ -221,15 +223,15 @@ function feature_product() {
 	$post = get_post($post_id);
 	if(!$post) die;
 	
-	if($post->post_type !== self::$post_type) die;
+	if($post->post_type !== Prism_Portfolio::$post_type) die;
 	
 	//once verified, update featured tax
 	if (isset($_GET['archived']) && $_GET['archived']=='set' ) {
-		wp_set_object_terms( $post_id, 'archived', self::$featured );
+		wp_set_object_terms( $post_id, 'archived', Prism_Portfolio::$featured );
 	} elseif ( isset($_GET['featured']) && $_GET['featured']=='set') {
-		wp_set_object_terms( $post_id, 'featured', self::$featured );
+		wp_set_object_terms( $post_id, 'featured', Prism_Portfolio::$featured );
 	} else {
-		wp_set_object_terms( $post_id, NULL , self::$featured  );
+		wp_set_object_terms( $post_id, NULL , Prism_Portfolio::$featured  );
 	}
 	
 	$sendback = remove_query_arg( array('trashed', 'untrashed', 'deleted', 'ids'), wp_get_referer() );
@@ -244,17 +246,17 @@ function feature_product() {
 	 
 	// Add a quick edit input
 	function add_quick_edit($column_name, $post_type) {
-		if ( $post_type != self::$post_type || $column_name != self::$featured) return;
+		if ( $post_type != Prism_Portfolio::$post_type || $column_name != Prism_Portfolio::$featured) return;
 		
 		?>
 		<fieldset class="inline-edit-col-left">
 		<div class="inline-edit-col">
-			<span class="title"><?php _e('Featured Status', 'prism_portfolio');?></span><br/>
-			<input type="hidden" name="<?php echo self::$featured;?>_nonce" id="<?php echo self::$featured;?>_nonce" value="" />                      							
+			<span class="title"><?php _e('Featured Status', "prism_portfolio");?></span><br/>
+			<input type="hidden" name="<?php echo Prism_Portfolio::$featured;?>_nonce" id="<?php echo Prism_Portfolio::$featured;?>_nonce" value="" />                      							
 
-			<input type="radio" name="<?php echo self::$featured;?>_tax" value="featured"/> <?php _e('Featured ', 'prism_portfolio');?>
-			<input type="radio" name="<?php echo self::$featured;?>_tax" value="normal"/> <?php _e('Normal ', 'prism_portfolio');?> 
-			<input type="radio" name="<?php echo self::$featured;?>_tax" value="archived"/> <?php _e('Archived ', 'prism_portfolio');?>  
+			<input type="radio" name="<?php echo Prism_Portfolio::$featured;?>_tax" value="featured"/> <?php _e('Featured ', "prism_portfolio");?>
+			<input type="radio" name="<?php echo Prism_Portfolio::$featured;?>_tax" value="normal"/> <?php _e('Normal ', "prism_portfolio");?> 
+			<input type="radio" name="<?php echo Prism_Portfolio::$featured;?>_tax" value="archived"/> <?php _e('Archived ', "prism_portfolio");?>  
 		</div>
 		</fieldset>
 		
@@ -266,7 +268,7 @@ function feature_product() {
 	function quick_edit_javascript() {
 		$screen = get_current_screen(); 
 		
-		if ( $screen->id != 'edit-'.self::$post_type || $screen->post_type != self::$post_type) return $actions; 
+		if ( $screen->id != 'edit-'.Prism_Portfolio::$post_type || $screen->post_type != Prism_Portfolio::$post_type) return $actions; 
 
 		?>
 		<script type="text/javascript">  
@@ -304,8 +306,8 @@ function feature_product() {
 			// revert Quick Edit menu so that it refreshes properly
 			inlineEditPost.revert();
 
-			var featuredRadioInput = document.getElementsByName('<?php echo self::$featured;?>_tax');  
-			var nonceInput = document.getElementById('<?php echo self::$featured;?>_nonce'); 
+			var featuredRadioInput = document.getElementsByName('<?php echo Prism_Portfolio::$featured;?>_tax');  
+			var nonceInput = document.getElementById('<?php echo Prism_Portfolio::$featured;?>_nonce'); 
 			nonceInput.value = nonce;  
 			// check option manually
 			for (i = 0; i < featuredRadioInput.length; i++) {
@@ -325,11 +327,11 @@ function feature_product() {
 	function expand_quick_edit_link($actions, $post) {
 		$screen = get_current_screen(); 
 
-		if ( $screen->id != 'edit-'.self::$post_type || $screen->post_type != self::$post_type) return $actions; 
+		if ( $screen->id != 'edit-'.Prism_Portfolio::$post_type || $screen->post_type != Prism_Portfolio::$post_type) return $actions; 
 
-		$nonce = wp_create_nonce( self::$featured );
+		$nonce = wp_create_nonce( Prism_Portfolio::$featured );
 
-		$featured = wp_get_object_terms($post->ID, self::$featured); 
+		$featured = wp_get_object_terms($post->ID, Prism_Portfolio::$featured); 
 		
 		//if for some reason there is no term in the tax, show as normal
 		if ( !is_wp_error( $featured ) && isset($featured[0]) ){ 
@@ -355,12 +357,12 @@ function feature_product() {
 		if ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE ) return $post_id;	
 		
 		// verify post type is portfolio and not a revision
-		if( $post->post_type != self::$post_type || $post->post_type == 'revision' ) return $post_id;
+		if( $post->post_type != Prism_Portfolio::$post_type || $post->post_type == 'revision' ) return $post_id;
 		
 		// make sure data came from our meta box, verify nonce
-		$nonce = isset($_POST[self::$featured . '_nonce']) ? $_POST[self::$featured . '_nonce'] : NULL ;
+		$nonce = isset($_POST[Prism_Portfolio::$featured . '_nonce']) ? $_POST[Prism_Portfolio::$featured . '_nonce'] : NULL ;
 		
-		if (!wp_verify_nonce( $nonce, self::$featured )) return $post_id;
+		if (!wp_verify_nonce( $nonce, Prism_Portfolio::$featured )) return $post_id;
 		
 		// Check permissions
 		if ( 'page' == $post->post_type ) {
@@ -370,12 +372,12 @@ function feature_product() {
 		}	
 		
 		//once verified, update featured tax
-		if (isset($_POST[self::$featured . '_tax']) ) { 
-			$status = esc_attr($_POST[self::$featured . '_tax']);
+		if (isset($_POST[Prism_Portfolio::$featured . '_tax']) ) { 
+			$status = esc_attr($_POST[Prism_Portfolio::$featured . '_tax']);
 			if ($status) {
-				wp_set_object_terms( $post_id, $status, self::$featured );
+				wp_set_object_terms( $post_id, $status, Prism_Portfolio::$featured );
 			} else { 
-				wp_set_object_terms( $post_id, NULL , self::$featured );
+				wp_set_object_terms( $post_id, NULL , Prism_Portfolio::$featured );
 			}
 		}
 		
@@ -386,8 +388,8 @@ function feature_product() {
 	 * http://devpress.com/blog/custom-columns-for-custom-post-types/
 	*/
 	function sortable_columns( $columns ) {
-		$columns[self::$featured] = 'portfolio_featured';
-		//to do: $columns[self::$category] = 'portfolio_category';
+		$columns[Prism_Portfolio::$featured] = 'portfolio_featured';
+		//to do: $columns[Prism_Portfolio::$category] = 'portfolio_category';
 		return $columns;
 	}
 
@@ -399,7 +401,7 @@ function feature_product() {
 	 function featured_clauses( $clauses, $wp_query ) {
 		global $wpdb;
 		//sort by featured status
-		if ( isset( $wp_query->query['orderby'] ) && self::$featured == $wp_query->query['orderby'] ) {
+		if ( isset( $wp_query->query['orderby'] ) && Prism_Portfolio::$featured == $wp_query->query['orderby'] ) {
 	
 			$clauses['join'] .= <<<SQL
 LEFT OUTER JOIN {$wpdb->term_relationships} ON {$wpdb->posts}.ID={$wpdb->term_relationships}.object_id
@@ -407,20 +409,20 @@ LEFT OUTER JOIN {$wpdb->term_taxonomy} USING (term_taxonomy_id)
 LEFT OUTER JOIN {$wpdb->terms} USING (term_id)
 SQL;
 			
-			$clauses['where'] .= " AND (taxonomy = self::$featured OR taxonomy IS NULL)";
+			$clauses['where'] .= " AND (taxonomy = Prism_Portfolio::$featured OR taxonomy IS NULL)";
 			$clauses['groupby'] = "object_id";
 			$clauses['orderby']  = "GROUP_CONCAT({$wpdb->terms}.name ORDER BY name ASC) ";
 			$clauses['orderby'] .= ( 'ASC' == strtoupper( $wp_query->get('order') ) ) ? 'ASC' : 'DESC';
 		}
 		//sort by portfolio category
-		if ( isset( $wp_query->query['orderby'] ) && self::$category == $wp_query->query['orderby'] ) {
+		if ( isset( $wp_query->query['orderby'] ) && Prism_Portfolio::$category == $wp_query->query['orderby'] ) {
 	 
 			$clauses['join'] .= <<<SQL
 LEFT OUTER JOIN {$wpdb->term_relationships} ON {$wpdb->posts}.ID={$wpdb->term_relationships}.object_id
 LEFT OUTER JOIN {$wpdb->term_taxonomy} USING (term_taxonomy_id)
 LEFT OUTER JOIN {$wpdb->terms} USING (term_id)
 SQL;
-			$clauses['where'] .= " AND (taxonomy = self::$category OR taxonomy IS NULL)";
+			$clauses['where'] .= " AND (taxonomy = Prism_Portfolio::$category OR taxonomy IS NULL)";
 			$clauses['groupby'] = "object_id";
 			$clauses['orderby']  = "GROUP_CONCAT({$wpdb->terms}.name ORDER BY name ASC) ";
 			$clauses['orderby'] .= ( 'ASC' == strtoupper( $wp_query->get('order') ) ) ? 'ASC' : 'DESC';
@@ -435,13 +437,13 @@ SQL;
 	 */
 	function restrict_manage_posts() {
 		global $typenow;
-		if ( $typenow == 'prism_portfolio')  {
-		$filters = array(self::$category,self::$tag,self::$featured);
+		if ( $typenow == "prism_portfolio")  {
+		$filters = array(Prism_Portfolio::$category,Prism_Portfolio::$tag,Prism_Portfolio::$featured);
 			foreach ($filters as $tax_slug) {
 				$tax_obj = get_taxonomy($tax_slug);  
 				$selected = (isset($_GET[$tax_obj->query_var])) ? $_GET[$tax_obj->query_var] : '';
 				wp_dropdown_categories(array(
-					'show_option_all' => __('Show All '.$tax_obj->label, 'prism_portfolio' ),
+					'show_option_all' => __('Show All '.$tax_obj->label, "prism_portfolio" ),
 					'taxonomy' => $tax_slug,
 					'name' => $tax_obj->name,
 					'orderby' => 'term_order',
@@ -479,7 +481,7 @@ SQL;
 	function conditional_thickbox() {
 		$screen = get_current_screen(); 
 		
-		if ( $screen->id != 'edit-'.self::$post_type || $screen->post_type != self::$post_type) return; 
+		if ( $screen->id != 'edit-'.Prism_Portfolio::$post_type || $screen->post_type != Prism_Portfolio::$post_type) return; 
 			wp_enqueue_script('media-upload');
 			wp_enqueue_script('thickbox');
 			wp_enqueue_style('thickbox');
@@ -491,7 +493,7 @@ SQL;
 	 * (TODO: only load on popups from portfolio screen, if possible)
 	 */
 	function custom_set_thumbnail(){ 
-		wp_enqueue_script('prism-thumbnails', self::$plugin_url . '/admin/js/prism-set-post-thumbnail.js' , array('jquery'));
+		wp_enqueue_script('prism-thumbnails', Prism_Portfolio::$plugin_url . '/admin/js/prism-set-post-thumbnail.js' , array('jquery'));
 	}
 
 	function set_thumbnail_callback(){
@@ -528,7 +530,7 @@ SQL;
 
 	    get_current_screen()->add_help_tab( array(
 	        'id'        => 'prism-help-tab',
-	        'title'     => __( 'My Title', 'prism_portfolio' ),
+	        'title'     => __( 'My Title', "prism_portfolio" ),
 	        'content'   => __( 'This tab is below the built in tab.' )
 	    ) );
 	}

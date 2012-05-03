@@ -604,13 +604,13 @@
 	display: none;
 }
 
-#file-gallery-content
+#prism-gallery-content
 {
 	float: left;
 	width: 100%;
 }
 
-.no-attachments #file-gallery-content
+.no-attachments #prism-gallery-content
 {
 	margin-left: -60px;
 }
@@ -1295,14 +1295,14 @@ td.column-post_thumb img
 #media_tag_taxonomy_name,
 #media_tag_taxonomy_slug
 {
-	background: url(../images/file-gallery-logo.png) right center no-repeat;
+	background: url(../images/prism-gallery-logo.png) right center no-repeat;
 }
 
 #poststuff #prism_gallery h3.hndle span
 {
 	width: 100%;
 	display: block;
-	background:url(../images/file-gallery-logo.png) right center no-repeat;
+	background:url(../images/prism-gallery-logo.png) right center no-repeat;
 }
 
 

@@ -112,11 +112,11 @@ add_action("delete_post", "prism_gallery_clear_cache_gallery");
  */
 function prism_gallery_clear_cache_manual()
 {
-	check_ajax_referer('file-gallery-clear_cache');
+	check_ajax_referer('prism-gallery-clear_cache');
 	
 	prism_gallery_clear_cache();
 	
-	_e("You have successfully cleared the Prism Gallery cache.", "file-gallery");
+	_e("You have successfully cleared the Prism Gallery cache.", "prism_portfolio");
 	
 	exit();
 }
