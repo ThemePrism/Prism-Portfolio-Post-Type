@@ -1,30 +1,24 @@
 <?php
-/*
-Plugin Name: Prism Gallery
-Plugin URI: http://skyphe.org/code/wordpress/file-gallery/
-Version: 1.7.4.1
-Description: "Prism Gallery" extends WordPress' media (attachments) capabilities by adding a new gallery shortcode handler with templating support, a new interface for attachment handling when editing posts, and much more.
-Author: Bruno "Aesqe" Babic
-Author URI: http://skyphe.org
-
-////////////////////////////////////////////////////////////////////////////
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-	
-////////////////////////////////////////////////////////////////////////////
-
-*/
+/**
+ * Prism Gallery Metabox
+ * 
+ * The Prism Gallery Metaboxes class creates a metabox that will manage attachments to the prism_portfolio post type.
+ *
+ * @class 		Prism_Gallery
+ * @package		Prism_Portfolio
+ * @category	Class
+ * @author		Kathy Darling
+ *
+ * This part of the plugin is heavily derivative of the File Gallery Plugin by Bruno "Aesque" Babic
+ * http://skyphe.org/code/wordpress/file-gallery/
+ *
+ *
+ * Table of Contents
+ *
+ *
+ *
+ *
+ */
 
 // don't load directly
 if (!function_exists('is_admin')) {
@@ -32,7 +26,6 @@ if (!function_exists('is_admin')) {
     header('HTTP/1.1 403 Forbidden');
     exit();
 }
-
 
 
 /**
@@ -85,13 +78,7 @@ class Prism_Gallery extends Prism_Portfolio {
 	var $ssl_admin = false;
 
 	/***/
-	function __construct()
-	{
-		$this->File_Gallery();
-	}
-
-	/***/
-	function File_Gallery()
+	function Prism_Gallery()
 	{
 		// Checks if Attachment custom fields plugin is installed (not released yet)
 		if( false !== strpos(serialize(get_option('active_plugins')), 'attachment-custom-fields.php') )
@@ -102,73 +89,7 @@ class Prism_Gallery extends Prism_Portfolio {
 	}
 	
 	
-	function debug_add( $section, $vars )
-	{
-		if( ! PRISM_GALLERY_DEBUG )
-			return;
-		
-		foreach( $vars as $k => $v )
-		{
-			$type = gettype($v);
-			
-			if( 'boolean' === $type )
-				$v = false === $v ? 'false' : 'true';
-			
-			$this->debug[$section][$k] = $type . ': ' . $v;
-		}
-	}
-	
-	
-	function debug_print()
-	{
-		if( ! PRISM_GALLERY_DEBUG )
-			return;
-
-		if( isset($_GET['prism_gallery_debug']) )
-		{
-			$vars = get_object_vars($this);
-			
-			unset($vars['defaults']);
-			unset($vars['false_defaults']);
-			unset($vars['settings']);
-			
-			function block($a)
-			{
-				$out = '<ul>';
-				
-				foreach($a as $k => $v)
-				{
-					$out .= '<li>[' . $k . '] => ';
-					
-					if( is_array($v) )
-						$out .= block($v);
-					else
-						$out .= empty($v) ? '""' : $v;
-					
-					$out .= '</li>' . "\n";
-				}
-				
-				$out .= '</ul>' . "\n";
-				
-				return $out;
-			}
-			
-			return block($vars);
-		}
-	}
-};
-
-
-function prism_gallery_debug_print( $content )
-{
-	global $prism_portfolio;
-	
-	return $content . $prism_portfolio->Gallery->debug_print();
-}
-if( isset($_GET['prism_gallery_debug']) )
-	add_action('the_content', 'prism_gallery_debug_print', 100);
-
-
+} //end class
 
 
 /**
@@ -177,9 +98,9 @@ if( isset($_GET['prism_gallery_debug']) )
  */
 function prism_gallery_do_settings()
 {
-	global $prism_portfolio;
+	global $prism_portfolio_gallery;
 
-	$prism_portfolio->Gallery->settings = array(
+	$prism_portfolio_gallery->settings = array(
 			'disable_shortcode_handler' => array(
 				'default' => 0, 
 				'display' => true,
@@ -596,12 +517,12 @@ function prism_gallery_do_settings()
 			)
 		);
 	
-	foreach( $prism_portfolio->Gallery->settings as $key => $val )
+	foreach( $prism_portfolio_gallery->settings as $key => $val )
 	{
-		$prism_portfolio->Gallery->defaults[$key] = $val['default'];
+		$prism_portfolio_gallery->defaults[$key] = $val['default'];
 		
 		if( is_bool($val['default']) || 1 === $val['default'] || 0 === $val['default'] )
-			$prism_portfolio->Gallery->false_defaults[$key] = 0;
+			$prism_portfolio_gallery->false_defaults[$key] = 0;
 	}
 }
 
@@ -611,13 +532,13 @@ function prism_gallery_do_settings()
  */
 function prism_gallery_activate()
 {
-	global $prism_portfolio;
+	global $prism_portfolio_gallery;
 
 	prism_gallery_plugins_loaded();
 	prism_gallery_after_setup_theme();
 	prism_gallery_do_settings();
 	
-	$defaults = $prism_portfolio->Gallery->defaults;
+	$defaults = $prism_portfolio_gallery->defaults;
 
 	// if options already exist, upgrade
 	if( $options = get_option('prism_portfolio_gallery') )
@@ -660,7 +581,7 @@ function prism_gallery_activate()
 	// clear any existing cache
 	prism_gallery_clear_cache();
 }
-register_activation_hook( __FILE__, 'prism_gallery_activate' );
+//register_activation_hook( __FILE__, 'prism_gallery_activate' );
 
 
 /**
@@ -910,7 +831,7 @@ add_filter('posts_where', 'prism_gallery_add_library_query_vars');
  */
 function prism_gallery_js_admin()
 {
-	global $pagenow, $current_screen, $wp_version, $post_ID, $prism_portfolio;
+	global $pagenow, $current_screen, $wp_version, $post_ID, $prism_portfolio_gallery;
 
 	$s = array('{"', '",', '"}', '\/', '"[', ']"');
 	$r = array("\n{\n\"", "\",\n", "\"\n}", '/', '[', ']');
@@ -987,15 +908,7 @@ function prism_gallery_js_admin()
 		wp_enqueue_script('prism-gallery-clear_cache',   Prism_Portfolio::plugin_url() . '/admin/js/prism-gallery-clear_cache.js', false, PRISM_GALLERY_VERSION);
 		wp_enqueue_script('acf-attachment-custom-fields',  Prism_Portfolio::plugin_url() . '/admin/js/prism-gallery-attachment_custom_fields.js', false, PRISM_GALLERY_VERSION);
 
-		echo '<style>bacon = '. Prism_Portfolio::plugin_url() .'</style>
-		<script type="text/javascript">
-			var prism_gallery_L10n = ' . str_replace($s, $r, json_encode($prism_gallery_localize)) . ',
-				prism_gallery_options = ' . str_replace($s, $r, json_encode($prism_gallery_options)) . ',
-				acf_L10n = ' . str_replace($s, $r, json_encode($acf_localize)) . ',
-				init_prism_gallery = true,
-				acf_options = ' . str_replace($s, $r, json_encode($acf_options)) . ';
-		</script>
-		';
+		wp_localize_script( 'prism-gallery-main', 'Prism_Portfolio_Settings', array( 'prism_gallery_L10n' => $prism_gallery_localize , 'prism_gallery_options' => $prism_gallery_options, 'acf_L10n' => $acf_localize, 'init_prism_gallery' => 1, 'acf_options' => $acf_options )); 
 	}
 	elseif( "edit.php" == $pagenow  )
 	{
@@ -1256,7 +1169,7 @@ add_filter('manage_pages_columns', 'prism_gallery_posts_columns');
  */
 function prism_gallery_media_custom_column($column_name, $post_id)
 {
-	global $prism_portfolio, $wpdb;
+	global $prism_portfolio_gallery, $wpdb;
 	
 	$options = get_option('prism_portfolio_gallery');
 	

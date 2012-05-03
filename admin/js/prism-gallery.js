@@ -1,7 +1,7 @@
 var prism_gallery =
 {
-	L10n : prism_gallery_L10n,
-	options : prism_gallery_options
+	L10n : Prism_Portfolio_Settings.prism_gallery_L10n,
+	options : Prism_Portfolio_Settings.prism_gallery_options
 };
 
 // add access and prop for older versions of jQuery

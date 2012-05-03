@@ -57,7 +57,14 @@ class Prism_Portfolio {
 	protected static $plugin_path;
 	protected static $template_url;
 
-	/** Variables ******************************************************************/
+	/** Child Classes **/
+	private $Init;
+	private $Options;
+	private $Columns;
+	private $Featured;
+	private $Gallery;
+
+			/** Variables ******************************************************************/
 	
 	static $version = .1;
 	static $post_type = "prism_portfolio";
@@ -70,7 +77,7 @@ class Prism_Portfolio {
 
 	/** Constructor ******************************************************************/
 	
-	function __construct() {	
+	function Prism_Portfolio() {	
 
 		// Set up localisation
 		$this->load_plugin_textdomain();
@@ -153,8 +160,7 @@ class Prism_Portfolio {
 		$this->Featured = new Prism_Featured();
 
 		//Creates, manages and saves the data for the Gallery Attachments
-		global $prism_portfolio_gallery;
-		$prism_portfolio_gallery = new Prism_Gallery();
+		$this->Gallery = new Prism_Gallery();
 	}
 
 	/**

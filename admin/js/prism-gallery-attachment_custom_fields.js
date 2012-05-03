@@ -1,7 +1,7 @@
 var acf =
 {
-	L10n : acf_L10n,
-	options : acf_options
+	L10n : Prism_Portfolio_Settings.acf_L10n,
+	options : Prism_Portfolio_Settings.acf_options
 };
 
 jQuery(document).ready(function()

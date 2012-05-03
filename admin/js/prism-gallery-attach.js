@@ -1,5 +1,5 @@
 if( "undefined" == typeof(prism_gallery) )
-	var prism_gallery = { L10n : prism_gallery_L10n };
+	var prism_gallery = { L10n : Prism_Portfolio_Settings.prism_gallery_L10n };
 
 jQuery(document).ready(function()
 {
