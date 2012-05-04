@@ -121,10 +121,8 @@
 			
 		</fieldset>
 	
-	<?php if( false == $prism_gallery_options["display_single_fieldset"] && true == $prism_gallery_options['insert_single_button'] ) : ?>
 		<input type="button" class="button-primary" id="prism_gallery_send_single_legend" value="<?php _e("Insert single files", "prism_portfolio"); ?>" />
-	<?php endif; ?>
-	
+			
 		<div id="prism_gallery_attachment_list">
 		
 			<p id="prism_gallery_attachments_sorting">

@@ -883,18 +883,18 @@
 
 /* wp-admin css fixes */
 
-.prism_gallery_inline_checkbox_label
+.pluploader_inline_checkbox_label
 {
 	margin-right: 1em;
 }
 
-.prism_gallery_textarea,
-.prism_gallery_select
+.pluploader_textarea,
+.pluploader_select
 {
 	width: 415px;
 }
 
-.prism_gallery_select.default_columns
+.pluploader_select.default_columns
 {
 	width: 45px;
 }
@@ -1020,7 +1020,7 @@ textarea, input, select
 	background: #FFFFFF;
 }
 
-.prism_gallery_attach_to_post.solo
+.pluploader_attach_to_post.solo
 {
 	float: right;
 	margin: 11px 6px 0 0;
@@ -1131,7 +1131,7 @@ textarea, input, select
 	margin-top: -16px;
 }
 
-.prism_gallery_regenerate
+.pluploader_regenerate
 {
 	display: block;
 	text-decoration: none;
@@ -1140,7 +1140,7 @@ textarea, input, select
 	background: url(../images/famfamfam_silk/arrow_refresh_small.png) left center no-repeat;
 }
 
-.prism_gallery_regenerate img
+.pluploader_regenerate img
 {
 	height: 1em;
 	width: 110px;
@@ -1327,4 +1327,64 @@ td.column-post_thumb img
 .attachment-copy.alternate
 {
 	background-color: #e4eff4;
+}
+
+
+/*
+ * Plupload
+ */
+
+ 
+.pluploader .drag-drop-area {
+    border: 4px dashed #ddd;
+    height: 200px;
+}
+.pluploader .drag-drop-inside {
+    margin: 70px auto 0;
+    width: 250px;
+}
+.pluploader .drag-drop-inside p {
+    color: #aaa;
+    font-size: 14px;
+    margin: 5px 0;
+    display: none;
+}
+.pluploader .drag-drop-inside p { text-align: center }
+.pluploader .drag-drop-inside p.drag-drop-info { font-size: 20px }
+.pluploader .drag-drop-inside p,
+.pluploader .drag-drop-inside p.drag-drop-buttons { display: block }
+.pluploader .drag-over .drag-drop-area { border-color: #83b4d8 }
+.pluploader .plupload-upload-ui { position: relative }
+
+.pluploader .filelist {
+    width: 60%;
+	margin-top: 20px;
+}
+.pluploader .filelist .file {
+    padding: 5px;
+    background: #ececec;
+    border: solid 1px #ccc;
+    margin-bottom: 4px;
+}
+.pluploader .filelist .fileprogress {
+    width: 0%;
+    background: #B7C53D;
+    height: 5px;
+    margin: 10px auto;
+}
+.pluploader .plupload-thumbs {
+    overflow: hidden;
+    margin: 10px auto;
+}
+.pluploader .plupload-thumbs .thumb {
+    width: 100px;
+    padding-right: 10px;
+    float: left;
+}
+.pluploader .plupload-thumbs .thumb img {
+    width: 100px;
+    height: 100px;
+}
+.pluploader .ui-sortable  .thumb img {
+    cursor: pointer;
 }
